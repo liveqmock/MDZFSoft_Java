@@ -3,7 +3,7 @@
   <description>Web配置</description>
   <context-param>
     <param-name>webAppRootKey</param-name>
-    <param-value>cams.root</param-value>
+    <param-value>zfms.root</param-value>
   </context-param>
   <context-param>
     <param-name>log4jConfigLocation</param-name>
@@ -37,7 +37,7 @@
   </filter-mapping>
   <filter>
     <filter-name>AdminLoginTokenFilter</filter-name>
-    <filter-class>com.verywell.framework.filters.LoginTokenFilter</filter-class>
+    <filter-class>com.njmd.framework.filters.LoginTokenFilter</filter-class>
     <init-param>
       <description>检查的SeessionKey</description>
       <param-name>sessionKey</param-name>
@@ -51,7 +51,7 @@
     <init-param>
       <description>不需要过滤的URL</description>
       <param-name>notFilterURL</param-name>
-      <param-value>/login,/css/,/images/,/js/,/plugins/,/common/,/clientService,/menuMgr,
+      <param-value>/login,/footer,/css/,/images/,/js/,/plugins/,/common/,/clientService,/menuMgr,
 			/menu/view,/menu/edit,/menu/up,/menu/down,/menu/del,/menu/batchDel,/menu/add,/menu/save,/menu/update
 			</param-value>
     </init-param>

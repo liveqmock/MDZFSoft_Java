@@ -28,8 +28,7 @@ public class SysRole extends AuditableEntity implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "ROLE_ID_GENERATOR", sequenceName = "SEQ_SYS_ROLE", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROLE_ID_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ROLE_ID")
 	private Long roleId;
 
@@ -55,10 +54,6 @@ public class SysRole extends AuditableEntity implements Serializable
 	// bi-directional many-to-one association to SysRolePermission
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysRole")
 	private List<SysRolePermission> sysRolePermissions;
-
-	// bi-directional many-to-one association to SysRolePermission
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysRole")
-	private List<SysRoleRoom> sysRoleRoom;
 
 	/**** 非实体化属性 *********/
 	// 单位名称
@@ -158,16 +153,6 @@ public class SysRole extends AuditableEntity implements Serializable
 	public void setSysRolePermissions(List<SysRolePermission> sysRolePermissions)
 	{
 		this.sysRolePermissions = sysRolePermissions;
-	}
-
-	public List<SysRoleRoom> getSysRoleRoom()
-	{
-		return sysRoleRoom;
-	}
-
-	public void setSysRoleRoom(List<SysRoleRoom> sysRoleRoom)
-	{
-		this.sysRoleRoom = sysRoleRoom;
 	}
 
 	public void setCorpName(String corpName)

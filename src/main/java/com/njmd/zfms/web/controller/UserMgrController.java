@@ -21,11 +21,9 @@ import com.njmd.framework.utils.DateTimeUtil;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.UrlConstants;
-import com.njmd.zfms.web.entity.sys.SysDept;
 import com.njmd.zfms.web.entity.sys.SysLogin;
 import com.njmd.zfms.web.entity.sys.SysLoginRole;
 import com.njmd.zfms.web.entity.sys.SysRole;
-import com.njmd.zfms.web.service.SysDeptService;
 import com.njmd.zfms.web.service.SysLoginService;
 import com.njmd.zfms.web.service.SysRoleService;
 
@@ -33,7 +31,7 @@ import com.njmd.zfms.web.service.SysRoleService;
 @RequestMapping("/userMgr")
 public class UserMgrController extends BaseController
 {
-	private final String[] INFORMATION_PARAMAS = { "用户" ,"用户账号"};
+	private final String[] INFORMATION_PARAMAS = { "用户", "用户账号" };
 	// 基础目录
 	private final String BASE_DIR = "/sys_mgr/user_mgr/";
 
@@ -44,15 +42,11 @@ public class UserMgrController extends BaseController
 
 	@Autowired
 	private SysRoleService sysRoleService;
-	
-	@Autowired
-	private SysDeptService sysDeptService;
 
 	/** 列表查询 */
 	@RequestMapping
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
-		List<SysDept> deptList = sysDeptService.findAll();
 		// 设置默认排序方式
 		if (!page.isOrderBySetted())
 		{
@@ -66,14 +60,12 @@ public class UserMgrController extends BaseController
 		filters.add(pf2);
 		Page pageResult = sysLoginService.query(page, filters);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
-		model.addAttribute("deptList", deptList);
-		model.addAttribute("deptListSize", deptList.size());
 		return BASE_DIR + "list";
 	}
-	
+
 	@RequestMapping(value = "/list/{id}")
-	public String list(HttpServletRequest request,Page page, Model model,@PathVariable("id") Long deptId) throws Exception{
-		List<SysDept> deptList = sysDeptService.findAll();
+	public String list(HttpServletRequest request, Page page, Model model, @PathVariable("id") Long deptId) throws Exception
+	{
 		// 设置默认排序方式
 		if (!page.isOrderBySetted())
 		{
@@ -88,9 +80,6 @@ public class UserMgrController extends BaseController
 		filters.add(pf2);
 		Page pageResult = sysLoginService.query(page, filters);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
-		model.addAttribute("deptId", deptId);
-		model.addAttribute("deptList", deptList);
-		model.addAttribute("deptListSize", deptList.size());
 		return BASE_DIR + "list";
 	}
 
@@ -98,22 +87,19 @@ public class UserMgrController extends BaseController
 	@RequestMapping(value = "/add")
 	public String add(HttpServletRequest request, Model model) throws Exception
 	{
-		List<SysDept> deptList = sysDeptService.findAll();
 		List<SysRole> roleList = sysRoleService.findByCorpId(this.getLoginToken().getSysCorp().getCorpId());
 		model.addAttribute("roleList", roleList);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, new SysLogin());
-		model.addAttribute("deptList", deptList);
-		model.addAttribute("deptListSize", deptList.size());
 		return BASE_DIR + "add";
 	}
 
 	/** 保存新增 */
 	@RequestMapping(value = "/save")
-	public String save(HttpServletRequest request, Model model, SysLogin entity,Long[] roleIds,Long deptId) throws Exception
+	public String save(HttpServletRequest request, Model model, SysLogin entity, Long[] roleIds, Long deptId) throws Exception
 	{
 		entity.setSystemId(this.getLoginToken().getSysLogin().getSystemId());
 		entity.setSysCorp(this.getLoginToken().getSysCorp());
-		int resultTag = sysLoginService.save(entity,roleIds,deptId);
+		int resultTag = sysLoginService.save(entity, roleIds, deptId);
 		if (resultTag == ResultConstants.SAVE_SUCCEED)
 		{
 			ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), request, REDIRECT_PATH);
@@ -131,36 +117,35 @@ public class UserMgrController extends BaseController
 	@RequestMapping(value = "/edit/{id}")
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
-		List<SysDept> deptList = sysDeptService.findAll();
-		model.addAttribute("deptList", deptList);
-		model.addAttribute("deptListSize", deptList.size());
 		List<SysRole> roleList = sysRoleService.findByCorpId(this.getLoginToken().getSysCorp().getCorpId());
 		model.addAttribute("roleList", roleList);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, new SysLogin());
 		model.addAttribute("currenDate", DateTimeUtil.getChar8());
 		SysLogin entity = sysLoginService.findById(id);
 		List<SysLoginRole> list = entity.getSysLoginRoles();
-		String roleIds ="";
-		for(int i = 0;i<list.size();i++){
+		String roleIds = "";
+		for (int i = 0; i < list.size(); i++)
+		{
 			String roleId = list.get(i).getSysRole().getRoleId().toString();
-			if(i == (list.size() -1)){
-				roleIds+=roleId;
-			}else{
-				roleIds+=roleId+",";
+			if (i == (list.size() - 1))
+			{
+				roleIds += roleId;
+			}
+			else
+			{
+				roleIds += roleId + ",";
 			}
 		}
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 		model.addAttribute("roleIds", roleIds);
-		model.addAttribute("deptList", deptList);
-		model.addAttribute("deptListSize", deptList.size());
 		return BASE_DIR + "edit";
 	}
 
 	/** 修改保存 */
 	@RequestMapping(value = "/update")
-	public String update(HttpServletRequest request, Model model, SysLogin entity,Long[] roleIds,String newLoginPwd ,Long deptId) throws Exception
+	public String update(HttpServletRequest request, Model model, SysLogin entity, Long[] roleIds, String newLoginPwd, Long deptId) throws Exception
 	{
-		int resultTag = sysLoginService.update(entity,roleIds,newLoginPwd,deptId);
+		int resultTag = sysLoginService.update(entity, roleIds, newLoginPwd, deptId);
 		if (resultTag == ResultConstants.UPDATE_SUCCEED)
 		{
 			ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), request, REDIRECT_PATH);
@@ -210,7 +195,8 @@ public class UserMgrController extends BaseController
 	}
 
 	/**
-	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出对象,再把Form提交的内容绑定到该对象上。
+	 * 使用@ModelAttribute, 实现Struts2
+	 * Preparable二次部分绑定的效果,先根据form的id从数据库查出对象,再把Form提交的内容绑定到该对象上。
 	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
 	 */
 	@ModelAttribute("entity")

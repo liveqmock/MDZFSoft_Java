@@ -44,8 +44,7 @@ public class SysLog implements Serializable
 	 */
 	public static final Integer OPERATE_TYPE_AUDIT = 4;
 	@Id
-	@SequenceGenerator(name = "LOG_ID_GENERATOR", sequenceName = "SEQ_SYS_LOG", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LOG_ID_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "LOG_ID")
 	private Long logId;
 
@@ -66,6 +65,12 @@ public class SysLog implements Serializable
 
 	@Column(name = "OPER_USER_NAME")
 	private String operUserName;
+
+	@Column(name = "OPER_CORP_ID")
+	private Long operCorpId;
+
+	@Column(name = "OPER_CORP_NAME")
+	private String operCorpName;
 
 	@Column(name = "SYSTEM_ID")
 	private Integer systemId;
@@ -152,6 +157,26 @@ public class SysLog implements Serializable
 	public void setSystemId(Integer systemId)
 	{
 		this.systemId = systemId;
+	}
+
+	public Long getOperCorpId()
+	{
+		return operCorpId;
+	}
+
+	public void setOperCorpId(Long operCorpId)
+	{
+		this.operCorpId = operCorpId;
+	}
+
+	public String getOperCorpName()
+	{
+		return operCorpName;
+	}
+
+	public void setOperCorpName(String operCorpName)
+	{
+		this.operCorpName = operCorpName;
 	}
 
 }

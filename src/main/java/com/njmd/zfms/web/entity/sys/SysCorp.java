@@ -28,8 +28,7 @@ public class SysCorp extends AuditableEntity implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "SYS_CORP_ID_GENERATOR", sequenceName = "SEQ_SYS_CORP", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_CORP_ID_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "CORP_ID")
 	private Long corpId;
 

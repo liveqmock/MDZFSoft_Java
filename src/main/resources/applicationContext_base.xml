@@ -13,7 +13,7 @@
 
 	<description>Spring 基础配置</description>
 	<!-- SpringContextHandler定义 -->
-	<bean class="com.verywell.framework.utils.spring.SpringContextHolder" lazy-init="false" />
+	<bean class="com.njmd.framework.utils.spring.SpringContextHolder" lazy-init="false" />
 	<!-- 定义受环境影响易变的变量 -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
@@ -25,15 +25,15 @@
 			</list>
 		</property>
 	</bean>
-	<context:component-scan base-package="com.verywell">
-		<context:include-filter type="annotation" expression="com.verywell.framework.module.config.Config"  />
+	<context:component-scan base-package="com.njmd">
+		<context:include-filter type="annotation" expression="com.njmd.framework.module.config.Config"  />
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	<!-- 加载属性配置文件 -->
-	<bean class="com.verywell.framework.module.config.ConfigAnnotationBeanPostProcessor"/>
+	<bean class="com.njmd.framework.module.config.ConfigAnnotationBeanPostProcessor"/>
 
 	<!-- SpringContextHandler定义 -->
-	<bean class="com.verywell.framework.utils.spring.SpringContextHolder" lazy-init="false"/>
+	<bean class="com.njmd.framework.utils.spring.SpringContextHolder" lazy-init="false"/>
 	
 
 </beans>

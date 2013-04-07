@@ -1,50 +1,58 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/common/taglibs.jsp"%>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<HEAD>
-<%@ include file="/common/header.jsp"%>
-<%@ include file="/plugins/jquery-ui.jsp"%>
-<%@ include file="/plugins/ztree.jsp"%>
-<LINK href="${ctx}/css/left_menu.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-	<div style="height: 100%; overflow: auto;">
-		<c:forEach var="level1Menu" items="${level1MenuList}">
-			<div id="menu_${level1Menu.permissionId}" class="menu_out">
-				<img src="${ctx}/images/${level1Menu.permissionIco}"><a href="#1" class="menu_ico2">${level1Menu.permissionName}</a>
+<div id="nav">
+		<div class="nav_box">
+			<div class="layout">
+				<ul class="nav_list">
+					<c:forEach var="level1Menu" items="${level1MenuList}" varStatus="status">
+					<li class="nav_item current" id="menuIndex_${status.index}"><a class="nav_target" href="${ctx}/${level1Menu.permissionUrl}">${level1Menu.permissionName}</a>
+					<ul class="nav_sublist" id="childMenu_1">
+					<c:forEach var="level2Menu" items="${level2MenuMap[level1Menu.permissionId]}">
+						<li class="nav_subitem" id="menu_${level2Menu.permissionId}"><a class="nav_subtarget" href="${ctx}/${level2Menu.permissionUrl}">${level2Menu.permissionName}</a></li>
+					</c:forEach>
+					</ul>
+					</li>
+					</c:forEach>
+				</ul>
 			</div>
-			<div id="submenu_${level1Menu.permissionId}" class="menu_con" style="display: none">
-				<c:forEach var="level2Menu" items="${level2MenuMap[level1Menu.permissionId]}">
-				<a href="${ctx}/${level2Menu.permissionUrl}" target="mainFrame">${level2Menu.permissionName}</a>
-				</c:forEach>
-			</div>
-		</c:forEach>
+		</div>
 	</div>
 	<script>
+	    jQuery(function($) {
+	     	$(".nav_item").hover(function(){
+	    		var _this=$(this);
+	    		_this.siblings(".nav_item").find(".nav_sublist").hide();
+	    		if(_this.find(".nav_sublist").length>0)
+	    		{
+	    			_this.addClass("nav_hover");
+	    			_this.find(".nav_sublist").show();
+	    			
+	    		}
+	    	},function(){
+	    		var _this=$(this);
+	    		if(_this.find(".nav_sublist").length>0)
+	    		{
+	    			_this.removeClass("nav_hover");
+	    			_this.find(".nav_sublist").hide();
+	    			
+	    		}
+	    		$(".nav_item").each(function(){
+	    			if($(this).hasClass("current")){
+	    			$(this).find(".nav_sublist").show();
+	    		}
+	    		});
+	    		
+	    	});
+	     });
 
-	var openMenuId = "menu_0";
-	$(document).ready(function(){
-		//根据屏幕高度，重新设置每个子菜单的高度
-		$("div[id^='submenu']").height($(document).height()-$("#menu_${level1MenuList[0].permissionId}").height()*'${fn:length(level1MenuList)}');
+	    for(var i=0; i<6; i++)
+	    {
+	    	$('#menuIndex_'+i).attr('class', 'nav_item');
+	    }
+	    $('#menuIndex_'+menuIndex).attr('class', 'nav_item current');
 
-		$("div[id^='menu']").click(function(){
-			 var menuId= $(this).attr("id");
-			 $("#sub"+menuId).slideToggle();
-			 if(openMenuId!=menuId)
-				 $('#'+openMenuId).click();
-			 if($(this).hasClass("menu_out"))
-			 {
-				 $(this).attr("class","menu_over");
-				 openMenuId = menuId;
-			 }
-			 else
-			 {
-				 $(this).attr("class","menu_out");
-				 openMenuId="";
-			 }
-		});	
-	});
+	    if(menuIndex>0)
+	    {
+	    $('#childMenu_'+menuIndex).css('display', 'block');
+	    }
 	</script>
-</body>
-</html>

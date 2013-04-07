@@ -18,8 +18,6 @@ public interface SysLoginService extends BaseCrudService<SysLogin, Long>
 
 	List<SysLogin> findByCorpId(Long corpId) throws Exception;
 
-	List<SysLogin> findByDeptId(Long deptId) throws Exception;
-
 	List<SysLogin> findByRoleId(Long roleId) throws Exception;
 
 	public long getCountByDeptId(Long deptId) throws Exception;

@@ -24,8 +24,7 @@ public class SysRolePermission implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "SYS_ROLE_PERMISSION_ID_GENERATOR", sequenceName = "SEQ_SYS_ROLE_PERMISSION", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SYS_ROLE_PERMISSION_ID_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Long id;
 

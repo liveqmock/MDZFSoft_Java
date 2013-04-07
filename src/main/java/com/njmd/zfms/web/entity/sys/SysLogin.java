@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -40,16 +39,10 @@ public class SysLogin extends AuditableEntity implements Serializable
 	/** 用户类型 1-管理员 */
 	public static final int USER_TYPE_ADMIN = 1;
 
-	/** 用户类型 2-操作员 */
-	public static final int USER_TYPE_PERSONAL = 2;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "LOGIN_ID")
 	private Long loginId;
-
-	@Column(name = "EMAIL")
-	private String email;
 
 	@Column(name = "LOGIN_LAST_TIME")
 	private String loginLastTime;
@@ -63,16 +56,20 @@ public class SysLogin extends AuditableEntity implements Serializable
 	@Column(name = "RECORD_CORP_ID")
 	private Long recordCorpId;
 
+	@Column(name = "SEX")
+	private String sex;
+
 	@Column(name = "STATUS")
 	private Integer status;
 
 	@Column(name = "SYSTEM_ID")
 	private Integer systemId;
+
 	@Column(name = "TEL")
 	private String tel;
 
-	@Column(name = "CAR_NO")
-	private String carNo;
+	@Column(name = "USER_CODE")
+	private String userCode;
 
 	@Column(name = "USER_NAME")
 	private String userName;
@@ -88,11 +85,6 @@ public class SysLogin extends AuditableEntity implements Serializable
 
 	@Column(name = "VALID_TAG")
 	private String validTag;
-
-	// bi-directional many-to-one association to SysDept
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DEPT_ID")
-	private SysDept sysDept;
 
 	// bi-directional many-to-one association to SysCorp
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -119,16 +111,6 @@ public class SysLogin extends AuditableEntity implements Serializable
 	public void setLoginId(Long loginId)
 	{
 		this.loginId = loginId;
-	}
-
-	public String getEmail()
-	{
-		return email;
-	}
-
-	public void setEmail(String email)
-	{
-		this.email = email;
 	}
 
 	public String getLoginLastTime()
@@ -191,14 +173,14 @@ public class SysLogin extends AuditableEntity implements Serializable
 		this.systemId = systemId;
 	}
 
-	public String getCarNo()
+	public String getSex()
 	{
-		return carNo;
+		return sex;
 	}
 
-	public void setCarNo(String carNo)
+	public void setSex(String sex)
 	{
-		this.carNo = carNo;
+		this.sex = sex;
 	}
 
 	public String getTel()
@@ -209,6 +191,16 @@ public class SysLogin extends AuditableEntity implements Serializable
 	public void setTel(String tel)
 	{
 		this.tel = tel;
+	}
+
+	public String getUserCode()
+	{
+		return userCode;
+	}
+
+	public void setUserCode(String userCode)
+	{
+		this.userCode = userCode;
 	}
 
 	public String getUserName()
@@ -279,16 +271,6 @@ public class SysLogin extends AuditableEntity implements Serializable
 	public void setSysLoginRoles(List<SysLoginRole> sysLoginRoles)
 	{
 		this.sysLoginRoles = sysLoginRoles;
-	}
-
-	public SysDept getSysDept()
-	{
-		return sysDept;
-	}
-
-	public void setSysDept(SysDept sysDept)
-	{
-		this.sysDept = sysDept;
 	}
 
 	public String getRoleIds()

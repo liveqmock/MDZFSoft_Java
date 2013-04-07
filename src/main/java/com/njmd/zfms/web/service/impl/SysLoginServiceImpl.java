@@ -3,6 +3,7 @@
  */
 package com.njmd.zfms.web.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +25,12 @@ import com.njmd.zfms.web.commons.LoginToken;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.SessionNameConstants;
 import com.njmd.zfms.web.dao.SysLoginDAO;
-import com.njmd.zfms.web.entity.sys.SysDept;
 import com.njmd.zfms.web.entity.sys.SysLog;
 import com.njmd.zfms.web.entity.sys.SysLogin;
 import com.njmd.zfms.web.entity.sys.SysLoginRole;
 import com.njmd.zfms.web.entity.sys.SysPermission;
 import com.njmd.zfms.web.entity.sys.SysRole;
 import com.njmd.zfms.web.entity.sys.SysRolePermission;
-import com.njmd.zfms.web.service.SysDeptService;
 import com.njmd.zfms.web.service.SysLogService;
 import com.njmd.zfms.web.service.SysLoginRoleService;
 import com.njmd.zfms.web.service.SysLoginService;
@@ -56,9 +55,6 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 
 	@Autowired
 	private SysLoginRoleService sysLoginRoleService;
-
-	@Autowired
-	private SysDeptService sysDeptService;
 
 	@Override
 	@Autowired
@@ -193,6 +189,41 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			}
 		}
 		loginToken.setMenuPermissions(menuPermissions);
+
+		// 取得数据库中所有一级菜单列表
+		List<SysPermission> allLevel1MenuList = sysPermissionService.findLevel1Menu(1);
+
+		List<SysPermission> level1MenuList = new ArrayList<SysPermission>();
+		Map<Long, List<SysPermission>> level2MenuMap = new HashMap<Long, List<SysPermission>>();
+
+		if (allLevel1MenuList != null && allLevel1MenuList.size() > 0)
+		{
+			for (SysPermission level1Menu : allLevel1MenuList)
+			{
+				Long level1MenuId = level1Menu.getPermissionId();
+				level1MenuList.add(level1Menu);
+				List<SysPermission> allLevel2Menus = sysPermissionService.findMenuByparentIdAndType(level1MenuId, SysPermission.PERMISSION_TYPE_1);
+				List<SysPermission> level2Menus = new ArrayList<SysPermission>();
+				if (allLevel2Menus != null && allLevel2Menus.size() > 0)
+				{
+					for (SysPermission level2menu : allLevel2Menus)
+					{
+						Long level2MenuId = level2menu.getPermissionId();
+						if (menuPermissions.containsKey(level2MenuId))
+						{
+							level2Menus.add(level2menu);
+						}
+					}
+					// if (level2Menus.size() > 0)
+					// {
+
+					level2MenuMap.put(level1MenuId, level2Menus);
+					// }
+				}
+			}
+		}
+		loginToken.setLevel1MenuList(level1MenuList);
+		loginToken.setLevel2MenuMap(level2MenuMap);
 		return loginToken;
 	}
 
@@ -235,8 +266,6 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 		else
 		{
 			entity.setLoginPwd(MD5Utils.toMD5(entity.getLoginPwd()));
-			SysDept sysdept = sysDeptService.findById(deptId);
-			entity.setSysDept(sysdept);
 			baseDao.save(entity);
 			sysLoginRoleService.saveLoginRole(entity, roleIds);
 			return ResultConstants.SAVE_SUCCEED;
@@ -260,8 +289,6 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			{
 				entity.setLoginPwd(MD5Utils.toMD5(newLoginPwd));
 			}
-			SysDept sysdept = sysDeptService.findById(deptId);
-			entity.setSysDept(sysdept);
 			baseDao.update(entity);
 			sysLoginRoleService.updateLoginRole(entity, roleIds);
 			return ResultConstants.UPDATE_SUCCEED;
@@ -283,13 +310,6 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			return result.get(0);
 		else
 			return null;
-	}
-
-	@Override
-	public List<SysLogin> findByDeptId(Long deptId) throws Exception
-	{
-		String hql = "from SysLogin as model where model.sysDept.deptId= ?)";
-		return baseDao.findByHql(hql, deptId);
 	}
 
 }

@@ -42,9 +42,9 @@ public class MenuController extends BaseController
 
 	@Autowired
 	private SysPermissionService sysPermissionService;
-	
+
 	private final String VIEW_PATH = "/sys_mgr/menu_mgr/";
-	
+
 	private final String RELOAD_PATH = "/menu/menuMgr";
 
 	@RequestMapping
@@ -90,10 +90,9 @@ public class MenuController extends BaseController
 		model.addAttribute("level2MenuMap", level2MenuMap);
 		return "menu";
 	}
-	
-	
+
 	@RequestMapping(value = "/menuMgr")
-	public String menuMgr(HttpServletRequest request, Model model,Long menuId)
+	public String menuMgr(HttpServletRequest request, Model model, Long menuId)
 	{
 		try
 		{
@@ -110,14 +109,16 @@ public class MenuController extends BaseController
 			}
 			model.addAttribute("menuTree", menuTree);
 
-			if(menuId == null ){
+			if (menuId == null)
+			{
 				menuId = 0L;
 			}
 			permissions = sysPermissionService.findMenuByparentIdAndType(menuId, 1L);
 			model.addAttribute(RequestNameConstants.RESULT_LIST, permissions);
 			SysPermission sysPermission = sysPermissionService.findById(menuId);
 			model.addAttribute(RequestNameConstants.RESULT_OBJECT, sysPermission);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("获取菜单列表异常", e);
 		}
@@ -125,13 +126,13 @@ public class MenuController extends BaseController
 	}
 
 	/**
-	* 权限上移
-	*
-	* @param request
-	* @param model
-	* @param menuId
-	* @return
-	*/
+	 * 权限上移
+	 * 
+	 * @param request
+	 * @param model
+	 * @param menuId
+	 * @return
+	 */
 
 	@RequestMapping(value = "/up")
 	public String up(HttpServletRequest request, Model model, Long menuId)
@@ -140,7 +141,8 @@ public class MenuController extends BaseController
 		{
 			this.sysPermissionService.changSort(menuId, -1);
 			ResultInfo.saveMessage("菜单上移操作成功!", request, RELOAD_PATH);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("菜单上移操作异常", e);
 			ResultInfo.saveErrorMessage("菜单上移操作异常", request);
@@ -149,13 +151,13 @@ public class MenuController extends BaseController
 	}
 
 	/**
-	* 权限下移
-	*
-	* @param request
-	* @param model
-	* @param menuId
-	* @return
-	*/
+	 * 权限下移
+	 * 
+	 * @param request
+	 * @param model
+	 * @param menuId
+	 * @return
+	 */
 
 	@RequestMapping(value = "/down")
 	public String down(HttpServletRequest request, Model model, Long menuId)
@@ -164,7 +166,8 @@ public class MenuController extends BaseController
 		{
 			this.sysPermissionService.changSort(menuId, 1);
 			ResultInfo.saveMessage("菜单下移操作成功!", request, RELOAD_PATH);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("菜单下移操作异常", e);
 			ResultInfo.saveErrorMessage("菜单下移操作异常", request);
@@ -183,7 +186,8 @@ public class MenuController extends BaseController
 			List<SysPermission> allMenuList = new ArrayList<SysPermission>();
 			allMenuList = sysPermissionService.findAll();
 			model.addAttribute("allMenu", allMenuList);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("新增异常", e);
 		}
@@ -200,12 +204,14 @@ public class MenuController extends BaseController
 			if (resultTag == ResultConstants.ADD_SUCCEED)
 			{
 				ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag), request, RELOAD_PATH);
-			} else
+			}
+			else
 			{
 				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 				ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag), request);
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("新增保存异常", e);
 			ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.ADD_ERROR), request);
@@ -223,7 +229,8 @@ public class MenuController extends BaseController
 			List<SysPermission> allMenuList = sysPermissionService.findAll();
 			model.addAttribute("allMenu", allMenuList);
 			model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("编辑异常", e);
 			ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.EDIT_ERROR), request);
@@ -242,12 +249,14 @@ public class MenuController extends BaseController
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{
 				ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag), request, RELOAD_PATH);
-			} else
+			}
+			else
 			{
 				ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag), request);
 			}
 
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("修改异常", e);
 			ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.UPDATE_ERROR), request);
@@ -258,6 +267,7 @@ public class MenuController extends BaseController
 
 	/**
 	 * 查看
+	 * 
 	 * @param request
 	 * @param model
 	 * @param menuId
@@ -270,7 +280,8 @@ public class MenuController extends BaseController
 		{
 			SysPermission entity = sysPermissionService.findById(menuId);
 			model.addAttribute("menu", entity);
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("查看异常", e);
 
@@ -288,11 +299,13 @@ public class MenuController extends BaseController
 			if (resultTag == ResultConstants.DELETE_SUCCEED)
 			{
 				ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag), request, RELOAD_PATH);
-			} else
+			}
+			else
 			{
 				ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag), request);
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("删除异常", e);
 			ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.DELETE_ERR0R), request);
@@ -311,11 +324,13 @@ public class MenuController extends BaseController
 			if (resultTag == ResultConstants.DELETE_SUCCEED)
 			{
 				ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag), request, RELOAD_PATH);
-			} else
+			}
+			else
 			{
 				ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag), request);
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			this.logger.error("删除异常", e);
 			ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.DELETE_ERR0R), request);

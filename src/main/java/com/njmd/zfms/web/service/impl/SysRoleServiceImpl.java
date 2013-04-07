@@ -21,13 +21,11 @@ import com.njmd.zfms.web.dao.SysCorpDAO;
 import com.njmd.zfms.web.dao.SysPermissionDAO;
 import com.njmd.zfms.web.dao.SysRoleDAO;
 import com.njmd.zfms.web.dao.SysRolePermissionDAO;
-import com.njmd.zfms.web.dao.SysRoleRoomDAO;
 import com.njmd.zfms.web.entity.sys.SysCorp;
 import com.njmd.zfms.web.entity.sys.SysLog;
 import com.njmd.zfms.web.entity.sys.SysPermission;
 import com.njmd.zfms.web.entity.sys.SysRole;
 import com.njmd.zfms.web.entity.sys.SysRolePermission;
-import com.njmd.zfms.web.entity.sys.SysRoleRoom;
 import com.njmd.zfms.web.service.SysLogService;
 import com.njmd.zfms.web.service.SysLoginRoleService;
 import com.njmd.zfms.web.service.SysLoginService;
@@ -76,12 +74,6 @@ public class SysRoleServiceImpl extends BaseCrudServiceImpl<SysRole, Long> imple
 	 */
 	@Autowired
 	private SysPermissionDAO sysPermissionDAO;
-
-	/**
-	 * 房间权限信息数据访问对象
-	 */
-	@Autowired
-	private SysRoleRoomDAO sysRoleRoomDAO;
 
 	/**
 	 * 系统日志操作接口
@@ -258,16 +250,10 @@ public class SysRoleServiceImpl extends BaseCrudServiceImpl<SysRole, Long> imple
 
 		// 先删除角色权限关联信息
 		List<SysRolePermission> menuIdList = sysRoleTemp.getSysRolePermissions();
-		List<SysRoleRoom> roomIdList = sysRoleTemp.getSysRoleRoom();
 		sysRoleTemp.setSysRolePermissions(null);
-		sysRoleTemp.setSysRoleRoom(null);
 		if ((menuIdList != null) && (!menuIdList.isEmpty()))
 		{
 			sysRolePermissionDAO.deleteAll(menuIdList);
-		}
-		if ((roomIdList != null) && (!roomIdList.isEmpty()))
-		{
-			sysRoleRoomDAO.deleteAll(roomIdList);
 		}
 
 		// 保存角色权限关联信息

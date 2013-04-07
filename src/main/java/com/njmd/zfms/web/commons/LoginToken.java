@@ -3,6 +3,7 @@
  */
 package com.njmd.zfms.web.commons;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.annotation.Scope;
@@ -34,6 +35,10 @@ public class LoginToken
 	// 菜单权限
 	private Map<Long, SysPermission> menuPermissions;
 
+	private List<SysPermission> level1MenuList;
+
+	private Map<Long, List<SysPermission>> level2MenuMap;
+
 	public SysLogin getSysLogin()
 	{
 		return sysLogin;
@@ -62,6 +67,26 @@ public class LoginToken
 	public void setSysCorp(SysCorp sysCorp)
 	{
 		this.sysCorp = sysCorp;
+	}
+
+	public List<SysPermission> getLevel1MenuList()
+	{
+		return level1MenuList;
+	}
+
+	public void setLevel1MenuList(List<SysPermission> level1MenuList)
+	{
+		this.level1MenuList = level1MenuList;
+	}
+
+	public Map<Long, List<SysPermission>> getLevel2MenuMap()
+	{
+		return level2MenuMap;
+	}
+
+	public void setLevel2MenuMap(Map<Long, List<SysPermission>> level2MenuMap)
+	{
+		this.level2MenuMap = level2MenuMap;
 	}
 
 }

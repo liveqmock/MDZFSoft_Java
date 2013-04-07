@@ -27,7 +27,7 @@
 	//生成随机类	Random random = new Random();
 
 	// 设定背景色	//g.setColor(getRandColor(200,250));
-	g.setColor(new Color(0, 160, 30));
+	g.setColor(new Color(0,62,162));
 	g.fillRect(0, 0, width, height);
 
 	//设定字体

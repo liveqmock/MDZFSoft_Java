@@ -111,11 +111,8 @@ public class ResultConstants
 	/** 审核异常 */
 	public static final int AUDIT_ERROR = 8002;
 
-	/*** 用户设备保存失败 */
-	public static final int USER_DEV_SAVE_FAILED = 9901;
-
-	/*** 用户设备更新失败 */
-	public static final int USER_DEV_UPDATE_FAILED = 9902;
+	/*** 系统错误 */
+	public static final int SYSTEM_ERROR = 9999;
 
 	private static Properties resultProperties;
 

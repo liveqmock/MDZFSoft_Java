@@ -121,7 +121,7 @@
    	<logger name="org.hibernate">
         <level value="WARN"/>
     </logger>
-    <logger name="com.verywell.framework">
+    <logger name="com.njmd.framework">
         <level value="DEBUG"/>
     </logger>
 	<root>

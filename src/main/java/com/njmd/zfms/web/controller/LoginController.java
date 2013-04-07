@@ -3,22 +3,31 @@
  */
 package com.njmd.zfms.web.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.njmd.framework.commons.ResultInfo;
 import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.utils.web.SessionUtils;
+import com.njmd.zfms.web.commons.LoginToken;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.SessionNameConstants;
 import com.njmd.zfms.web.constants.UrlConstants;
 import com.njmd.zfms.web.entity.sys.SysLogin;
+import com.njmd.zfms.web.entity.sys.SysPermission;
 import com.njmd.zfms.web.service.SysLoginService;
+import com.njmd.zfms.web.service.SysPermissionService;
 
 /**
  * 
@@ -43,6 +52,8 @@ public class LoginController extends BaseController
 
 	// 基础目录
 	private final String BASE_DIR = "/reset_pwd/";
+	@Autowired
+	private SysPermissionService sysPermissionService;
 
 	/**
 	 * 用户登录
@@ -55,22 +66,28 @@ public class LoginController extends BaseController
 	 * @throws Exception
 	 */
 	@RequestMapping
-	public String login(HttpServletRequest request, String loginName, String loginPwd, String imgCheckCode) throws Exception
+	@ResponseBody
+	public ResultInfo login(HttpServletRequest request, String loginName, String loginPwd, String imgCheckCode)
 	{
-		// 如果已经登陆过了，则直接登陆
-		// if (this.getLoginToken() != null)
-		// return "index";
-		int loginResultCode = sysLoginService.login(loginName, loginPwd, imgCheckCode, SYSTEM_ID, request);
+		try
+		{
+			int loginResultCode = sysLoginService.login(loginName, loginPwd, imgCheckCode, SYSTEM_ID, request);
+			LoginToken loginToken = this.getLoginToken();
 
-		if (loginResultCode == ResultConstants.LOGIN_SUCCESS)
-		{
-			return "index";
+			if (loginResultCode == ResultConstants.LOGIN_SUCCESS)
+			{
+				return ResultInfo.saveMessage(ResultConstants.getResultInfo(loginResultCode, INFORMATION_PARAMAS), "/pages/index.jsp");
+			}
+			else
+			{
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(loginResultCode, INFORMATION_PARAMAS));
+			}
 		}
-		else
+		catch (Throwable t)
 		{
-			ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(loginResultCode), "/pages/login.jsp", request);
+			logger.error("登陆异常", t);
+			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.SYSTEM_ERROR, INFORMATION_PARAMAS));
 		}
-		return UrlConstants.INFORMATION_PAGE;
 	}
 
 	/**

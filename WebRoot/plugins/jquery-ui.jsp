@@ -1,0 +1,2 @@
+<link type="text/css" href="${ctx}/plugins/jquery-ui/css/cupertino/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="${ctx}/plugins/jquery-ui/js/jquery-ui-1.8.23.custom.min.js"></script>

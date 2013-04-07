@@ -34,8 +34,7 @@ public class SysPermission implements Serializable
 	public static final long PERMISSION_TYPE_2 = 2;
 
 	@Id
-	@SequenceGenerator(name = "PERMISSION_ID_GENERATOR", sequenceName = "SEQ_SYS_PERMISSION", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PERMISSION_ID_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "PERMISSION_ID")
 	private Long permissionId;
 
