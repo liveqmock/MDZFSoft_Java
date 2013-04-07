@@ -1,0 +1,15 @@
+@charset "utf-8";
+body { margin:0px; padding:0px; font-size:14px; background:url(../images/login_bg2.png); }
+.login_div { background:url(../images/login_bg.png); width:373px; height:487px; margin:0 auto; margin-top:100px; position: relative; }
+.login_div input { font-size:14px; font-weight:bold; }
+.input_a { height:26px; width:250px; line-height:26px; border:solid 1px #f0f6f9; background:transparent; position:absolute; top:214px; left:80px; }
+.input_b { height:26px; width:250px; line-height:26px; border:solid 1px #f0f6f9; background:transparent; position:absolute; top:267px; left:80px; }
+.input_c { height:26px; width:160px; line-height:26px; border:solid 1px #f0f6f9; background:transparent; position:absolute; top:320px; left:80px; }
+.yzm { position:absolute; top:322px; right:40px; }
+.ps { position:absolute; top:370px; left:30px; }
+.anniu { background: url(../images/login_anniu.png); width:316px; height:46px; border:none; line-height:46px; font-size:14px; font-weight:bold; cursor:pointer; position:absolute; top:405px; left:30px; color:#FFFFFF; }
+
+
+
+
+

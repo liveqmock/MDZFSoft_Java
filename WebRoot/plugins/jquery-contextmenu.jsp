@@ -1,0 +1,1 @@
+<script type="text/javascript" src="${ctx}/plugins/jquery-contextmenu/jquery.contextmenu.r2.packed.js"></script>

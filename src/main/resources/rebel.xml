@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
+
+	<classpath>
+		<dir name="D:/我的工作文档/维睿尔项目/森林案件询（讯）问管理系统/源码/cams/WebRoot/WEB-INF/classes">
+		</dir>
+	</classpath>
+
+	<web>
+		<link target="/">
+			<dir name="D:/我的工作文档/维睿尔项目/森林案件询（讯）问管理系统/源码/cams/WebRoot">
+			</dir>
+		</link>
+	</web>
+
+</application>

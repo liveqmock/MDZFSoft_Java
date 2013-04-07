@@ -1,0 +1,75 @@
+/* tables */
+table.tablesorter {
+	margin:0px 20px;
+}
+
+table.tablesorter thead tr th{
+	background:url(../images/table_list_bg.png);
+	height:31px;
+	padding:0px;
+	border-bottom:3px solid #cee0f4;
+	text-align:center;
+	line-height:31px;
+	font-weight:bold;
+	color:#FFFFFF;
+	border-right:0px;
+}
+
+table.tablesorter thead th a {
+	text-decoration: none;
+}
+
+table.tablesorter thead tr .sortable {
+	background-image: url(bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table.tablesorter tbody td {
+	
+}
+
+
+table.tablesorter tbody tr a {
+	text-decoration: none;
+}
+
+table.tablesorter tbody tr a:hover {
+	text-decoration: underline;
+}
+
+
+table.tablesorter thead tr .sortUp {
+	background-image: url(asc.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table.tablesorter thead tr .sortDown {
+	background-image: url(desc.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table.tablesorter thead tr .sortUp,table.tablesorter thead tr .sortDown
+	{
+	background-color: #8dbdd8;
+}
+
+tr.even {
+	background: #E6EFFF;
+}
+tr.odd {
+	background: #F5F5F5;
+}
+tr.over td {
+	background: #CDE6FF;
+	color: #000000;
+}
+.tr_chouse td {
+	color: #FFF;
+	background: #6AB1FF;
+}

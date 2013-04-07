@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../css/left_menu.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table border="0" height="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="menu_border" valign="middle"><img id="hiddenIco" src="../images/left_menu_04.jpg" style="width:7px; height:50px; cursor:pointer;" onclick="hideLeftFrame()"></td>
+  </tr>
+</table>
+	<SCRIPT language=javascript>
+var win = "on";
+function hideLeftFrame()
+{
+	if (win == "on")
+	{
+		win = "off";
+		document.getElementById('hiddenIco').src="../images/left_menu_05.jpg";
+		window.top.mainFrm.cols= "0,7,*";	
+	}
+	else
+	{
+		win = "on";
+		document.getElementById('hiddenIco').src="../images/left_menu_04.jpg";
+		window.top.mainFrm.cols= "169,7,*";
+	}
+}
+</SCRIPT>
+</body>
+</html>
