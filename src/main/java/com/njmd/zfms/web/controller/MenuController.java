@@ -14,11 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.njmd.framework.commons.ResultInfo;
-import com.njmd.framework.commons.tree.Tree;
-import com.njmd.framework.commons.tree.TreeNode;
+import com.njmd.framework.commons.Tree;
+import com.njmd.framework.commons.TreeNode;
 import com.njmd.framework.controller.BaseController;
 import com.njmd.zfms.web.commons.LoginToken;
 import com.njmd.zfms.web.constants.RequestNameConstants;
@@ -103,8 +102,8 @@ public class MenuController extends BaseController
 			for (SysPermission sysMenu : permissions)
 			{
 				TreeNode node = new TreeNode(String.valueOf(sysMenu.getPermissionId()));
-				node.setText(sysMenu.getPermissionName());
-				node.setParentId(String.valueOf(sysMenu.getParentPermissionId()));
+				// node.setText(sysMenu.getPermissionName());
+				// node.setParentId(String.valueOf(sysMenu.getParentPermissionId()));
 				menuTree.addNode(node);
 			}
 			model.addAttribute("menuTree", menuTree);

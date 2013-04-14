@@ -2,6 +2,9 @@ package com.njmd.zfms.web.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.njmd.framework.commons.Tree;
 import com.njmd.framework.service.BaseCrudService;
 import com.njmd.zfms.web.entity.sys.SysCorp;
 
@@ -39,5 +42,13 @@ public interface SysCorpService extends BaseCrudService<SysCorp, Long>
 	 * @throws Exception
 	 */
 	List<SysCorp> findByParentIdAndCorpType(Long parentId, Long corpType) throws Exception;
+
+	/**
+	 * 获得单位树
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	Tree getCorpTree(HttpServletRequest request) throws Exception;
 
 }

@@ -2,16 +2,13 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/common/taglibs.jsp"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<%@ include file="/common/header.jsp"%>
-		<%@ include file="/plugins/jquery-validation.jsp"%>
-	</head>
+<head>
+<%@ include file="/common/header.jsp"%>
+<%@ include file="/plugins/jquery-validation.jsp"%>
+</head>
 <body>
-	<div class="mianbaoxie">
-		当前位置：密码修改
-	</div>
-	<div class="tab_search" style="margin-top: 20px;">
 	<form:form id="mainForm" name="mainForm" method="POST" action="${ctx}/login/updatePwd"  modelAttribute="resultObject">
+		<div class="gray_bor_bg">
 		<div class="table_div">
 			<table width="100%" class="table_border">
 				<tr>
@@ -20,7 +17,7 @@
 				</tr>
 				<tr>
 					<td class="title" width="100">登录账号：</td>
-					<td><input name="loginName" class="form_input" size="20" type="text" disabled="true" value="${resultObject.loginName}"/></td>
+					<td><input name="loginName" class="form_input" size="20" type="text" disabled="true" value="${sessionScope.loginToken.sysLogin.loginName}"/></td>
 				</tr>
 				<tr>
 					<td class="title"><font color="red">*&nbsp;</font>原密码：</td>
@@ -35,16 +32,37 @@
 					<td><input type="password" name="reLoginPwd" id="reLoginPwd" class="form_input {required:true,equalTo:'#newLoginPwd'}" size="20"/></td>
 				</tr>
 				<tr>
-					<td colspan="4" align="center"><input name="确定" type="submit" value="确定" class="form_botton"/></td>
+					<td colspan="4" align="center">
+						<input name="确定" type="submit" value="确定" class="blue_mod_btn"/>
+						<input type="button" value="取消" class="blue_mod_btn" onclick="parent.closeModalWindow();">
+					</td>
 				</tr>
 			</table>
 		</div>
+		</div>
 	</form:form>
-	</div>
-</body>
-<script>
+	<script>
 	$(function(){
+		
 		$('#mainForm').validate();
+		
+		$('#mainForm').ajaxForm({
+			 dataType:  'json',
+		     success:   onSuccess
+		});
 	});
+	
+	function onSuccess(data) {
+	    if(data.messageType=='1')
+	    {
+	    	alert(data.promptInfo);
+	    	parent.closeModalWindow();
+	    }
+	    else
+	    {
+	    	alert(data.promptInfo);
+	    }
+	}
 </script>
+</body>
 </html>

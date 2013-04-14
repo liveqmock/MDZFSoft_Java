@@ -22,6 +22,7 @@ import com.njmd.framework.utils.DateTimeUtil;
 import com.njmd.framework.utils.MD5Utils;
 import com.njmd.framework.utils.web.SessionUtils;
 import com.njmd.zfms.web.commons.LoginToken;
+import com.njmd.zfms.web.constants.CommonConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.SessionNameConstants;
 import com.njmd.zfms.web.dao.SysLoginDAO;
@@ -90,30 +91,9 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 		sysLogin.setLoginLastTime(DateTimeUtil.getChar14());
 		baseDao.update(sysLogin);
 		// 保存系统日志
-		sysLogService.save(SysLog.OPERATE_TYPE_LOGIN, "用户登录");
+		sysLogService.save(SysLog.OPERATE_TYPE_LOGIN, "【用户登录】用户名：" + sysLogin.getLoginName());
 		return ResultConstants.LOGIN_SUCCESS;
 
-	}
-
-	@Override
-	public SysLogin login(String loginName, String loginPwd, HttpServletRequest request) throws Exception
-	{
-		// 检查登录名和密码是否正确 MD5Utils.toMD5(loginPwd)
-		SysLogin sysLogin = ((SysLoginDAO) baseDao).login(loginName, MD5Utils.toMD5(loginPwd), 1l);
-		if (sysLogin != null)
-		{
-			// 加载登录用户的相关信息到登录令牌
-			LoginToken loginToken = this.getAdminLoginToken(sysLogin);
-			// 保存登录用户信息到http session
-			SessionUtils.setObjectAttribute(request, SessionNameConstants.LOGIN_TOKEN, loginToken);
-
-			// 修改最后登录时间
-			sysLogin.setLoginLastTime(DateTimeUtil.getChar14());
-			baseDao.update(sysLogin);
-			// 保存系统日志
-			sysLogService.save(SysLog.OPERATE_TYPE_LOGIN, "客户端用户登录");
-		}
-		return sysLogin;
 	}
 
 	/**
@@ -138,7 +118,8 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			// 用MD5算法加密
 			login.setLoginPwd(MD5Utils.toMD5(newLoginPwd));
 			baseDao.update(login);
-			String operDesc = "用户:" + login.getLoginName() + "对密码进行了修改";
+			// 保存系统日志
+			String operDesc = "【修改密码】用户名:" + login.getLoginName();
 			sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, operDesc);
 			return ResultConstants.UPDATE_SUCCEED;
 		}
@@ -268,13 +249,16 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			entity.setLoginPwd(MD5Utils.toMD5(entity.getLoginPwd()));
 			baseDao.save(entity);
 			sysLoginRoleService.saveLoginRole(entity, roleIds);
+			// 保存系统日志
+			String operDesc = "【用户新增】用户名:" + entity.getLoginName();
+			sysLogService.save(SysLog.OPERATE_TYPE_ADD, operDesc);
 			return ResultConstants.SAVE_SUCCEED;
 		}
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public int update(SysLogin entity, Long[] roleIds, String newLoginPwd, Long deptId) throws Exception
+	public int update(SysLogin entity, Long[] roleIds, String newLoginPwd) throws Exception
 	{
 		Object[] params = { entity.getLoginName(), entity.getLoginId() };
 		String hql = "select count(*) from SysLogin as model where model.loginName= ? and model.loginId != ?)";
@@ -291,6 +275,9 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			}
 			baseDao.update(entity);
 			sysLoginRoleService.updateLoginRole(entity, roleIds);
+			// 保存系统日志
+			String operDesc = "【用户修改】用户名：" + entity.getLoginName();
+			sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, operDesc);
 			return ResultConstants.UPDATE_SUCCEED;
 		}
 	}
@@ -310,6 +297,19 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			return result.get(0);
 		else
 			return null;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public int resetPwd(Long loginId) throws Exception
+	{
+		SysLogin sysLogin = baseDao.findById(loginId);
+		sysLogin.setLoginPwd(MD5Utils.toMD5(CommonConstants.DEFAULT_PWD));
+		baseDao.update(sysLogin);
+		// 保存系统日志
+		String operDesc = "【密码重置】用户名：" + sysLogin.getLoginName();
+		sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, operDesc);
+		return ResultConstants.UPDATE_SUCCEED;
 	}
 
 }

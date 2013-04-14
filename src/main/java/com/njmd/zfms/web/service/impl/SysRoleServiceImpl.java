@@ -96,23 +96,24 @@ public class SysRoleServiceImpl extends BaseCrudServiceImpl<SysRole, Long> imple
 	public int save(SysRole sysRole) throws Exception
 	{
 		LoginToken loginToken = WebContextHolder.getCurrLoginToken();
-		sysRole.setCorpId(loginToken.getSysLogin().getSysCorp().getCorpId());
+		if (loginToken.getSysCorp() != null)
+			sysRole.setCorpId(loginToken.getSysCorp().getCorpId());
+		else
+			sysRole.setCorpId(CommonConstants.NO_PARENT_ID);
 		sysRole.setSystemId(loginToken.getSysLogin().getSystemId());
 
 		// 判断是否已经存在同名角色
 		if (sysRoleDAO.findUnique("roleName", sysRole.getRoleName()) == null)
 		{
 			String permissionIds = sysRole.getPermissionIds();
-			String roomIds = sysRole.getRoomIds();
 
 			// 保存角色信息
 			sysRoleDAO.save(sysRole);
 
 			// 保存角色菜单
 			saveRoleMenu(permissionIds, sysRole);
-			// 保存角色权限关联信息
-			// this.saveRoleMenu(sysRole.getMenuIdStr(), sysRole);
-			sysLogService.save(SysLog.OPERATE_TYPE_ADD, "添加角色成功,roleName:" + sysRole.getRoleName());
+
+			sysLogService.save(SysLog.OPERATE_TYPE_ADD, "【角色新增】角色名称:" + sysRole.getRoleName());
 			return ResultConstants.SAVE_SUCCEED;
 		}
 		return ResultConstants.SAVE_FAILED_NAME_IS_EXIST;
@@ -139,8 +140,9 @@ public class SysRoleServiceImpl extends BaseCrudServiceImpl<SysRole, Long> imple
 		{
 			// 删除角色信息
 			sysRolePermissionDAO.deleteByRoleId(roleId);
-			sysRoleDAO.deleteById(roleId);
-			sysLogService.save(SysLog.OPERATE_TYPE_DELETE, "删除角色成功,roleId:" + roleId);
+			SysRole sysRole = sysRoleDAO.findById(roleId);
+			sysRoleDAO.delete(sysRole);
+			sysLogService.save(SysLog.OPERATE_TYPE_DELETE, "【角色删除】角色名称:" + sysRole.getRoleName());
 			return ResultConstants.DELETE_SUCCEED;
 		}
 		else
@@ -162,24 +164,23 @@ public class SysRoleServiceImpl extends BaseCrudServiceImpl<SysRole, Long> imple
 	{
 		LoginToken loginToken = WebContextHolder.getCurrLoginToken();
 		filters.add(new PropertyFilter("systemId", MatchType.EQ, loginToken.getSysLogin().getSystemId()));
-		filters.add(new PropertyFilter("corpId", MatchType.EQ, loginToken.getSysLogin().getSysCorp().getCorpId()));
-		Page pageTemp = sysRoleDAO.findByPage(page, filters);
-		List resultList = pageTemp.getResult();
-		if (resultList != null)
-		{
-			SysRole sysRole = null;
-			SysCorp tempCorp = null;
-			for (int i = 0; i < resultList.size(); i++)
-			{
-				sysRole = (SysRole) resultList.get(i);
-				tempCorp = sysCorpDAO.findById(sysRole.getCorpId());
-				if (tempCorp != null)
-				{
-					sysRole.setCorpName(tempCorp.getCorpName());
-				}
-			}
-		}
-		return pageTemp;
+		Page pageResult = sysRoleDAO.findByPage(page, filters);
+		// List resultList = pageTemp.getResult();
+		// if (resultList != null)
+		// {
+		// SysRole sysRole = null;
+		// SysCorp tempCorp = null;
+		// for (int i = 0; i < resultList.size(); i++)
+		// {
+		// sysRole = (SysRole) resultList.get(i);
+		// tempCorp = sysCorpDAO.findById(sysRole.getCorpId());
+		// if (tempCorp != null)
+		// {
+		// sysRole.setCorpName(tempCorp.getCorpName());
+		// }
+		// }
+		// }
+		return pageResult;
 	}
 
 	/**
@@ -217,8 +218,9 @@ public class SysRoleServiceImpl extends BaseCrudServiceImpl<SysRole, Long> imple
 			{
 				// 删除角色信息
 				sysRolePermissionDAO.deleteByRoleId(roleId);
-				sysRoleDAO.deleteById(roleId);
-				sysLogService.save(SysLog.OPERATE_TYPE_DELETE, "删除角色成功,roleId:" + roleId);
+				SysRole sysRole = sysRoleDAO.findById(roleId);
+				sysRoleDAO.delete(sysRole);
+				sysLogService.save(SysLog.OPERATE_TYPE_DELETE, "【角色删除】角色名称:" + sysRole.getRoleName());
 			}
 			return ResultConstants.DELETE_SUCCEED;
 		}
@@ -264,7 +266,7 @@ public class SysRoleServiceImpl extends BaseCrudServiceImpl<SysRole, Long> imple
 		sysRoleTemp.setRoleName(sysRole.getRoleName());
 		sysRoleTemp.setStatus(sysRole.getStatus());
 		sysRoleDAO.update(sysRoleTemp);
-		sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, "更新角色成功,roleId:" + sysRole.getRoleId());
+		sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, "【角色修改】角色名称:" + sysRole.getRoleName());
 		return ResultConstants.UPDATE_SUCCEED;
 	}
 

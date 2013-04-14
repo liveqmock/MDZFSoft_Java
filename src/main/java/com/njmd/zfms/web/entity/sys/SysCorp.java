@@ -42,8 +42,18 @@ public class SysCorp extends AuditableEntity implements Serializable
 	private Integer corpType;
 
 	@Column(name = "PARENT_CORP_ID")
-	private Long parentCorpId;
+	private Long parentCorpId = 0l;
 
+	@Column(name = "FTP_IP")
+	private String ftpIp;
+
+	@Column(name = "FTP_PWD")
+	private String ftpPwd;
+
+	@Column(name = "FTP_USER")
+	private String ftpUser;
+
+	@Column(name = "STATUS")
 	private Integer status;
 
 	// bi-directional many-to-one association to SysLogin
@@ -137,5 +147,35 @@ public class SysCorp extends AuditableEntity implements Serializable
 	public String getParentCorpName()
 	{
 		return parentCorpName;
+	}
+
+	public String getFtpIp()
+	{
+		return ftpIp;
+	}
+
+	public void setFtpIp(String ftpIp)
+	{
+		this.ftpIp = ftpIp;
+	}
+
+	public String getFtpPwd()
+	{
+		return ftpPwd;
+	}
+
+	public void setFtpPwd(String ftpPwd)
+	{
+		this.ftpPwd = ftpPwd;
+	}
+
+	public String getFtpUser()
+	{
+		return ftpUser;
+	}
+
+	public void setFtpUser(String ftpUser)
+	{
+		this.ftpUser = ftpUser;
 	}
 }

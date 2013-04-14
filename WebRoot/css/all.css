@@ -17,7 +17,11 @@ abbr,acronym { border:0;}
 
 html{ -webkit-text-size-adjust:none;}
 body{ font:normal normal 12px/14px "宋体"; color:#333;}
-input,select,textarea,button { font:11px Verdana, Geneva, sans-serif; color:#888;}
+body .field-validation-error {color:red;}
+body .validation-summary-errors {color:red;}
+body{ background:url(../images/containerbg.png) #daecf6 repeat-x 0 0;}
+html{height:100%;overflow:auto;}
+input,select,textarea,button { font:12px Verdana, Geneva, sans-serif; color:#888;}
 table{ font-size:inherit; font:100%;}
 
 /* Link */
@@ -36,7 +40,7 @@ textarea { overflow:auto; resize:none;}
 .clear{ clear:both; display:block;}
 
 /*space*/
-.pl_50{ padding-left:50px;}
+.pl_50{ padding-left:47px;}
 .mt_10{ margin-top:10px;}
 .mt_15{ margin-top:15px;}
 .ml_15{ margin-left:15px;}
@@ -59,13 +63,8 @@ textarea { overflow:auto; resize:none;}
 .af_hd{ height:100px; background:url(../images/af_headbg.png) #5ea5e5 no-repeat right bottom;}
 .logo{ position:absolute; margin-left:40px; margin-top:10px;}
 .login_main{ padding-left:15px; position:absolute; top:340px; left:50%;}
-.input_386x25{ width:386px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
 .input_186x25{ width:186px; height:25px; line-height:25px; background:url(../images/long_text.png) no-repeat 0 0; border:none; vertical-align:middle;}
-.input_168x19{ width:168px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
-.input_186x19{ width:186px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
-.input_79x19{ width:79px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
-.select_79x19{ width:79px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
-.input_38x19{ width:38px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
+.input_79x19{ width:100px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
 .input_67x25{ width:67px; height:25px; line-height:25px; background:url(../images/short_text.png) no-repeat 0 0; border:none; vertical-align:middle}
 .form_list{ padding:30px 0px 0px 0px;}
 .form_list .form_item{ padding-bottom:15px;}
@@ -81,9 +80,13 @@ textarea { overflow:auto; resize:none;}
 
 .white,.white:link,.white:visited{ color:#fff;}
 
+/* footer至底 */
+.wrap_page{ height:100%;}
+#body{ padding-bottom:50px;}
+
 /*footer*/
-.footer_out{ padding-top:770px;}
-.footer{ color:#fff; text-align:center;  background-color:#255887; height:30px; line-height:30px;}
+.footer_out{ padding-top:750px;}
+.footer{ color:#fff; text-align:center;  background-color:#255887; height:30px; line-height:30px;margin-top:-30px;}
 .footer span{ padding:0px 50px;}
 
 /*个人中心部门管理*/
@@ -110,7 +113,7 @@ textarea { overflow:auto; resize:none;}
 
 
 /*container*/
-#container{ background:url(../images/containerbg.png) #daecf6 repeat-x 0 0; padding:10px 0px 40px;}
+#container{ background:url(../images/containerbg.png) #daecf6 repeat-x 0 0; padding:10px 0px 40px; }
 /*side white mod*/
 .mod_white{padding:3px; background-color:#fff;}
 .mod_hd{ padding-left:18px; background:url(../images/side_modhd.png) no-repeat 0 0; width:160px; height:27px; line-height:27px; color:#1f83b7; font-weight:bold; cursor:pointer;}
@@ -130,7 +133,7 @@ textarea { overflow:auto; resize:none;}
 .content_bd{ border:1px solid #c3ccd3; padding:10px;}
 
 
-.gray_bor_bg{ background-color:#f2edda; border:1px solid #d5cfaf; padding:15px 0px 15px 15px;}
+.gray_bor_bg{ background-color:#f2edda; border:1px solid #d5cfaf; padding:15px 15px 15px 15px;}
 .gray_blod_word{ color:#755c02; font-weight:bold;}
 
 .radio{ margin-right:6px; vertical-align:-3px;}
@@ -161,11 +164,12 @@ textarea { overflow:auto; resize:none;}
 .common_table .hoverbg{ background-color:#f3f3f3}
 .common_table .pr{ border:none;}
 .common_table .pl{ border:none;}
+.common_table_name td{ padding:6px 6px; color:#656565; line-height:18px;}
 .textc{ text-align:center;}
 .pagination{}
-.pagination a:link,.pagination a:visited{display:inline-block;*display:inline;*zoom:1; height:22px; line-height:22px;  text-align:center;  font-size:12px; vertical-align:middle;}
+.pagination a:link,.pagination a:visited{display:inline-block;*display:inline;*zoom:1; height:22px; line-height:19px;  text-align:center;  font-size:12px; vertical-align:middle;}
 .pagination a:hover,.pagination a:active{ color:#1f83b5;}
-.pagination span a:link,.pagination span a:visited{width:22px; height:22px; color:#666867; background:url(../images/normal_p.png) no-repeat 0 0; vertical-align:middle; line-height:22px; margin:0px 3px;}
+.pagination span a:link,.pagination span a:visited{width:22px; height:26px; color:#666867; background:url(../images/normal_p.png) no-repeat 0 0; vertical-align:middle; line-height:22px; margin:0px 3px;}
 .pagination span a.current:link,.pagination span a.current:visited{ background:url(../images/cur_p.png) no-repeat 0 0; color:#fffeff; font-weight:bold;}
 
 /*个人中心日志查询号*/
@@ -213,6 +217,8 @@ textarea { overflow:auto; resize:none;}
 .over_icon,.over_icon:link,.over_icon:visited{ display:inline-block; padding:2px 0px 2px 40px; background:url(../images/overwrite.png) no-repeat 0 2px; color:#1e82b4;}
 .orange_word{ color:#dd6239;}
 .common_table .orange_word{ color:#dd6239;}
+
+.new_form .field-validation-error{ color:Red;}
 
 
 /*datapicker*/
@@ -579,7 +585,10 @@ textarea { overflow:auto; resize:none;}
 .dialog-btn1,.dialog-btn2{margin-right:10px}
 .dialog-content{text-align:left; clear:both; overflow:auto;}
 
-.weedialog{width:800px; color:#444;}
+.weedialog{width:800px; color:#444; 
+           _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon_home.png'); /* IE6 */
+            _background-image: none; /* IE6 */
+}
 .weedialog a:link,weedialog a:visited {color: #005EAC; text-decoration:none;}
 .weedialog a:hover {color:#ff6600; text-decoration:underline;}
 .weedialog .dialog-header{height:40px; position:relative; cursor:move;}
@@ -635,5 +644,3 @@ div.information {
 	border:1px solid #b4dbe8;
 	background:#e3f2f7 url(../images/icons/information-balloon.png) 10px 13px no-repeat
 }
-
-.label_1{ font:normal normal 14px/16px "宋体"; color:#333; width:640px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}

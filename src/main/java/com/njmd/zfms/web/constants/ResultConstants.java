@@ -81,6 +81,15 @@ public class ResultConstants
 	/** 更新失败-名称重复 */
 	public static final int UPDATE_FAILED_NAME_IS_EXIST = 5003;
 
+	/** 密码重置更新成功 */
+	public static final int UPDATE_PWD_SUCCEED = 5004;
+
+	/** 密码重置更新失败 */
+	public static final int UPDATE_PWD_FAILED = 5005;
+
+	/** 密码重置更新异常 */
+	public static final int UPDATE_PWD_ERROR = 5006;
+
 	/** 删除成功 */
 	public static final int DELETE_SUCCEED = 6000;
 

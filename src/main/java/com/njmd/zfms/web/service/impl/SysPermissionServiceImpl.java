@@ -5,8 +5,11 @@ package com.njmd.zfms.web.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.criterion.Order;
@@ -15,9 +18,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.njmd.framework.commons.Tree;
+import com.njmd.framework.commons.TreeNode;
 import com.njmd.framework.dao.BaseHibernateDAO;
 import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.framework.service.BaseCrudServiceImpl;
+import com.njmd.framework.utils.web.WebContextHolder;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.dao.SysPermissionDAO;
 import com.njmd.zfms.web.entity.sys.SysPermission;
@@ -142,7 +148,7 @@ public class SysPermissionServiceImpl extends BaseCrudServiceImpl<SysPermission,
 	{
 
 		String hql = "from SysPermission as model where model.parentPermissionId=? and model.systemId=? order by model.permissionSort desc";
-		Object[] values = new Object[] {sysPermission.getParentPermissionId(),1};
+		Object[] values = new Object[] { sysPermission.getParentPermissionId(), 1 };
 		List<SysPermission> menuList = sysPermissionDAO.findByHql(hql, values);
 		Integer menuSort = 1;
 		if (menuList.size() != 0)
@@ -204,21 +210,54 @@ public class SysPermissionServiceImpl extends BaseCrudServiceImpl<SysPermission,
 	}
 
 	@Override
-	public List<SysPermission> sortList(List<SysPermission> list) throws Exception {
-		if(list.isEmpty()){
+	public List<SysPermission> sortList(List<SysPermission> list) throws Exception
+	{
+		if (list.isEmpty())
+		{
 			return new ArrayList<SysPermission>();
-		}else{
+		}
+		else
+		{
 			int size = list.size();
 			Long[] pIds = new Long[size];
-			for(int i=0;i<size;i++){
+			for (int i = 0; i < size; i++)
+			{
 				pIds[i] = list.get(i).getPermissionId();
 			}
 			String hql = "from SysPermission as model where model.permissionId in (:pIds) order by model.permissionSort asc";
 			Map m = new HashMap();
 			m.put("pIds", pIds);
-			List<SysPermission> spList = baseDao.findByHql(hql,m);
+			List<SysPermission> spList = baseDao.findByHql(hql, m);
 			return spList;
 		}
+	}
+
+	@Override
+	public Tree getMenuTree(HttpServletRequest request) throws Exception
+	{
+		Map<Long, SysPermission> menuMap = WebContextHolder.getCurrLoginToken().getMenuPermissions();
+
+		Iterator menuIterator = menuMap.keySet().iterator();
+		Tree tree = new Tree();
+		String context = request.getContextPath();
+		while (menuIterator.hasNext())
+		{
+			SysPermission menu = menuMap.get(menuIterator.next());
+			TreeNode treeNode = new TreeNode();
+			treeNode.setId(menu.getPermissionId().toString());
+			treeNode.setName(menu.getPermissionName());
+			treeNode.setpId(menu.getParentPermissionId().toString());
+			if (menu.getParentPermissionId() == 0)
+			{
+				treeNode.setIcon(context + "/plugins/zTree/css/zTreeStyle/img/diy/1_open.png");
+			}
+			else
+			{
+				treeNode.setIcon(context + "/plugins/zTree/css/zTreeStyle/img/diy/3.png");
+			}
+			tree.addNode(treeNode);
+		}
+		return tree;
 	}
 
 }

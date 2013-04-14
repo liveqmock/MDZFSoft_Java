@@ -40,4 +40,10 @@ public class CommonConstants
 	/** 状态 0-无效 */
 	public static final Integer STATUS_INVALID = 0;
 
+	/** 新增用户默认密码 */
+	public static final String DEFAULT_PWD = "888888";
+
+	/** 无上级ID */
+	public static final Long NO_PARENT_ID = 0l;
+
 }

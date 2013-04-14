@@ -2,6 +2,9 @@ package com.njmd.zfms.web.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -11,10 +14,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.njmd.framework.commons.Tree;
+import com.njmd.framework.commons.TreeNode;
 import com.njmd.framework.dao.BaseHibernateDAO;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.framework.service.BaseCrudServiceImpl;
+import com.njmd.zfms.web.constants.CommonConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.entity.sys.SysCorp;
 import com.njmd.zfms.web.entity.sys.SysLog;
@@ -59,7 +65,7 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		if (baseDao.findUnique("corpName", sysCorpDTO.getCorpName()) == null)
 		{
 			baseDao.save(sysCorp);
-			sysLogBO.save(SysLog.OPERATE_TYPE_ADD, "添加单位成功,corpName" + sysCorp.getCorpName());
+			sysLogBO.save(SysLog.OPERATE_TYPE_ADD, "【部门新增】部门名称：" + sysCorp.getCorpName());
 			return ResultConstants.SAVE_SUCCEED;
 		}
 		return ResultConstants.SAVE_FAILED;
@@ -101,20 +107,14 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 	public int delete(Long corpId) throws Exception
 	{
 		// 判断是否有下级单位，如果有下级单位则不允许删除
-
 		List<SysCorp> corpList = this.findByParentId(corpId);
 		if ((corpList != null) && (!corpList.isEmpty()))
 			return ResultConstants.DELETE_FAILED_IS_REF;
 
-		// if (!this.validationCorp(corpId))
-		{
-			baseDao.deleteById(corpId);
-			sysLogBO.save(SysLog.OPERATE_TYPE_DELETE, "删除单位成功,corpId" + corpId);
-			return ResultConstants.DELETE_SUCCEED;
-		}
-		// else
-		// // return ResultConstants.CORP_USER_QUOTED;
-		// return 0;
+		SysCorp sysCorp = baseDao.findById(corpId);
+		baseDao.delete(sysCorp);
+		sysLogBO.save(SysLog.OPERATE_TYPE_DELETE, "【部门删除】部门名称：" + sysCorp.getCorpName());
+		return ResultConstants.DELETE_SUCCEED;
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		BeanUtils.copyProperties(sysCorpTemp, sysCorp);
 
 		baseDao.update(sysCorpTemp);
-		sysLogBO.save(SysLog.OPERATE_TYPE_UPDATE, "更新单位成功,corpId" + sysCorp.getCorpId());
+		sysLogBO.save(SysLog.OPERATE_TYPE_UPDATE, "【部门更新】部门名称：" + sysCorp.getCorpName());
 		return ResultConstants.UPDATE_SUCCEED;
 	}
 
@@ -247,7 +247,34 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 	public void setBaseDao(BaseHibernateDAO<SysCorp, Long> baseDao)
 	{
 		this.baseDao = baseDao;
+	}
 
+	@Override
+	public Tree getCorpTree(HttpServletRequest request) throws Exception
+	{
+		String context = request.getContextPath();
+		Tree tree = new Tree();
+		List<SysCorp> corpList = this.findAll();
+		for (SysCorp sysCorp : corpList)
+		{
+			TreeNode treeNode = new TreeNode();
+
+			treeNode.setId(sysCorp.getCorpId().toString());
+			if (sysCorp.getParentCorpId() != null)
+				treeNode.setpId(sysCorp.getParentCorpId().toString());
+			treeNode.setName(sysCorp.getCorpName());
+			if (sysCorp.getParentCorpId() == null || sysCorp.getParentCorpId().intValue() == CommonConstants.NO_PARENT_ID)
+			{
+				treeNode.setIconOpen(context + "/plugins/zTree/css/zTreeStyle/img/diy/1_open.png");
+				treeNode.setIconClose(context + "/plugins/zTree/css/zTreeStyle/img/diy/1_close.png");
+			}
+			else
+				treeNode.setIcon(context + "/plugins/zTree/css/zTreeStyle/img/diy/8.png");
+			treeNode.setNocheck(true);
+			tree.addNode(treeNode);
+		}
+
+		return tree;
 	}
 
 }

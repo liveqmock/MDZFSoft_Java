@@ -66,6 +66,9 @@ public class SysLog implements Serializable
 	@Column(name = "OPER_USER_NAME")
 	private String operUserName;
 
+	@Column(name = "OPER_USER_CODE")
+	private String operUserCode;
+
 	@Column(name = "OPER_CORP_ID")
 	private Long operCorpId;
 
@@ -177,6 +180,16 @@ public class SysLog implements Serializable
 	public void setOperCorpName(String operCorpName)
 	{
 		this.operCorpName = operCorpName;
+	}
+
+	public String getOperUserCode()
+	{
+		return operUserCode;
+	}
+
+	public void setOperUserCode(String operUserCode)
+	{
+		this.operUserCode = operUserCode;
 	}
 
 }

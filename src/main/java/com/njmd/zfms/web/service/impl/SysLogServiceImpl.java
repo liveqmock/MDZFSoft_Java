@@ -50,6 +50,7 @@ public class SysLogServiceImpl extends BaseCrudServiceImpl<SysLog, Long> impleme
 		sysLog.setOperType(operType);
 		sysLog.setOperUserId(loginToken.getSysLogin().getLoginId());
 		sysLog.setOperUserName(loginToken.getSysLogin().getUserName());
+		sysLog.setOperUserCode(loginToken.getSysLogin().getUserCode());
 		if (loginToken.getSysLogin().getSysCorp() != null)
 		{
 			sysLog.setOperCorpId(loginToken.getSysLogin().getSysCorp().getCorpId());

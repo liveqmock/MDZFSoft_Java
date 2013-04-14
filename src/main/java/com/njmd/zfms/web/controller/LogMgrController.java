@@ -19,7 +19,8 @@ import com.njmd.zfms.web.service.SysLogService;
 
 @Controller
 @RequestMapping("/logMgr")
-public class LogMgrController extends BaseController {
+public class LogMgrController extends BaseController
+{
 
 	private final String[] INFORMATION_PARAMAS = { "系统日志" };
 	// 基础目录
@@ -29,7 +30,7 @@ public class LogMgrController extends BaseController {
 
 	@Autowired
 	private SysLogService sysLogService;
-	
+
 	/** 列表查询 */
 	@RequestMapping
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
@@ -41,8 +42,6 @@ public class LogMgrController extends BaseController {
 			page.setOrderBy("operTime");
 		}
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
-//		PropertyFilter pf = new PropertyFilter("systemId", MatchType.EQ, this.getLoginToken().getSysCorp().getCorpId());
-//		filters.add(pf);
 		Page pageResult = sysLogService.query(page, filters);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
 		return BASE_DIR + "log_list";

@@ -20,25 +20,29 @@ import com.njmd.zfms.web.service.SysLoginRoleService;
 import com.njmd.zfms.web.service.SysRolePermissionService;
 
 @Service
-public class SysLoginRoleServiceImpl extends BaseCrudServiceImpl<SysLoginRole, Long> implements SysLoginRoleService {
-	
+public class SysLoginRoleServiceImpl extends BaseCrudServiceImpl<SysLoginRole, Long> implements SysLoginRoleService
+{
+
 	@Autowired
 	private SysPermissionDAO sysPermissionDAO;
-	
+
 	@Autowired
 	private SysRolePermissionService sysRolePermissionService;
 
 	@Override
 	@Autowired
 	@Qualifier(value = "sysLoginRoleDAO")
-	public void setBaseDao(BaseHibernateDAO<SysLoginRole, Long> baseDao) {
+	public void setBaseDao(BaseHibernateDAO<SysLoginRole, Long> baseDao)
+	{
 		this.baseDao = baseDao;
 	}
 
 	@Override
-	public void saveLoginRole(SysLogin login, Long[] roleIds) throws Exception {
+	public void saveLoginRole(SysLogin login, Long[] roleIds) throws Exception
+	{
 		List<SysLoginRole> list = new ArrayList<SysLoginRole>();
-		for(Long roleId:roleIds){
+		for (Long roleId : roleIds)
+		{
 			SysLoginRole sysLoginRole = new SysLoginRole();
 			sysLoginRole.setSysLogin(login);
 			sysLoginRole.setSysRole(new SysRole(roleId));
@@ -46,19 +50,23 @@ public class SysLoginRoleServiceImpl extends BaseCrudServiceImpl<SysLoginRole, L
 		}
 		baseDao.saveAll(list);
 	}
-	
+
 	@Override
-	public void updateLoginRole(SysLogin login, Long[] roleIds) throws Exception {
+	public void updateLoginRole(SysLogin login, Long[] roleIds) throws Exception
+	{
 		String hql = "from SysLoginRole model where model.sysLogin.loginId = ?";
 		List<SysLoginRole> list = baseDao.findByHql(hql, login.getLoginId());
-		if(!list.isEmpty()){
-			for(SysLoginRole slr:list){
+		if (!list.isEmpty())
+		{
+			for (SysLoginRole slr : list)
+			{
 				baseDao.delete(slr);
 			}
 		}
-		
+
 		List<SysLoginRole> tmpList = new ArrayList<SysLoginRole>();
-		for(Long roleId:roleIds){
+		for (Long roleId : roleIds)
+		{
 			SysLoginRole sysLoginRole = new SysLoginRole();
 			sysLoginRole.setSysLogin(login);
 			sysLoginRole.setSysRole(new SysRole(roleId));
@@ -68,28 +76,38 @@ public class SysLoginRoleServiceImpl extends BaseCrudServiceImpl<SysLoginRole, L
 	}
 
 	@Override
-	public List<SysPermission> findSysPermissionByLogin(SysLogin login) throws Exception {
+	public List<SysPermission> findSysPermissionByLogin(SysLogin login) throws Exception
+	{
 		String hql = "from SysLoginRole as model where model.sysLogin.loginId = ?";
-		if(login.getUserType() == 0){//超级管理员
+		if (login.getUserType() == 0)
+		{// 超级管理员
 			hql = "from SysPermission as model where systemId = 1 and permissionType = 1";
 			List<SysPermission> list = sysPermissionDAO.findByHql(hql);
-			if(list.isEmpty()){
+			if (list.isEmpty())
+			{
 				return new ArrayList<SysPermission>();
 			}
 			return list;
-		}else{
+		}
+		else
+		{
 			List<SysLoginRole> list = baseDao.findByHql(hql, login.getLoginId());
-			
-			if(list == null || list.isEmpty()){
+
+			if (list == null || list.isEmpty())
+			{
 				return new ArrayList<SysPermission>();
-			}else{
+			}
+			else
+			{
 				int size = list.size();
 				Long[] roleIds = new Long[size];
-				for(int i=0;i<size;i++){
+				for (int i = 0; i < size; i++)
+				{
 					roleIds[i] = list.get(i).getSysRole().getRoleId();
 				}
 				List<SysPermission> _list = sysRolePermissionService.findByRoleIds(roleIds);
-				if(_list.isEmpty()){
+				if (_list.isEmpty())
+				{
 					return new ArrayList<SysPermission>();
 				}
 				return _list;
@@ -98,14 +116,18 @@ public class SysLoginRoleServiceImpl extends BaseCrudServiceImpl<SysLoginRole, L
 	}
 
 	@Override
-	public boolean findLoginByRole(Long[] roleId) {
+	public boolean findLoginByRole(Long[] roleId)
+	{
 		String hql = "from SysLoginRole model where model.sysRole.roleId in (:roleIds)";
 		Map m = new HashMap();
 		m.put("roleIds", roleId);
 		List<SysLoginRole> list = baseDao.findByHql(hql, m);
-		if(list == null || list.isEmpty()){
+		if (list == null || list.isEmpty())
+		{
 			return true;
-		}else{
+		}
+		else
+		{
 			return false;
 		}
 	}
