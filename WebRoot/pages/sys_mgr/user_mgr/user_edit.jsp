@@ -62,7 +62,7 @@
 								<font color="red">*&nbsp;</font>所属部门
 							</td>
 							<td>
-								<form:hidden path="sysCorp.corpId" />
+								<input id="corpId" name="sysCorp.corpId" type="hidden" value="${resultObject.sysCorp.corpId}"/>
 								<input type="text" name="corpName" id="corpName" value="${resultObject.sysCorp.corpName}" size="20" class="form_input {required:true}" readonly="readonly" style="cursor: pointer;"/>
 								<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none">
 							         <ul id="treeDemo" class="ztree" style="width: 180px;">

@@ -9,7 +9,7 @@
 </head>
 <body>
 	<%@ include file="/pages/top.jsp"%>
-	<form id="mainForm" action="${ctx}/roleMgr" method="post">
+	<form id="mainForm" action="${ctx}/noticeMgr" method="post">
 		<input type="hidden" name="pageNo" id="pageNo" value="${page.pageNo}" />
 		<input type="hidden" name="pageSize" id="pageSize" value="${page.pageSize}" />
 		<input type="hidden" name="orderBy" id="orderBy" value="${page.orderBy}" />
@@ -17,60 +17,58 @@
 		<div id="container">
 			<div class="layout clearfix">
 				<div class="white_p10">
-					<h4 class="content_hd long_content_hd">角色管理</h4>
+					<h4 class="content_hd long_content_hd">公告管理</h4>
 					<div class="content_bd">
 						<div class="gray_bor_bg">
 							<h5 class="gray_blod_word">按条件查询</h5>
 							<div class="search_form">
 								<div class="mt_10">
-									<label>角色名：</label>
-									<input type="text" id="roleName" name="filter_LIKE_roleName" value="${param['filter_LIKE_roleName']}" class="input_79x19" />
+									<label>公告标题：</label>
+									<input type="text" id="noticeName" name="filter_LIKE_noticeName" value="${param['filter_LIKE_noticeTitle']}" class="input_79x19" />
 									<a href="javascript:$('#mainForm').submit()" class="blue_mod_btn">查&nbsp;询</a>
 									<a href="javascript:clearForm()" class="blue_mod_btn">重&nbsp;置</a>
 								</div>
 							</div>
 						</div>
 						<div style="margin-top: 10px">
-							<a href="${ctx}/roleMgr/add?r=<%=Math.random() %>" class="blue_mod_btn nyroModal" target="_blank" title="新增角色">新增角色</a>
+							<a href="${ctx}/noticeMgr/add?r=<%=Math.random() %>" class="blue_mod_btn nyroModal" target="_blank" title="新增公告">新增公告</a>
 						</div>
 						<div class="mange_table log_table mt_10">
 							<table id="tableList" cellspacing="1" class="tablesorter" width="100%">
 								<thead>
 									<tr align="center">
 										<th>序号</th>
-										<th class="sortable" onclick="javascript:sort('roleName','asc')">角色名称</th>
-										<th class="sortable" onclick="javascript:sort('status','asc')">角色状态</th>
+										<th class="sortable" onclick="javascript:sort('noticeTitle','asc')">公告标题</th>
+										<th class="sortable" onclick="javascript:sort('noticeContent','asc')">公告内容</th>
+										<th class="sortable" onclick="javascript:sort('createTime','asc')">创建时间</th>
 										<th>操作</th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:if test="${page.totalCount != '0'}">
-										<c:forEach var="role" items="${page.result}" varStatus="status">
+										<c:forEach var="notice" items="${page.result}" varStatus="status">
 											<tr align="center">
 												<td>${status.count}</td>
-												<td>${role.roleName}</td>
+												<td>${notice.noticeTitle}</td>
+												<td>${notice.noticeContent}</td>
 												<td>
-													<c:choose>
-														<c:when test="${role.status=='1'}">
-															<font color="#dd6239">有效</font>
-														</c:when>
-														<c:when test="${role.status=='0'}">
-															<font color="red">无效</font>
-														</c:when>
-													</c:choose>
+													<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedDateTime" parseLocale="en_US">
+														<c:out value="${notice.createTime}" />
+													</fmt:parseDate>
+													<fmt:formatDate value='${parsedDateTime}' pattern="yyyy-MM-dd HH:mm:ss" />
 												</td>
 												<td>
 													<!--img class="move" src="images/icons/arrow-move.png" alt="Move" title="Move" /-->
-													<a href="${ctx}/roleMgr/view/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色查看"><img src="images/icons/information-octagon.png" alt="查看" /></a>
-													<a href="${ctx}/roleMgr/edit/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色修改"><img src="images/icons/edit.png" alt="修改" /></a>
-													<a href="#" onclick="roleDelete('${role.roleId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
+													<a href="${ctx}/noticeMgr/view/${notice.noticeId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="公告查看"><img src="images/icons/information-octagon.png" alt="查看" /></a>
+													<a href="${ctx}/noticeMgr/edit/${notice.noticeId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="公告修改"><img src="images/icons/edit.png" alt="修改" /></a>
+													<a href="#" onclick="noticeDelete('${notice.noticeId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
 												</td>
 											</tr>
 										</c:forEach>
 									</c:if>
 									<c:if test="${page.totalCount == '0'}">
 										<tr align="center">
-											<td colspan="4" align="left">暂无符合条件的记录</td>
+											<td colspan="5" align="left">暂无符合条件的记录</td>
 										</tr>
 									</c:if>
 								</tbody>
@@ -97,7 +95,7 @@
 	}
 	
 	function clearForm(){
-		$("#roleName").val("");
+		$("#noticeName").val("");
 	}
 	
 	//批量删除
@@ -105,15 +103,15 @@
 	{
 		if(getCheckboxCheckedValue("id") != "")
 		{
-			if(confirm('确定删除所选的角色？'))
+			if(confirm('确定删除所选的公告？'))
 			{
-				$("#mainForm").attr("action","${ctx}/roleMgr/batchDelete");
+				$("#mainForm").attr("action","${ctx}/noticeMgr/batchDelete");
 				$("#mainForm").submit();
 			}
 		}
 		else
 		{
-			alert("请选择需要删除的角色!");
+			alert("请选择需要删除的公告!");
 		}
 	}
 	//关闭弹出窗口并刷新页面
@@ -124,12 +122,12 @@
 		window.location.reload();
 	}
 	
-	//角色删除
-	function roleDelete(roleId)
+	//公告删除
+	function noticeDelete(noticeId)
 	{
-		if(confirm("您确认删除该角色吗？"))
+		if(confirm("您确认删除该公告吗？"))
 		{
-			$.getJSON("${ctx}/roleMgr/delete/"+roleId+"?r="+Math.random(), function(data){
+			$.getJSON("${ctx}/noticeMgr/delete/"+noticeId+"?r="+Math.random(), function(data){
 				if(data.messageType=='1')
 			    {
 			    	alert(data.promptInfo);

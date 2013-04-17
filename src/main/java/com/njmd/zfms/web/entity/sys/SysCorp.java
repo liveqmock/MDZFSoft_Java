@@ -53,6 +53,9 @@ public class SysCorp extends AuditableEntity implements Serializable
 	@Column(name = "FTP_USER")
 	private String ftpUser;
 
+	@Column(name = "TREE_CODE")
+	private String treeCode;
+
 	@Column(name = "STATUS")
 	private Integer status;
 
@@ -177,5 +180,15 @@ public class SysCorp extends AuditableEntity implements Serializable
 	public void setFtpUser(String ftpUser)
 	{
 		this.ftpUser = ftpUser;
+	}
+
+	public String getTreeCode()
+	{
+		return treeCode;
+	}
+
+	public void setTreeCode(String treeCode)
+	{
+		this.treeCode = treeCode;
 	}
 }

@@ -2,7 +2,6 @@ package com.njmd.zfms.web.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +19,8 @@ import com.njmd.framework.dao.BaseHibernateDAO;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.framework.service.BaseCrudServiceImpl;
+import com.njmd.framework.utils.web.WebContextHolder;
+import com.njmd.zfms.web.commons.LoginToken;
 import com.njmd.zfms.web.constants.CommonConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.entity.sys.SysCorp;
@@ -65,6 +66,15 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		if (baseDao.findUnique("corpName", sysCorpDTO.getCorpName()) == null)
 		{
 			baseDao.save(sysCorp);
+			// 处理组织机构树编码，编码格式为：上级机构树编码.本机构ID
+			String treeCode = String.valueOf(sysCorp.getCorpId());
+			if (!CommonConstants.NO_PARENT_ID.equals(sysCorp.getParentCorpId()))
+			{
+				String parentTreeCode = baseDao.findById(sysCorp.getParentCorpId()).getTreeCode();
+				treeCode = parentTreeCode + "." + sysCorp.getCorpId();
+			}
+			sysCorp.setTreeCode(treeCode);
+			baseDao.update(sysCorp);
 			sysLogBO.save(SysLog.OPERATE_TYPE_ADD, "【部门新增】部门名称：" + sysCorp.getCorpName());
 			return ResultConstants.SAVE_SUCCEED;
 		}
@@ -202,6 +212,14 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 			sysCorpTemp = new SysCorp();
 		}
 		BeanUtils.copyProperties(sysCorpTemp, sysCorp);
+		// 处理组织机构树编码，编码格式为：上级机构树编码.本机构ID
+		String treeCode = String.valueOf(sysCorp.getCorpId());
+		if (!CommonConstants.NO_PARENT_ID.equals(sysCorp.getParentCorpId()))
+		{
+			String parentTreeCode = baseDao.findById(sysCorp.getParentCorpId()).getTreeCode();
+			treeCode = parentTreeCode + "." + sysCorp.getCorpId();
+		}
+		sysCorpTemp.setTreeCode(treeCode);
 
 		baseDao.update(sysCorpTemp);
 		sysLogBO.save(SysLog.OPERATE_TYPE_UPDATE, "【部门更新】部门名称：" + sysCorp.getCorpName());
@@ -254,7 +272,19 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 	{
 		String context = request.getContextPath();
 		Tree tree = new Tree();
-		List<SysCorp> corpList = this.findAll();
+		LoginToken loginToken = WebContextHolder.getCurrLoginToken();
+		List<SysCorp> corpList = null;
+		if (loginToken.getSysCorp() == null)
+		{
+			corpList = this.findAll();
+		}
+		else
+		{
+			Object[] values = new Object[] {};
+			String hql = "from SysCorp as model where model.treeCode like '" + loginToken.getSysCorp().getTreeCode() + "%' and status ="
+					+ CommonConstants.STATUS_VALID;
+			corpList = baseDao.findByHql(hql, values);
+		}
 		for (SysCorp sysCorp : corpList)
 		{
 			TreeNode treeNode = new TreeNode();
@@ -276,5 +306,4 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 
 		return tree;
 	}
-
 }

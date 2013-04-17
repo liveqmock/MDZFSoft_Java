@@ -31,11 +31,11 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>上级部门
+								上级部门
 							</td>
 							<td>
 								<form:hidden path="parentCorpId"/>
-								<input type="text" name="parentCorpName" id="parentCorpName" size="20" value="${resultObject.parentCorpName}" class="form_input {required:true}" readonly="readonly" style="cursor: pointer;"/>
+								<input type="text" name="parentCorpName" id="parentCorpName" size="20" value="${resultObject.parentCorpName}" class="form_input" readonly="readonly" style="cursor: pointer;"/>
 								<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none">
 							         <ul id="treeDemo" class="ztree" style="width: 180px;">
 							         </ul>
