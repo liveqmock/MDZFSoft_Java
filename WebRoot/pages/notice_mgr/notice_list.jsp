@@ -59,7 +59,6 @@
 												</td>
 												<td>
 													<!--img class="move" src="images/icons/arrow-move.png" alt="Move" title="Move" /-->
-													<a href="${ctx}/noticeMgr/view/${notice.noticeId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="公告查看"><img src="images/icons/information-octagon.png" alt="查看" /></a>
 													<a href="${ctx}/noticeMgr/edit/${notice.noticeId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="公告修改"><img src="images/icons/edit.png" alt="修改" /></a>
 													<a href="#" onclick="noticeDelete('${notice.noticeId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
 												</td>

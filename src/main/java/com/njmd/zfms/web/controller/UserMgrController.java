@@ -69,7 +69,7 @@ public class UserMgrController extends BaseController
 		filters.add(pf);
 		filters.add(pf2);
 		Page pageResult = sysLoginService.query(page, filters);
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, false);
 
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
@@ -101,7 +101,7 @@ public class UserMgrController extends BaseController
 		List<SysCorp> corpList = sysCorpService.findAll();
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("corpList", corpList);
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, false);
 
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, new SysLogin());
@@ -146,7 +146,7 @@ public class UserMgrController extends BaseController
 		List<SysCorp> corpList = sysCorpService.findAll();
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("corpList", corpList);
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, false);
 
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);

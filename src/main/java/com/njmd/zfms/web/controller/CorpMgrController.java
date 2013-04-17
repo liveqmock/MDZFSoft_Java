@@ -38,7 +38,7 @@ public class CorpMgrController extends BaseController
 	public String index(HttpServletRequest request, Model model) throws Exception
 	{
 		// 设置默认排序方式
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, false);
 		model.addAttribute("tree", tree);
 		return BASE_DIR + "corp_list";
 	}
@@ -56,7 +56,7 @@ public class CorpMgrController extends BaseController
 			sysCorp.setParentCorpId(parentCorpId);
 			sysCorp.setParentCorpName(entity.getCorpName());
 		}
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, false);
 		model.addAttribute("tree", tree);
 
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, sysCorp);
@@ -127,7 +127,7 @@ public class CorpMgrController extends BaseController
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		SysCorp entity = sysCorpService.findById(id);
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, false);
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 

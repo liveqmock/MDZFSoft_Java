@@ -46,9 +46,12 @@ public interface SysCorpService extends BaseCrudService<SysCorp, Long>
 	/**
 	 * 获得单位树
 	 * 
+	 * @param request
+	 * @param enableCheckBox
+	 *            是否需要显示复选框
 	 * @return
 	 * @throws Exception
 	 */
-	Tree getCorpTree(HttpServletRequest request) throws Exception;
+	Tree getCorpTree(HttpServletRequest request, boolean enableCheckBox) throws Exception;
 
 }

@@ -9,8 +9,7 @@
 </head>
 <body>
 	<form:form id="editForm" name="editForm" method="POST" action="${ctx}/roleMgr/update" modelAttribute="resultObject">
-		<form:hidden path="roleId"/>
-		<form:hidden path="status"/>
+		<form:hidden path="noticeId"/>
 			<div class="gray_bor_bg">
 				<div class="table_div">
 					<table width="100%" class="table_border">
@@ -22,25 +21,25 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>角色名称
+								<font color="red">*&nbsp;</font>公告标题
 							</td>
 							<td>
-								<form:input path="roleName" cssClass="form_input {required:true,maxlength:10}" size="20" />
+								<form:input path="noticeTitle" cssClass="form_input {required:true,maxlength:50}" size="30" />
 							</td>
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								角色描述
+								公告内容
 							</td>
 							<td>
-								<form:textarea path="roleDesc" cols="70" rows="3" cssClass="form_input {maxlength:70}"/>
+								<form:textarea path="noticeContent" cols="80" rows="9" cssClass="form_input {maxlength:500}"/>
 							</td>
 						</tr>
 						<tr>
-							<td class="title"><font color="red">*</font>菜单权限：</td>
+							<td class="title"><font color="red">*</font>发布对象：</td>
 							<td>
-								<form:hidden path="permissionIds"/> 
-								<div id="treeDemo" class="ztree" style="height: 250px;width: 400px;overflow: auto;">
+								<form:hidden path="targetIds"/> 
+								<div id="treeDemo" class="ztree" style="height: 200px;width: 400px;overflow: auto;">
 								</div>
 								<label id="treeError" style="color: red;font-style: italic"></label>
 							</td>
@@ -71,7 +70,7 @@
 		$(document).ready(function(){
 			
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
-			initCheck('${rolePermissIds}');
+			initCheck('${resultObject.targetIds}');
 		});
 		
 		$('#editForm').validate({
@@ -80,7 +79,7 @@
 					var nodes = treeObj.getCheckedNodes(true);  
 					var checkIds = "";  
 					if (nodes.length<=0) {
-						$('#treeError').html('请选择菜单');
+						$('#treeError').html('请至少选择一个公告发布对象');
 						$('#treeDemo').attr("style","height: 200px;width: 400px;overflow: auto;border: 1px dotted red;");
 						return false;
 					}
@@ -91,7 +90,7 @@
 						    checkIds += nodes[i].id;  
 						}
 					}
-					$("#permissionIds").val(checkIds);
+					$("#targetIds").val(checkIds);
 					$('#editForm').ajaxSubmit(function(data){
 						if(data.messageType=='1')
 					    {

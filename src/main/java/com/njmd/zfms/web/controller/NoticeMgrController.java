@@ -25,6 +25,7 @@ import com.njmd.zfms.web.entity.notice.NoticeInfo;
 import com.njmd.zfms.web.entity.sys.SysLogin;
 import com.njmd.zfms.web.service.NoticeInfoService;
 import com.njmd.zfms.web.service.SysCorpService;
+import com.njmd.zfms.web.service.SysPermissionService;
 
 @Controller
 @RequestMapping("/noticeMgr")
@@ -42,6 +43,9 @@ public class NoticeMgrController extends BaseController
 
 	@Autowired
 	private SysCorpService sysCorpService;
+
+	@Autowired
+	private SysPermissionService sysPermissionService;
 
 	/** 列表查询 */
 	@RequestMapping
@@ -70,7 +74,7 @@ public class NoticeMgrController extends BaseController
 	@RequestMapping(value = "/add")
 	public String add(HttpServletRequest request, Model model) throws Exception
 	{
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, true);
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, new NoticeInfo());
 		return BASE_DIR + "notice_add";
@@ -143,7 +147,7 @@ public class NoticeMgrController extends BaseController
 	{
 
 		NoticeInfo entity = noticeInfoService.findById(id);
-		Tree tree = sysCorpService.getCorpTree(request);
+		Tree tree = sysCorpService.getCorpTree(request, true);
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 

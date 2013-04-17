@@ -268,7 +268,7 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 	}
 
 	@Override
-	public Tree getCorpTree(HttpServletRequest request) throws Exception
+	public Tree getCorpTree(HttpServletRequest request, boolean enableCheckBox) throws Exception
 	{
 		String context = request.getContextPath();
 		Tree tree = new Tree();
@@ -300,7 +300,7 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 			}
 			else
 				treeNode.setIcon(context + "/plugins/zTree/css/zTreeStyle/img/diy/8.png");
-			treeNode.setNocheck(true);
+			treeNode.setNocheck(!enableCheckBox);
 			tree.addNode(treeNode);
 		}
 
