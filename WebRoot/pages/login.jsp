@@ -38,8 +38,8 @@
 			</ul>
 		</form>
 		<div class="login_opt white">
-			<span class="h_l"></span> <span class="h_r"></span> <a href="${ctx}/downloads/mdDrivers.zip" class="white" target="_blank">执法记录仪驱动下载</a>&nbsp;&nbsp;|&nbsp; <a
-				href="${ctx}/downloads/md_1.0.0.5.CAB" class="white" target="_blank">上传插件下载</a>
+			<span class="h_l"></span> <span class="h_r"></span> <a href="#" onclick="javascript:downloadFile('mdDrivers.zip')" class="white" target="_blank">执法记录仪驱动下载</a>&nbsp;&nbsp;|&nbsp; <a
+				href="#" onclick="javascript:downloadFile('md_1.0.0.5.CAB')" class="white">上传插件下载</a>
 		</div>
 	</div>
 	<div class="footer_out">

@@ -52,18 +52,18 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP用户名
+								<font color="red">*&nbsp;</font>FTP端口
 							</td>
 							<td>
-								<form:input path="ftpUser" cssClass="form_input {required:true,maxlength:20}" size="20"/>
+								<form:input path="ftpPort" cssClass="form_input {required:true,maxlength:20}" size="20" />
 							</td>
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP密码
+								<font color="red">*&nbsp;</font>FTP用户名
 							</td>
 							<td>
-								<form:input path="ftpPwd" cssClass="form_input {required:true,maxlength:20}" size="20" />
+								<form:input path="ftpUser" cssClass="form_input {required:true,maxlength:20}" size="20"/>
 							</td>
 						</tr>
 						<tr>

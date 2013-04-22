@@ -51,9 +51,7 @@
     <init-param>
       <description>不需要过滤的URL</description>
       <param-name>notFilterURL</param-name>
-      <param-value>/login,/footer,/css/,/images/,/js/,/plugins/,/common/,/clientService,/menuMgr,
-			/menu/view,/menu/edit,/menu/up,/menu/down,/menu/del,/menu/batchDel,/menu/add,/menu/save,/menu/update
-			</param-value>
+      <param-value>/login,/footer,/css/,/images/,/js/,/plugins/,/common/,/menuMgr,/servlet/downloadFile</param-value>
     </init-param>
   </filter>
   <filter-mapping>
@@ -77,10 +75,19 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet>
+    <servlet-name>DownloadServlet</servlet-name>
+    <servlet-class>com.njmd.framework.web.servlet.DownloadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadServlet</servlet-name>
+    <url-pattern>/servlet/downloadFile</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>spring-mvc</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>

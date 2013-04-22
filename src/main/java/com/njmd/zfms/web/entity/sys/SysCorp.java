@@ -47,8 +47,8 @@ public class SysCorp extends AuditableEntity implements Serializable
 	@Column(name = "FTP_IP")
 	private String ftpIp;
 
-	@Column(name = "FTP_PWD")
-	private String ftpPwd;
+	@Column(name = "FTP_PORT")
+	private String ftpPort;
 
 	@Column(name = "FTP_USER")
 	private String ftpUser;
@@ -162,14 +162,14 @@ public class SysCorp extends AuditableEntity implements Serializable
 		this.ftpIp = ftpIp;
 	}
 
-	public String getFtpPwd()
+	public String getFtpPort()
 	{
-		return ftpPwd;
+		return ftpPort;
 	}
 
-	public void setFtpPwd(String ftpPwd)
+	public void setFtpPort(String ftpPort)
 	{
-		this.ftpPwd = ftpPwd;
+		this.ftpPort = ftpPort;
 	}
 
 	public String getFtpUser()
