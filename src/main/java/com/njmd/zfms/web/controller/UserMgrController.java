@@ -122,10 +122,16 @@ public class UserMgrController extends BaseController
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
 			}
-			else
+			else if (resultTag == ResultConstants.SAVE_FAILED_NAME_IS_EXIST)
 			{
 				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
+			}
+			else
+			{
+				String[] PARAMAS = { "用户", "警员编号" };
+				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, PARAMAS));
 			}
 		}
 		catch (Throwable t)
@@ -166,9 +172,15 @@ public class UserMgrController extends BaseController
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
 			}
-			else
+			else if (resultTag == ResultConstants.UPDATE_FAILED_NAME_IS_EXIST)
 			{
 				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
+			}
+			else
+			{
+				String[] PARAMAS = { "用户", "警员编号" };
+				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, PARAMAS));
 			}
 		}
 		catch (Throwable t)
@@ -238,5 +250,26 @@ public class UserMgrController extends BaseController
 			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.SYSTEM_ERROR, "用户密码"));
 		}
 
+	}
+
+	/** 弹出用户选择列表 */
+	@RequestMapping(value = "/userSelect")
+	public String userSelect(HttpServletRequest request, Page page, Model model) throws Exception
+	{
+		// 设置默认排序方式
+		if (!page.isOrderBySetted())
+		{
+			page.setOrder(Page.ASC);
+			page.setOrderBy("loginName");
+		}
+		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
+		PropertyFilter pf = new PropertyFilter("sysCorp.treeCode", PropertyFilter.MatchType.START, this.getLoginToken().getSysCorp().getTreeCode());
+		filters.add(pf);
+		Page pageResult = sysLoginService.query(page, filters);
+		Tree tree = sysCorpService.getCorpTree(request, false);
+
+		model.addAttribute("tree", tree);
+		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
+		return BASE_DIR + "user_select";
 	}
 }

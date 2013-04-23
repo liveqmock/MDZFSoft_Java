@@ -1,8 +1,6 @@
 package com.njmd.zfms.web.controller;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.njmd.framework.commons.ResultInfo;
 import com.njmd.framework.commons.Tree;
-import com.njmd.framework.commons.TreeNode;
 import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
@@ -26,7 +23,6 @@ import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.UrlConstants;
 import com.njmd.zfms.web.entity.sys.SysLogin;
 import com.njmd.zfms.web.entity.sys.SysLoginRole;
-import com.njmd.zfms.web.entity.sys.SysPermission;
 import com.njmd.zfms.web.entity.sys.SysRole;
 import com.njmd.zfms.web.service.SysLoginRoleService;
 import com.njmd.zfms.web.service.SysPermissionService;

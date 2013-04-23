@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.njmd.zfms.web.entity.sys.SysCorp;
 import com.njmd.zfms.web.entity.sys.SysLogin;
 import com.njmd.zfms.web.entity.sys.SysPermission;
+import com.njmd.zfms.web.entity.sys.SysRole;
 
 /**
  * 
@@ -31,6 +32,8 @@ public class LoginToken
 	private SysLogin sysLogin;
 	// 单位信息
 	private SysCorp sysCorp;
+
+	private List<SysRole> sysRoles;
 
 	// 菜单权限
 	private Map<Long, SysPermission> menuPermissions;
@@ -67,6 +70,16 @@ public class LoginToken
 	public void setSysCorp(SysCorp sysCorp)
 	{
 		this.sysCorp = sysCorp;
+	}
+
+	public List<SysRole> getSysRoles()
+	{
+		return sysRoles;
+	}
+
+	public void setSysRoles(List<SysRole> sysRoles)
+	{
+		this.sysRoles = sysRoles;
 	}
 
 	public List<SysPermission> getLevel1MenuList()

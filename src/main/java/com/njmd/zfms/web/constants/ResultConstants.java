@@ -18,6 +18,11 @@ import com.njmd.framework.module.config.PropertiesLoaded;
 @PropertiesConfigLoader(file = "config/result_config.properties", refreshTime = 60 * 60)
 public class ResultConstants
 {
+	/** 成功 */
+	public static final int SUCCESS = 1;
+	/** 失败 */
+	public static final int FAILED = -1;
+
 	/** 登录成功 */
 	public static final int LOGIN_SUCCESS = 9000;
 
@@ -26,6 +31,9 @@ public class ResultConstants
 
 	/** 登录失败,验证码不正确! */
 	public static final int IMG_CODE_FAILED = 9002;
+
+	/** 登录失败,账号已被锁定! */
+	public static final int LOGIN_INFO_INVAILD = 9003;
 
 	/** 登录失败,系统错误! */
 	public static final int LOGIN_ERROR = 9009;
@@ -60,6 +68,9 @@ public class ResultConstants
 	/** 插入异常-名称重复 */
 	public static final int SAVE_FAILED_NAME_IS_EXIST = 3003;
 
+	/** 插入异常-名称重复 */
+	public static final int SAVE_FAILED_CODE_IS_EXIST = 3004;
+
 	/** 编辑成功 */
 	public static final int EDIT_SUCCEED = 4000;
 
@@ -80,6 +91,9 @@ public class ResultConstants
 
 	/** 更新失败-名称重复 */
 	public static final int UPDATE_FAILED_NAME_IS_EXIST = 5003;
+
+	/** 更新失败-编号重复 */
+	public static final int UPDATE_FAILED_CODE_IS_EXIST = 5004;
 
 	/** 密码重置更新成功 */
 	public static final int UPDATE_PWD_SUCCEED = 5004;
@@ -133,7 +147,10 @@ public class ResultConstants
 	 */
 	public static String getResultInfo(int resultCode)
 	{
-		return resultProperties.getProperty(String.valueOf(resultCode));
+		if (resultProperties != null)
+			return resultProperties.getProperty(String.valueOf(resultCode));
+		else
+			return "";
 	}
 
 	/**
@@ -144,7 +161,10 @@ public class ResultConstants
 	 */
 	public static String getResultInfo(int resultCode, String... params)
 	{
-		return MessageFormat.format(resultProperties.getProperty(String.valueOf(resultCode)), params);
+		if (resultProperties != null)
+			return MessageFormat.format(resultProperties.getProperty(String.valueOf(resultCode)), params);
+		else
+			return "";
 	}
 
 	@PropertiesLoaded

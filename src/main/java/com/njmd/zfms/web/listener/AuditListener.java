@@ -4,10 +4,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.event.SaveOrUpdateEvent;
 import org.hibernate.event.SaveOrUpdateEventListener;
 
+import com.njmd.framework.entity.AuditableEntity;
 import com.njmd.framework.utils.DateTimeUtil;
 import com.njmd.framework.utils.web.WebContextHolder;
 import com.njmd.zfms.web.commons.LoginToken;
-import com.njmd.zfms.web.entity.AuditableEntity;
 
 /**
  * 在自动为entity添加审计信息的Hibernate EventListener.

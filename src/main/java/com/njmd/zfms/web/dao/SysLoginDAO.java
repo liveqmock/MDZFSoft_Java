@@ -34,7 +34,6 @@ public class SysLoginDAO extends BaseHibernateDAO<SysLogin, Long>
 		filters.add(new PropertyFilter("loginName", PropertyFilter.MatchType.EQ, loginName));
 		filters.add(new PropertyFilter("loginPwd", PropertyFilter.MatchType.EQ, loginPwd));
 		filters.add(new PropertyFilter("systemId", PropertyFilter.MatchType.EQ, systemId));
-		filters.add(new PropertyFilter("status", PropertyFilter.MatchType.EQ, Long.valueOf("1")));
 		List<SysLogin> list = this.findByFilters(filters);
 		if (list != null && list.size() == 1)
 			return list.get(0);

@@ -81,8 +81,8 @@ public final class ReflectionUtil extends org.springframework.util.ReflectionUti
 	/**
 	 * 直接调用对象方法,无视private/protected修饰符.
 	 */
-	public static Object invokeMethod(final Object object, final String methodName, final Class<?>[] parameterTypes,
-			final Object[] parameters) throws InvocationTargetException
+	public static Object invokeMethod(final Object object, final String methodName, final Class<?>[] parameterTypes, final Object[] parameters)
+			throws InvocationTargetException
 	{
 		Method method = getDeclaredMethod(object, methodName, parameterTypes);
 		if (method == null)
@@ -180,7 +180,8 @@ public final class ReflectionUtil extends org.springframework.util.ReflectionUti
 
 		if (!(genType instanceof ParameterizedType))
 		{
-			logger.warn(clazz.getSimpleName() + "'s superclass not ParameterizedType");
+			// logger.warn(clazz.getSimpleName() +
+			// "'s superclass not ParameterizedType");
 			return Object.class;
 		}
 

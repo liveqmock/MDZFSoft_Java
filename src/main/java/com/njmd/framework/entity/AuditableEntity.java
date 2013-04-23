@@ -1,4 +1,4 @@
-package com.njmd.zfms.web.entity;
+package com.njmd.framework.entity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

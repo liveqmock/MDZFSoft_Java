@@ -7,10 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.njmd.zfms.web.entity.AuditableEntity;
+import com.njmd.framework.entity.AuditableEntity;
+import com.njmd.zfms.web.entity.sys.SysCorp;
 
 /**
  * The persistent class for the SYS_NOTICE database table.
@@ -27,8 +30,9 @@ public class NoticeInfo extends AuditableEntity implements Serializable
 	@Column(name = "NOTICE_ID")
 	private Long noticeId;
 
-	@Column(name = "CORP_ID")
-	private Long corpId;
+	/*
+	 * @Column(name = "CORP_ID") private Long corpId;
+	 */
 
 	@Lob
 	@Column(name = "NOTICE_CONTENT")
@@ -42,6 +46,10 @@ public class NoticeInfo extends AuditableEntity implements Serializable
 
 	@Column(name = "TARGET_IDS")
 	private String targetIds;
+
+	@ManyToOne
+	@JoinColumn(name = "CORP_ID")
+	private SysCorp sysCorp;
 
 	public NoticeInfo()
 	{
@@ -57,15 +65,11 @@ public class NoticeInfo extends AuditableEntity implements Serializable
 		this.noticeId = noticeId;
 	}
 
-	public Long getCorpId()
-	{
-		return this.corpId;
-	}
-
-	public void setCorpId(Long corpId)
-	{
-		this.corpId = corpId;
-	}
+	/*
+	 * public Long getCorpId() { return this.corpId; }
+	 * 
+	 * public void setCorpId(Long corpId) { this.corpId = corpId; }
+	 */
 
 	public String getCreateBy()
 	{
@@ -145,6 +149,16 @@ public class NoticeInfo extends AuditableEntity implements Serializable
 	public void setTargetIds(String targetIds)
 	{
 		this.targetIds = targetIds;
+	}
+
+	public SysCorp getSysCorp()
+	{
+		return sysCorp;
+	}
+
+	public void setSysCorp(SysCorp sysCorp)
+	{
+		this.sysCorp = sysCorp;
 	}
 
 }

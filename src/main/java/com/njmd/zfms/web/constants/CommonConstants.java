@@ -1,7 +1,5 @@
 package com.njmd.zfms.web.constants;
 
-import com.njmd.framework.module.config.Config;
-import com.njmd.framework.module.config.PropertiesConfigLoader;
 
 /**
  * 
@@ -9,8 +7,6 @@ import com.njmd.framework.module.config.PropertiesConfigLoader;
  * @description: 定义了系统常量信息
  * @author: Yao
  */
-@Config
-@PropertiesConfigLoader(file = "config/config.properties", refreshTime = 60 * 60)
 public class CommonConstants
 {
 	/** 每页显示记录数量 */

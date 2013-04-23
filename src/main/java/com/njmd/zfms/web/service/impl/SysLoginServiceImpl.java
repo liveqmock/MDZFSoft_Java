@@ -81,6 +81,10 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 		{
 			return ResultConstants.LOGIN_INFO_FAILED;
 		}
+		if (sysLogin.getStatus().equals(CommonConstants.STATUS_INVALID))
+		{
+			return ResultConstants.LOGIN_INFO_INVAILD;
+		}
 
 		// 加载登录用户的相关信息到登录令牌
 		LoginToken loginToken = this.getAdminLoginToken(sysLogin);
@@ -143,7 +147,24 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			Hibernate.initialize(sysLogin.getSysCorp());
 			loginToken.setSysCorp(sysLogin.getSysCorp());
 		}
+		List<SysRole> roles = new ArrayList<SysRole>();
+		if (sysLogin.getSysLoginRoles() != null && sysLogin.getSysLoginRoles().size() > 0)
+		{
 
+			List<SysLoginRole> sysLoginRoles = sysLogin.getSysLoginRoles();
+			for (SysLoginRole sysLoginRole : sysLoginRoles)
+			{
+				roles.add(sysLoginRole.getSysRole());
+			}
+
+		}
+		else
+		{
+			SysRole role = new SysRole();
+			role.setRoleName("超级管理员");
+			roles.add(role);
+		}
+		loginToken.setSysRoles(roles);
 		// 设置登录信息
 
 		Map<Long, SysPermission> menuPermissions = new HashMap<Long, SysPermission>();
@@ -182,7 +203,7 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			for (SysPermission level1Menu : allLevel1MenuList)
 			{
 				Long level1MenuId = level1Menu.getPermissionId();
-				level1MenuList.add(level1Menu);
+
 				List<SysPermission> allLevel2Menus = sysPermissionService.findMenuByparentIdAndType(level1MenuId, SysPermission.PERMISSION_TYPE_1);
 				List<SysPermission> level2Menus = new ArrayList<SysPermission>();
 				if (allLevel2Menus != null && allLevel2Menus.size() > 0)
@@ -195,11 +216,11 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 							level2Menus.add(level2menu);
 						}
 					}
-					// if (level2Menus.size() > 0)
-					// {
-
-					level2MenuMap.put(level1MenuId, level2Menus);
-					// }
+					if (level2Menus.size() > 0)
+					{
+						level1MenuList.add(level1Menu);
+						level2MenuMap.put(level1MenuId, level2Menus);
+					}
 				}
 			}
 		}
@@ -237,49 +258,57 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 	@Transactional(readOnly = false)
 	public int save(SysLogin entity, Long[] roleIds, Long deptId) throws Exception
 	{
-		Object[] params = { entity.getLoginName() };
 		String hql = "select count(*) from SysLogin as model where model.loginName= ?)";
-		long count = baseDao.findLong(hql, params);
+		long count = baseDao.findLong(hql, entity.getLoginName());
 		if (count > 0)
 		{
 			return ResultConstants.SAVE_FAILED_NAME_IS_EXIST;
 		}
-		else
+
+		hql = "select count(*) from SysLogin as model where model.userCode= ?)";
+		count = baseDao.findLong(hql, entity.getUserCode());
+		if (count > 0)
 		{
-			entity.setLoginPwd(MD5Utils.toMD5(entity.getLoginPwd()));
-			baseDao.save(entity);
-			sysLoginRoleService.saveLoginRole(entity, roleIds);
-			// 保存系统日志
-			String operDesc = "【用户新增】用户名:" + entity.getLoginName();
-			sysLogService.save(SysLog.OPERATE_TYPE_ADD, operDesc);
-			return ResultConstants.SAVE_SUCCEED;
+			return ResultConstants.SAVE_FAILED_CODE_IS_EXIST;
 		}
+
+		entity.setLoginPwd(MD5Utils.toMD5(entity.getLoginPwd()));
+		baseDao.save(entity);
+		sysLoginRoleService.saveLoginRole(entity, roleIds);
+		// 保存系统日志
+		String operDesc = "【用户新增】用户名:" + entity.getLoginName();
+		sysLogService.save(SysLog.OPERATE_TYPE_ADD, operDesc);
+		return ResultConstants.SAVE_SUCCEED;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
 	public int update(SysLogin entity, Long[] roleIds, String newLoginPwd) throws Exception
 	{
-		Object[] params = { entity.getLoginName(), entity.getLoginId() };
 		String hql = "select count(*) from SysLogin as model where model.loginName= ? and model.loginId != ?)";
-		long count = baseDao.findLong(hql, params);
+		long count = baseDao.findLong(hql, entity.getLoginName(), entity.getLoginId());
 		if (count > 0)
 		{
 			return ResultConstants.UPDATE_FAILED_NAME_IS_EXIST;
 		}
-		else
+
+		hql = "select count(*) from SysLogin as model where model.userCode= ? and model.loginId != ?)";
+		count = baseDao.findLong(hql, entity.getUserCode(), entity.getLoginId());
+		if (count > 0)
 		{
-			if (newLoginPwd != null && !"".equals(newLoginPwd))
-			{
-				entity.setLoginPwd(MD5Utils.toMD5(newLoginPwd));
-			}
-			baseDao.update(entity);
-			sysLoginRoleService.updateLoginRole(entity, roleIds);
-			// 保存系统日志
-			String operDesc = "【用户修改】用户名：" + entity.getLoginName();
-			sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, operDesc);
-			return ResultConstants.UPDATE_SUCCEED;
+			return ResultConstants.UPDATE_FAILED_CODE_IS_EXIST;
 		}
+
+		if (newLoginPwd != null && !"".equals(newLoginPwd))
+		{
+			entity.setLoginPwd(MD5Utils.toMD5(newLoginPwd));
+		}
+		baseDao.update(entity);
+		sysLoginRoleService.updateLoginRole(entity, roleIds);
+		// 保存系统日志
+		String operDesc = "【用户修改】用户名：" + entity.getLoginName();
+		sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, operDesc);
+		return ResultConstants.UPDATE_SUCCEED;
 	}
 
 	@Override

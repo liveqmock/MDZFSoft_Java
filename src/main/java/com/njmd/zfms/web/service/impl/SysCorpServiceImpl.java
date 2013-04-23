@@ -240,25 +240,6 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		return baseDao.findByProperty("parentCorpId", parentId);
 	}
 
-	/**
-	 * 根据父单位id和单位类型查询合作商单位
-	 * 
-	 * @param parentId
-	 *            父单位id
-	 * @param corpType
-	 *            单位类型
-	 * @return 合作商单位集合
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SysCorp> findByParentIdAndCorpType(Long parentId, Long corpType) throws Exception
-	{
-		Object[] values = new Object[] { parentId, corpType };
-		String hql = "from SysCorp as model where model.parentCorpId = ? and model.corpType = ?";
-		return baseDao.findByHql(hql, values);
-	}
-
 	@Autowired
 	@Override
 	@Qualifier(value = "sysCorpDAO")
@@ -282,7 +263,7 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		{
 			Object[] values = new Object[] {};
 			String hql = "from SysCorp as model where model.treeCode like '" + loginToken.getSysCorp().getTreeCode() + "%' and status ="
-					+ CommonConstants.STATUS_VALID;
+					+ CommonConstants.STATUS_VALID + " order by corpId";
 			corpList = baseDao.findByHql(hql, values);
 		}
 		for (SysCorp sysCorp : corpList)

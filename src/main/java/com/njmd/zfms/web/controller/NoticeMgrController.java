@@ -18,6 +18,7 @@ import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.framework.dao.PropertyFilter.MatchType;
+import com.njmd.framework.utils.DateTimeUtil;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.UrlConstants;
@@ -60,11 +61,7 @@ public class NoticeMgrController extends BaseController
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
 
 		SysLogin sysLogin = this.getLoginToken().getSysLogin();
-
-		if (sysLogin.getUserType().longValue() != SysLogin.USER_TYPE_SUPER_ADMIN)
-		{
-			filters.add(new PropertyFilter("corpId", MatchType.EQ, sysLogin.getSysCorp().getCorpId()));
-		}
+		filters.add(new PropertyFilter("sysCorp.corpId", MatchType.EQ, sysLogin.getSysCorp().getCorpId()));
 		Page pageResult = noticeInfoService.query(page, filters);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
 		return BASE_DIR + "notice_list";
@@ -87,6 +84,8 @@ public class NoticeMgrController extends BaseController
 	{
 		try
 		{
+			entity.setCreateTime(DateTimeUtil.getChar14());
+			entity.setSysCorp(this.getLoginToken().getSysCorp());
 			int resultTag = noticeInfoService.save(entity);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
@@ -178,4 +177,16 @@ public class NoticeMgrController extends BaseController
 		}
 
 	}
+
+	/** 进入编辑 */
+	@RequestMapping(value = "/view/{id}")
+	public String view(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
+	{
+		NoticeInfo entity = noticeInfoService.findById(id);
+		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
+		Tree tree = sysCorpService.getCorpTree(request, true);
+		model.addAttribute("tree", tree);
+		return BASE_DIR + "notice_view";
+	}
+
 }

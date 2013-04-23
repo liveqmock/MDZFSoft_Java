@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.njmd.framework.dao.BaseHibernateDAO;
 import com.njmd.framework.service.BaseCrudServiceImpl;
 import com.njmd.framework.utils.DateTimeUtil;
+import com.njmd.framework.utils.web.RequestUtils;
 import com.njmd.framework.utils.web.WebContextHolder;
 import com.njmd.zfms.web.commons.LoginToken;
 import com.njmd.zfms.web.entity.sys.SysLog;
@@ -45,7 +46,7 @@ public class SysLogServiceImpl extends BaseCrudServiceImpl<SysLog, Long> impleme
 		HttpServletRequest request = WebContextHolder.getRequest();
 		SysLog sysLog = new SysLog();
 		sysLog.setOperDesc(operDesc);
-		sysLog.setOperIp(request.getRemoteAddr());
+		sysLog.setOperIp(RequestUtils.getIpAddr(request));
 		sysLog.setOperTime(DateTimeUtil.getChar14());
 		sysLog.setOperType(operType);
 		sysLog.setOperUserId(loginToken.getSysLogin().getLoginId());

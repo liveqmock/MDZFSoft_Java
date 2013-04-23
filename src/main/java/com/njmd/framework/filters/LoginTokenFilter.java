@@ -39,8 +39,7 @@ public class LoginTokenFilter implements Filter
 
 	private String sessionKey = null;
 
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException,
-			ServletException
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException
 	{
 
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -56,6 +55,7 @@ public class LoginTokenFilter implements Filter
 
 		if (this.isFilter(uri) && session.getAttribute(this.sessionKey) == null)
 		{
+			System.out.println("*******" + uri + "===" + session.getAttribute(this.sessionKey));
 			response.sendRedirect(request.getContextPath() + this.redirectURL);
 		}
 		else

@@ -13,7 +13,6 @@ import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
-import com.njmd.framework.dao.PropertyFilter.MatchType;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.service.SysLogService;
 

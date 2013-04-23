@@ -11,11 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.njmd.zfms.web.entity.AuditableEntity;
+import com.njmd.framework.entity.AuditableEntity;
 
 /**
  * The persistent class for the SYS_CORP database table.
@@ -52,6 +51,12 @@ public class SysCorp extends AuditableEntity implements Serializable
 
 	@Column(name = "FTP_USER")
 	private String ftpUser;
+
+	@Column(name = "FTP_PWD")
+	private String ftpPwd;
+
+	@Column(name = "FILE_ROOT_URL")
+	private String fileRootUrl;
 
 	@Column(name = "TREE_CODE")
 	private String treeCode;
@@ -191,4 +196,25 @@ public class SysCorp extends AuditableEntity implements Serializable
 	{
 		this.treeCode = treeCode;
 	}
+
+	public String getFtpPwd()
+	{
+		return ftpPwd;
+	}
+
+	public void setFtpPwd(String ftpPwd)
+	{
+		this.ftpPwd = ftpPwd;
+	}
+
+	public String getFileRootUrl()
+	{
+		return fileRootUrl;
+	}
+
+	public void setFileRootUrl(String fileRootUrl)
+	{
+		this.fileRootUrl = fileRootUrl;
+	}
+
 }

@@ -21,7 +21,6 @@ import com.njmd.zfms.web.dao.SysCorpDAO;
 import com.njmd.zfms.web.dao.SysPermissionDAO;
 import com.njmd.zfms.web.dao.SysRoleDAO;
 import com.njmd.zfms.web.dao.SysRolePermissionDAO;
-import com.njmd.zfms.web.entity.sys.SysCorp;
 import com.njmd.zfms.web.entity.sys.SysLog;
 import com.njmd.zfms.web.entity.sys.SysPermission;
 import com.njmd.zfms.web.entity.sys.SysRole;

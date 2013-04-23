@@ -17,8 +17,6 @@ import com.njmd.framework.utils.web.SessionUtils;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.SessionNameConstants;
-import com.njmd.zfms.web.constants.UrlConstants;
-import com.njmd.zfms.web.entity.sys.SysLogin;
 import com.njmd.zfms.web.service.SysLoginService;
 import com.njmd.zfms.web.service.SysPermissionService;
 
@@ -68,7 +66,7 @@ public class LoginController extends BaseController
 
 			if (loginResultCode == ResultConstants.LOGIN_SUCCESS)
 			{
-				return ResultInfo.saveMessage(ResultConstants.getResultInfo(loginResultCode, INFORMATION_PARAMAS), "/pages/homepage.jsp");
+				return ResultInfo.saveMessage(ResultConstants.getResultInfo(loginResultCode, INFORMATION_PARAMAS), "/index");
 			}
 			else
 			{

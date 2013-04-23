@@ -2,6 +2,7 @@ package com.njmd.framework.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -200,5 +201,48 @@ public final class DateTimeUtil
 		}
 		return null;
 	}
+	/**
+	 * 将当前日期向后滚动n天
+	 * @param dateNow
+	 * @param rollDate
+	 * @return
+	 */
+	public static String rollDate(String dateNow, int rollDate) {
+		String dateReturn = "";
+		if (dateNow == null || dateNow.trim().length() < 8)
+			return dateReturn;
 
+		dateNow = dateNow.trim();
+		Calendar cal = Calendar.getInstance();
+		int nYear = Integer.parseInt(dateNow.substring(0, 4));
+		int nMonth = Integer.parseInt(dateNow.substring(4, 6));
+		int nDate = Integer.parseInt(dateNow.substring(6, 8));
+		cal.set(nYear, nMonth - 1, nDate);
+		cal.add(Calendar.DATE, rollDate);
+		String strYear = String.valueOf(cal.get(Calendar.YEAR));
+		String strMonth = String.valueOf(cal.get(Calendar.MONTH) + 1);
+		String strDay = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+		strMonth = (strMonth.length() == 1) ? "0" + strMonth : strMonth;
+		strDay = (strDay.length() == 1) ? "0" + strDay : strDay;
+		dateReturn = strYear + strMonth + strDay;
+		return dateReturn;
+	}
+	/**
+	 * 获取月份的最后一天
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public static int lastDay(Integer year, int month) {
+		  
+		Calendar cal = Calendar.getInstance(); 
+		cal.set(year, month - 1, 1); 
+		cal.add(Calendar.MONTH, 1);
+		cal.add(Calendar.DATE, -1); 
+		return cal.get(Calendar.DAY_OF_MONTH);
+	}
+	
+	public static void main(String args[]){
+		System.out.println(lastDay(2013,2));
+	}
 }

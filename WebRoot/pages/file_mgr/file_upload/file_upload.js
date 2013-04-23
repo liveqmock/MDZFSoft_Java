@@ -380,10 +380,10 @@ function selectLocalSaveDir()
 		if(str!="")
 		{
 			setLocalSaveDir(str);
-jQuery(function($) {
-			$("#localSaveDir").val(str);
-			$("#localSaveButton").css("display", "block");
-});
+			jQuery(function($) {
+				$("#localSaveDir").val(str);
+				$("#localSaveButton").css("display", "block");
+			});
 		}
 	}
     catch(ex){
@@ -512,14 +512,15 @@ function copyLocalFile(){
  */
 function getLocalFirstFile(letter){
   var str = "";
-  try{
+  try
+  {
   	if(letter.indexOf(':')>0)
   	{
-    str =  MDOCX.getLocalFirstFile(letter,1);
+  		str =  MDOCX.getLocalFirstFile(letter,1);
   	}
   	else
   	{
-    str =  MDOCX.getLocalFirstFile(letter+":\\",1);
+  		str =  MDOCX.getLocalFirstFile(letter+":\\",1);
     }
   }
   catch(ex){
@@ -602,50 +603,43 @@ function uploadTable2(remoteDir)
  */
 function selectDrive(letterStr)
 {
-  if(getLocalFirstFile(letterStr) != "")
+  var firstFileUrl = getLocalFirstFile(letterStr);
+  if(firstFileUrl != "")
   {
-    static_selectLetter = letterStr;
-    jQuery(function($) {
-    $("#localSaveDiv").css("display", "block");
-    
-    var firstFileUrl = getLocalFirstFile(static_selectLetter);
-    //alert(firstFileUrl);
-			var firstFileName = firstFileUrl.substring(firstFileUrl.lastIndexOf("\\")+1);
-			$('#uploadNameValue1').val(firstFileName);
-			if(firstFileName.length==34)
-			{
-				var codeIndex = firstFileName.indexOf("_")+1;
-				var jingyuanCode = firstFileName.substring(codeIndex, codeIndex+6);
+	var firstFileName = firstFileUrl.substring(firstFileUrl.lastIndexOf("\\")+1);
+	$('#uploadNameValue1').val(firstFileName);
+	if(firstFileName.length==34)
+	{
+		var codeIndex = firstFileName.indexOf("_")+1;
+		var jingyuanCode = firstFileName.substring(codeIndex, codeIndex+6);
 
-				$.ajax({
-					url:contextPath()+'servletAction.do?method=userFormByCode',
-					type: 'post',
-					dataType: 'json',
-					cache: false,
-					async: false,
-					data: {"userCode":jingyuanCode},
-					success:function(res){
-						if(res != null)
-						{
-							try{
-								setDefaultVal(res.retObj.userId, res.retObj.userName);
-								$('#upload_editId').val(res.retObj.userId);
-								$('#editName').val(res.retObj.userName);
-							}catch(e){}
-						}
-					},
-					error:function(){
-						showMsg("userAddMsg", "请求失败 error function", 1);
-					}
-				});
+		$.ajax({
+			url:contextPath()+'servletAction.do?method=userFormByCode',
+			type: 'post',
+			dataType: 'json',
+			cache: false,
+			async: false,
+			data: {"userCode":jingyuanCode},
+			success:function(res){
+				if(res != null)
+				{
+					try{
+						setDefaultVal(res.retObj.userId, res.retObj.userName);
+						$('#upload_editId').val(res.retObj.userId);
+						$('#editName').val(res.retObj.userName);
+					}catch(e){}
+				}
+			},
+			error:function(){
+				showMsg("userAddMsg", "请求失败 error function", 1);
 			}
-    
 		});
-	  }
-	  else
-	  {
-	    showMsg("您选择的盘符下没有可以上传的文件，请您确认~");
-	  }
+	}
+  }
+  else
+  {
+    showMsg("您选择的盘符下没有可以上传的文件，请您确认~");
+  }
 }
 
 /**
@@ -674,13 +668,13 @@ function cancelUpload()
  */
 function startUpload()
 {
-jQuery(function($) {
-if($('#editName').val()=='')
-{
-	alert('请选择采集人');
-	return;
-}
-$.ajax({
+	jQuery(function($) {
+	if($('#editName').val()=='')
+	{
+		alert('请选择采集人');
+		return;
+	}
+	$.ajax({
 		url:contextPath()+'servletAction.do?method=letterFreeSpace',
 		type: 'post',
 		dataType: 'json',

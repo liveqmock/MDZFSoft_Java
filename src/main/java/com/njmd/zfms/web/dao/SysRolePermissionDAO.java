@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.njmd.framework.dao.BaseHibernateDAO;
-import com.njmd.zfms.web.entity.sys.SysPermission;
 import com.njmd.zfms.web.entity.sys.SysRolePermission;
 
 /**

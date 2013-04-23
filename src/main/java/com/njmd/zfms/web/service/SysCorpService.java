@@ -32,18 +32,6 @@ public interface SysCorpService extends BaseCrudService<SysCorp, Long>
 	List<SysCorp> findByParentId(Long parentId) throws Exception;
 
 	/**
-	 * 根据父单位id和单位类型查询合作商单位
-	 * 
-	 * @param parentId
-	 *            父单位id
-	 * @param corpType
-	 *            单位类型
-	 * @return 合作商单位集合
-	 * @throws Exception
-	 */
-	List<SysCorp> findByParentIdAndCorpType(Long parentId, Long corpType) throws Exception;
-
-	/**
 	 * 获得单位树
 	 * 
 	 * @param request

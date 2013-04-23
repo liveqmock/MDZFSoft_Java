@@ -3,6 +3,8 @@ package com.njmd.framework.service;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.njmd.framework.dao.BaseHibernateDAO;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
+import com.njmd.framework.utils.web.WebContextHolder;
+import com.njmd.zfms.web.commons.LoginToken;
 import com.njmd.zfms.web.constants.ResultConstants;
 
 @Transactional(readOnly = true)
@@ -19,6 +23,16 @@ public abstract class BaseCrudServiceImpl<T, PK extends Serializable> implements
 	protected BaseHibernateDAO<T, PK> baseDao;
 
 	public abstract void setBaseDao(BaseHibernateDAO<T, PK> baseDao);
+
+	public LoginToken getLoginToken()
+	{
+		return WebContextHolder.getCurrLoginToken();
+	}
+
+	public HttpServletRequest getRequest()
+	{
+		return WebContextHolder.getRequest();
+	}
 
 	@Override
 	public Page query(Page page, List<PropertyFilter> filters) throws Exception

@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.njmd.zfms.web.entity.AuditableEntity;
+import com.njmd.framework.entity.AuditableEntity;
 
 /**
  * The persistent class for the SYS_LOGIN database table.
