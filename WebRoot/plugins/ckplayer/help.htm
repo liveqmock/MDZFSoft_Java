@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>升级文档</title>
+<style type="text/css">
+body,td,th {
+	font-size: 14px;
+	line-height: 22px;
+}
+p {
+	padding-left: 20px;
+	margin: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+</style>
+</head>
+
+<body>
+<p>ckplayer6.1升级说明<br />
+本次升级的功能如下：</p>
+<p>第一部分：修正部分</p>
+<p>1：修正了暂停广告随机播放时多次暂停后打开链接也是多个的错误<br />
+2：修正了ckplayer_getstatus（）无法主动获取状态值的错误<br />
+3：修正了开关灯功能在IE10里不兼容的问题
+</p>
+<p>第二部分：修改增加的部分</p>
+<p>1：定义风格的部分，包括风格配置文件和风格图片文件以及插件，都打包成一个ZIP压缩包，外部的ckplayer.js和ckplayer.xml只做一些必要的设置<br />
+  2：去掉了ckplayer.txt文件，把该文件的功能都放在了ckplayer.js(ck.flashvars)和ckplayer.xml (&lt;flashvars&gt;&lt;/flashvars&gt;) 里<br />
+  3：为了尊重风格设计作者的劳动成果，在风格作者发布自己风格的同时可以在右键显示作者定义的名称和链接<br />
+  4：全新优化了html5部份，做到尽可能的对各平台的支持<br />
+  5：增加了调用方式里的网址调用方式，即s=1时的调用方式得到全面加强
+  <br />
+  6：增强了默认不加载视频时的功能，在已知道时间（单位秒，参数是o，） 和字节(参数为w) 的情况下默认时间状态将显示总时间 <br />
+  7：增加了CKobject.embedSWF()函数调用播放器的方式
+</p>
+<p>第三部分：API部分</p>
+<p>1：增加了新的接口函数ckplayer_advunload(); 跳过前置广告</p>
+<p>第四部分：html5部分以及JS部分的改动</p>
+<p>1：以前的html5object函数，被改成CKobject函数，因为要适应新的对flash方面的兼容<br />
+  2：新的CKobject函数同时集成了调用html5播放器和swf播放器的功能
+</p>
+<p><strong>升级方式，6.0升级到6.1的方法</strong><br />
+  如果你修改过插件的内容，请下载新版本的播放器进行重新配置。<br />
+配置的注意点主要就是新的6.1里的插件部份已不能通过下列函数获取文件名称了，在压缩包里无法获取自己的名称<br />
+function getMyName():String{<br />
+var loadurl:String=this.stage.loaderInfo.url;  	<br />
+var urlarr:Array=loadurl.split(&quot;/&quot;);  	<br />
+var myname:String=urlarr[urlarr.length-1];<br />
+return myname;  <br />
+}<br />
+只要把上面的函数修改成<br />
+function getMyName():String{<br />
+return &quot;本文件的名称&quot;; <br />
+}<br />
+  如果你使用的是默认的风格可以按照以下升级<br /> 
+第一步：在ckplayer.js中的ck.setup和ckpalyer.xml中的&lt;setup&gt;&lt;/setup&gt;的结尾追加了5个控制值，0,1,2,5000,0这5个值的意义如下：</p>
+<p style="color:#666">24、开启加载皮肤压缩文件包的加载进度提示，0是关闭，1是开启<br />
+25、使用隐藏控制栏时显示简单进度条的功能，0是关闭，1是开启<br />
+26、控制栏隐藏设置(0不隐藏，1全屏时隐藏，2都隐藏)<br />
+27、控制栏隐藏延时时间，即在鼠标离开控制栏后多少毫秒后隐藏控制栏<br />
+28、文字广告左右滚动时是否采用无缝，默认0采用，1是不采用 </p>
+<p>第二步：在ckplayer.js中和ckplayer.xml中分别加入对应的如下参数<br />
+  ckplayer.js中ckstyle()函数里加下如下内容
+  <br />
+  ck.flashvars='';<br />
+  ck.pm_zip='1,1,-40,-8,1,0,0';<br />
+ck.pr_zip='{font color=&quot;#FFFFFF&quot;}已加载[$prtage]%{/font}';<br />
+ckplayer.xml中加入如下内容<br />
+&lt;flashvars&gt;&lt;/flashvars&gt;'<br />
+&lt;pm_zip&gt;1,1,-40,-8,1,0,0&lt;pm_zip&gt;<br />
+&lt;pr_zip&gt;{font color=&quot;#FFFFFF&quot;}已加载[$prtage]%{/font}&lt;/pr_zip&gt;<br />
+</p>
+<p>第三步：ckplayer.js中，用新的CKobject函数替换掉之前的html5object函数</p>
+<p>第四步，把新的压缩包style.zip和播放器文件ckplayer.swf放到ckplayer文件夹里</p>
+<p>至此，升级就基本完成，如果想进一步优化代码，可以参考6.1版本的里的ckplayer.js和ckplayer.xml内容，把6.0里有而6.1里没有的参数都删除<br />
+</p>
+</body>
+</html>

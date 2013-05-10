@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>Highcharts Example</title>
 
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<script type="text/javascript">
 $(function () {
     var chart;
@@ -12,9 +12,8 @@ $(function () {
     $(document).ready(function () {
     	
     	// Build the chart
-        chart = new Highcharts.Chart({
+        $('#container').highcharts({
             chart: {
-                renderTo: 'container',
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false

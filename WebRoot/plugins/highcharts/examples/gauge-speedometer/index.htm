@@ -4,14 +4,13 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>Highcharts Example</title>
 
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<script type="text/javascript">
 $(function () {
 	
-    var chart = new Highcharts.Chart({
+    $('#container').highcharts({
 	
 	    chart: {
-	        renderTo: 'container',
 	        type: 'gauge',
 	        plotBackgroundColor: null,
 	        plotBackgroundImage: null,
@@ -105,19 +104,21 @@ $(function () {
 	}, 
 	// Add some life
 	function (chart) {
-	    setInterval(function () {
-	        var point = chart.series[0].points[0],
-	            newVal,
-	            inc = Math.round((Math.random() - 0.5) * 20);
-	        
-	        newVal = point.y + inc;
-	        if (newVal < 0 || newVal > 200) {
-	            newVal = point.y - inc;
-	        }
-	        
-	        point.update(newVal);
-	        
-	    }, 3000);
+		if (!chart.renderer.forExport) {
+		    setInterval(function () {
+		        var point = chart.series[0].points[0],
+		            newVal,
+		            inc = Math.round((Math.random() - 0.5) * 20);
+		        
+		        newVal = point.y + inc;
+		        if (newVal < 0 || newVal > 200) {
+		            newVal = point.y - inc;
+		        }
+		        
+		        point.update(newVal);
+		        
+		    }, 3000);
+		}
 	});
 });
 		</script>

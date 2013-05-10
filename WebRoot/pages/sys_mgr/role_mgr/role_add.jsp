@@ -93,7 +93,7 @@
 						if(data.messageType=='1')
 					    {
 					    	alert(data.promptInfo);
-					    	parent.closeModalWindow();
+					    	parent.closeModalWindow(true);
 					    }
 					    else
 					    {

@@ -2,7 +2,7 @@
  * nyroModal v2.0.0
  * Core
  *
- * Commit 15acdbfd58dae7610a5456d80fa2806c9ed4e0d7 (01/19/2012) * 
+ * Commit 61895b6ee8cb543cfdaa17d703ec6bcd338fec5f (01/16/2013) * 
  * 
  * Included parts:
  * - anims.fade
@@ -26,6 +26,35 @@
  */
 jQuery(function($, undefined) {
 
+	var uaMatch = function(ua) {
+		ua = ua.toLowerCase();
+		var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+			/(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+			/(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+			/(msie) ([\w.]+)/.exec( ua ) ||
+			ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+			[];
+
+		return {
+			browser: match[ 1 ] || "",
+			version: match[ 2 ] || "0"
+		};
+	},
+	matched = uaMatch(navigator.userAgent),
+	browser = {};
+
+	if (matched.browser) {
+		browser[matched.browser] = true;
+		browser.version = matched.version;
+	}
+
+	// Chrome is Webkit, but Webkit is also Safari.
+	if (browser.chrome) {
+		browser.webkit = true;
+	} else if (browser.webkit) {
+		browser.safari = true;
+	}
+
 	var $w = $(window),
 		$d = $(document),
 		$b = $('body'),
@@ -34,6 +63,7 @@ jQuery(function($, undefined) {
 		_nmObj = {
 			filters: [],	// List of filters used
 			callbacks: {},	// Sepcific callbacks
+			anims: {},	// Sepcific animations functions
 			loadFilter: undefined,	// Name of the filter used for loading
 
 			modal: false,	// Indicates if it's a modal window or not
@@ -55,6 +85,12 @@ jQuery(function($, undefined) {
 			galleryCounts: true,	// Indicates if the gallery counts should be shown
 			ltr: true, // Left to Right by default. Put to false for Hebrew or Right to Left language. Used in gallery filter
 
+			// Specific confirguation for DOM filter
+			domCopy: false, // Indicates if DOM element should be copied or moved
+			
+			// Specific confirguation for link and form filters
+			ajax: {}, // Ajax options to be used in link and form filter
+			
 			// Specific confirguation for image filter
 			imageRegex: '[^\.]\.(jpg|jpeg|png|tiff|gif|bmp)\s*$',	// Regex used to detect image link
 
@@ -243,6 +279,16 @@ jQuery(function($, undefined) {
 					});
 				});
 			},
+			
+			// Public function for destroying a nyroModal instance, only for non open modal
+			destroy: function() {
+				if (this._open)
+					return false;
+				this._callFilters('destroy');
+				if (this.elts.all)
+					this.elts.all.remove();
+				return true;
+			},
 
 			// Init HTML elements
 			_initElts: function() {
@@ -266,8 +312,8 @@ jQuery(function($, undefined) {
 
 			// Trigger the error
 			// Will call 'error' callback filter
-			_error: function() {
-				this._callFilters('error');
+			_error: function(jqXHR) {
+				this._callFilters('error', jqXHR);
 			},
 
 			// Set the HTML content to show.
@@ -289,7 +335,7 @@ jQuery(function($, undefined) {
 					var cur = $('<div>'+html+'</div>').find(selector);
 					if (cur.length) {
 						html = cur.html()
-							.replace(/<pre class="?nyroModalScript"? rel="?(.?)"?><\/pre>/gi, function(x, y, z) { return tmp[y]; })
+							.replace(/<pre class="?nyroModalScript"? rel="?([0-9]*)"?><\/pre>/gi, function(x, y, z) { return tmp[y]; })
 							.replace(/nyroModalLN/gi, "\r\n");
 					} else {
 						// selector not found
@@ -301,7 +347,7 @@ jQuery(function($, undefined) {
 					.append(this._filterScripts(html))
 					.prepend(this.header)
 					.append(this.footer)
-					.wrapInner('<div class="nyroModal'+ucfirst(this.loadFilter)+'" />');
+					.wrapInner($('<div />', {'class': 'nyroModal'+ucfirst(this.loadFilter)}));
 
 				// Store the size of the element
 				this.sizes.initW = this.sizes.w = this.elts.hidden.width();
@@ -368,26 +414,28 @@ jQuery(function($, undefined) {
 
 			// Call a function against all active filters
 			// - fct: Function name
+			// - prm: Parameter to be used in callback
 			// return an array of all return of callbacks; keys are filters name
-			_callFilters: function(fct) {
+			_callFilters: function(fct, prm) {
 				this.getInternal()._debug(fct);
 				var ret = [],
 					self = this;
 				$.each(this.filters, function(i, f) {
-					ret[f] = self._callFilter(f, fct);
+					ret[f] = self._callFilter(f, fct, prm);
 				});
 				if (this.callbacks[fct] && $.isFunction(this.callbacks[fct]))
-					this.callbacks[fct](this);
+					this.callbacks[fct](this, prm);
 				return ret;
 			},
 
 			// Call a filter function for a specific filter
 			// - f: Filter name
 			// - fct: Function name
+			// - prm: Parameter to be used in callback
 			// return the return of the callback
-			_callFilter: function(f, fct) {
+			_callFilter: function(f, fct, prm) {
 				if (_filters[f] && _filters[f][fct] && $.isFunction(_filters[f][fct]))
-					return _filters[f][fct](this);
+					return _filters[f][fct](this, prm);
 				return undefined;
 			},
 
@@ -401,10 +449,15 @@ jQuery(function($, undefined) {
 				if (!this._animated) {
 					this._animated = true;
 					if (!$.isFunction(clb)) clb = $.noop;
-					var set = this.anim[fct] || this.anim.def || 'basic';
-					if (!_animations[set] || !_animations[set][fct] || !$.isFunction(_animations[set][fct]))
-						set = 'basic';
-					_animations[set][fct](this, $.proxy(function() {
+					if (this.anims[fct] && $.isFunction(this.anims[fct])) {
+						curFct = this.anims[fct];
+					} else {
+						var set = this.anim[fct] || this.anim.def || 'basic';
+						if (!_animations[set] || !_animations[set][fct] || !$.isFunction(_animations[set][fct]))
+							set = 'basic';
+						curFct = _animations[set][fct];
+					}
+					curFct(this, $.proxy(function() {
 							this._animated = false;
 							this._callFilters('after'+ucfirst(fct));
 							clb();
@@ -440,6 +493,7 @@ jQuery(function($, undefined) {
 										this._callFilters('afterShowCont');
 										this.elts.cont.append(this._scriptsShown);
 										this._reposition();
+										this.elts.cont.scrollTop(0);
 									}, this));
 								}, this);
 								if (this._nbContentLoading == 1) {
@@ -454,6 +508,7 @@ jQuery(function($, undefined) {
 									this._callAnim('showCont', $.proxy(function() {
 										this.elts.cont.append(this._scriptsShown);
 										this._reposition();
+										this.elts.cont.scrollTop(0);
 									}, this));
 								}, this));
 							}
@@ -563,12 +618,21 @@ jQuery(function($, undefined) {
 								: $.extend(true, {opener: me}, _nmObj, opts));
 				});
 			},
+			nmDestroy: function() {
+				return this.each(function() {
+					var me = $(this);
+					if (me.data('nmObj')) {
+						if (me.data('nmObj').destroy())
+							me.removeData('nmObj');
+					}
+				});
+			},
 			nmCall: function() {
 				return this.trigger('nyroModal');
 			},
 
 			nmManual: function(url, opts) {
-				$('<a href="'+url+'"></a>').nyroModal(opts).trigger('nyroModal');
+				$('<a />', {href: url}).nyroModal(opts).trigger('nyroModal');
 			},
 			nmData: function(data, opts) {
 				this.nmManual('#', $.extend({data: data}, opts));
@@ -610,31 +674,11 @@ jQuery(function($, undefined) {
 				nm.opener
 					.off('nyroModal.nyroModal nmClose.nyroModal nmResize.nyroModal')
 					.on({
-						'nyroModal.nyroModal': 	function(e) { nm.open(); return false;},
+						'nyroModal.nyroModal': 	function() { nm.open(); return false;},
 						'nmClose.nyroModal': 	function() { nm.close(); return false;},
 						'nmResize.nyroModal': 	function() { nm.resize(); return false;}
 					});
 			},
-
-			_scrollWidth: (function() {
-				var scrollbarWidth;
-				if ($.browser.msie) {
-					var $textarea1 = $('<textarea cols="10" rows="2"></textarea>')
-							.css({ position: 'absolute', top: -1000, left: -1000 }).appendTo($b),
-						$textarea2 = $('<textarea cols="10" rows="2" style="overflow: hidden;"></textarea>')
-							.css({ position: 'absolute', top: -1000, left: -1000 }).appendTo($b);
-					scrollbarWidth = $textarea1.width() - $textarea2.width();
-					$textarea1.add($textarea2).remove();
-				} else {
-					var $div = $('<div />')
-						.css({ width: 100, height: 100, overflow: 'auto', position: 'absolute', top: -1000, left: -1000 })
-						.prependTo($b).append('<div />').find('div')
-							.css({ width: '100%', height: 200 });
-					scrollbarWidth = 100 - $div.width();
-					$div.parent().remove();
-				}
-				return scrollbarWidth;
-			})(),
 
 			_selNyroModal: function(obj) {
 				return $(obj).data('nmObj') ? true : false;
@@ -685,7 +729,7 @@ jQuery(function($, undefined) {
 				this.fullSize.viewH = Math.min(this.fullSize.h, this.fullSize.wH);
 			},
 			_getCurCSS: function(elm, name) {
-				var ret = parseInt($.curCSS(elm, name, true));
+				var ret = parseInt($.css(elm, name, true));
 				return isNaN(ret) ? 0 : ret;
 			},
 			_getOuter: function(elm) {
@@ -716,7 +760,7 @@ jQuery(function($, undefined) {
 			},
 			_getSpaceReposition: function() {
 				var	outer = this._getOuter($b),
-					ie7 = $.browser.msie && $.browser.version < 8 && !(screen.height <= $w.height()+23);
+					ie7 = browser.msie && browser.version < 8 && !(screen.height <= $w.height()+23);
 				return {
 					top: $w.scrollTop() - (!ie7 ? outer.h.border / 2 : 0),
 					left: $w.scrollLeft() - (!ie7 ? outer.w.border / 2 : 0)
@@ -857,6 +901,7 @@ jQuery(function($, undefined) {
 		nm: _internal.nyroModal,
 		nyroModal: _internal.nyroModal,
 		nmInit: _internal.nmInit,
+		nmDestroy: _internal.nmDestroy,
 		nmCall: _internal.nmCall
 	});
 
@@ -1163,18 +1208,19 @@ jQuery(function($, undefined) {
 				});
 			},
 			load: function(nm) {
-				var ajax = $.extend(true, {}, nm.ajax || {}, {
-						url: nm.store.link.url,
-						data: nm.store.link.sel ? [{name: nm.selIndicator, value: nm.store.link.sel.substring(1)}] : undefined,
-						success: function(data) {
-							nm._setCont(data, nm.store.link.sel);
-						},
-						error: function() {
-							nm._error();
-						}
-					});
-
-				$.ajax(ajax);
+				$.ajax($.extend(true, {}, nm.ajax || {}, {
+					url: nm.store.link.url,
+					data: nm.store.link.sel ? [{name: nm.selIndicator, value: nm.store.link.sel.substring(1)}] : undefined,
+					success: function(data) {
+						nm._setCont(data, nm.store.link.sel);
+					},
+					error: function(jqXHR) {
+						nm._error(jqXHR);
+					}
+				}));
+			},
+			destroy: function(nm) {
+				nm.opener.off('click.nyroModal');
 			}
 		}
 	});
@@ -1201,12 +1247,12 @@ jQuery(function($, undefined) {
 			load: function(nm) {
 				nm.store.domEl = $(nm.store.link.sel);
 				if (nm.store.domEl.length)
-					nm._setCont(nm.store.domEl.contents());
+					nm._setCont(nm.domCopy ? nm.store.domEl.html() : nm.store.domEl.contents());
 				else
 					nm._error();
 			},
 			close: function(nm) {
-				if (nm.store.domEl && nm.elts.cont)
+				if (!nm.domCopy && nm.store.domEl && nm.elts.cont)
 					nm.store.domEl.append(nm.elts.cont.find('.nyroModalDom').contents());
 			}
 		}
@@ -1227,9 +1273,8 @@ jQuery(function($, undefined) {
 		data: {
 			is: function(nm) {
 				var ret = nm.data ? true : false;
-				if (ret) {
+				if (ret)
 					nm._delFilter('dom');
-				}
 				return ret;
 			},
 			init: function(nm) {
@@ -1356,25 +1401,25 @@ jQuery(function($, undefined) {
 			},
 			load: function(nm) {
 				var data = {};
-				$.map(nm.opener.serializeArray(), function(d){
+				$.map(nm.opener.serializeArray(), function(d) {
 					data[d.name] = d.value;
 				});
 				if (nm.store.form.sel)
 					data[nm.selIndicator] = nm.store.form.sel.substring(1);
-
-				var ajax = $.extend(true, { type : 'get', dataType : 'text' }, nm.ajax || {}, {
+				$.ajax($.extend(true, { type : 'get', dataType : 'text' }, nm.ajax || {}, {
 					url: nm.store.form.url,
 					data: data,
 					type: nm.opener.attr('method') ? nm.opener.attr('method') : undefined,
 					success: function(data) {
 						nm._setCont(data, nm.store.form.sel);
 					},
-					error: function() {
-						nm._error();
+					error: function(jqXHR) {
+						nm._error(jqXHR);
 					}
-				});
-
-				$.ajax(ajax);
+				}));
+			},
+			destroy: function(nm) {
+				nm.opener.off('submit.nyroModal');
 			}
 		}
 	});
@@ -1415,8 +1460,7 @@ jQuery(function($, undefined) {
 			initElts: function(nm) {
 				var inputSel;
 				if (nm.store.form.sel)
-					inputSel = $('<input />', {
-						'type': 'hidden',
+					inputSel = $('<input type="hidden" />', {
 						name: nm.selIndicator,
 						value: nm.store.form.sel.substring(1)
 					}).appendTo(nm.opener);
@@ -1430,7 +1474,13 @@ jQuery(function($, undefined) {
 					nm.store.formFileIframe = undefined;
 					delete(nm.store.formFileIframe);
 				}
-				nm.store.formFileIframe = $('<iframe name="nyroModalFormFile" src="javascript:\'\';" id="nyromodal-iframe-'+(new Date().getTime())+'"></iframe>')
+				nm.store.formFileIframe = $('<iframe />')
+					.attr({
+						name: 'nyroModalFormFile',
+						src: 'javascript:\'\';',
+						id: 'nyromodal-iframe-'+(new Date().getTime()),
+						frameborder: '0'
+					})
 					.hide()
 					.load(function() {
 						if (nm.store.formFileLoading) {
@@ -1443,7 +1493,7 @@ jQuery(function($, undefined) {
 								nm._setCont(content.html(), nm.store.form.sel);
 							} else {
 								// Not totally ready, try it in a few secs
-								var nbTry = 0;
+								var nbTry = 0,
 									fct = function() {
 										nbTry++;
 										var content = nm.store.formFileIframe
@@ -1463,7 +1513,7 @@ jQuery(function($, undefined) {
 							}
 						}
 					})
-					.error(function() {
+					.on('error', function() {
 						rmFormFileElts();
 						nm._error();
 					});
@@ -1479,6 +1529,9 @@ jQuery(function($, undefined) {
 					nm.store.formFileIframe = undefined;
 					delete(nm.store.formFileIframe);
 				}
+			},
+			destroy: function(nm) {
+				nm.opener.off('submit.nyroModal')
 			}
 		}
 	});
@@ -1508,7 +1561,12 @@ jQuery(function($, undefined) {
 				nm.loadFilter = 'iframe';
 			},
 			load: function(nm) {
-				nm.store.iframe = $('<iframe src="javascript:\'\';" id="nyromodal-iframe-'+(new Date().getTime())+'" frameborder="0"></iframe>');
+				nm.store.iframe = $('<iframe />')
+					.attr({
+						src: 'javascript:\'\';',
+						id: 'nyromodal-iframe-'+(new Date().getTime()),
+						frameborder: '0'
+					});
 				nm._setCont(nm.store.iframe);
 			},
 			afterShowCont: function(nm) {
@@ -1559,7 +1617,13 @@ jQuery(function($, undefined) {
 				});
 			},
 			load: function(nm) {
-				nm.store.iframeFormIframe = $('<iframe name="nyroModalIframeForm" src="javascript:\'\';" id="nyromodal-iframe-'+(new Date().getTime())+'"></iframe>');
+				nm.store.iframeFormIframe = $('<iframe />')
+					.attr({
+						name: 'nyroModalIframeForm',
+						src: 'javascript:\'\';',
+						id: 'nyromodal-iframe-'+(new Date().getTime()),
+						frameborder: '0'
+					});
 				nm._setCont(nm.store.iframeFormIframe);
 			},
 			afterShowCont: function(nm) {
@@ -1576,6 +1640,9 @@ jQuery(function($, undefined) {
 					nm.store.iframeFormIframe = undefined;
 					delete(nm.store.iframeFormIframe);
 				}
+			},
+			destroy: function(nm) {
+				nm.opener.off('submit.nyroModal')
 			}
 		}
 	});
@@ -1629,7 +1696,7 @@ jQuery(function($, undefined) {
 						dataType: 'jsonp',
 						data: data,
 						success: function(data) {
-							if (data.type != 'error') {
+							if (data.type != 'error' && data.html) {
 								nm.store.embedly = data;
 								cache[nm.opener.attr('href')] = data;
 								nm._delFilter('iframe');
@@ -1653,7 +1720,7 @@ jQuery(function($, undefined) {
 							nm.elts.cont.addClass('nyroModalImg');
 							nm.elts.hidden.addClass('nyroModalImg');
 							nm._setCont(this);
-						}).error(function() {
+						}).on('error', function() {
 							nm._error();
 						})
 						.attr('src', nm.store.embedly.url);

@@ -36,7 +36,8 @@
 							<td>
 								<form:hidden path="parentCorpId"/>
 								<input type="text" name="parentCorpName" id="parentCorpName" size="20" value="${resultObject.parentCorpName}" class="form_input" readonly="readonly" style="cursor: pointer;"/>
-								<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none">
+								<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;">
+							         <iframe style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;z-index:-1;"></iframe>
 							         <ul id="treeDemo" class="ztree" style="width: 180px;">
 							         </ul>
 						        </div>
@@ -64,6 +65,22 @@
 							</td>
 							<td>
 								<form:input path="ftpUser" cssClass="form_input {required:true,maxlength:20}" size="20"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="title" width="100">
+								<font color="red">*&nbsp;</font>FTP密码
+							</td>
+							<td>
+								<form:password path="ftpPwd" cssClass="form_input {required:true,maxlength:20}" size="20"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="title" width="100">
+								<font color="red">*&nbsp;</font>文件服务地址
+							</td>
+							<td>
+								<form:input path="fileRootUrl" cssClass="form_input {required:true,maxlength:100}" size="30" maxlength="100"/>
 							</td>
 						</tr>
 						<tr>
@@ -119,7 +136,7 @@
 	    if(data.messageType=='1')
 	    {
 	    	alert(data.promptInfo);
-	    	parent.closeModalWindow();
+	    	parent.closeModalWindow(true);
 	    }
 	    else
 	    {

@@ -34,7 +34,8 @@
 									<label>所属部门：</label>
 									<input type="hidden" name="filter_EQ_sysCorp.corpId" id="corpId" value="${param['filter_EQ_sysCorp.corpId']}"/>
 									<input type="text" name="corpName" id="corpName" value="${param['corpName']}" size="20" class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
-									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none">
+									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;">
+								         <iframe style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;z-index:-1;"></iframe>
 								         <ul id="treeDemo" class="ztree" style="width: 180px;">
 								         </ul>
 							        </div>
@@ -200,12 +201,6 @@
 			    }
 			});
 		}
-	}
-	//关闭弹出窗口并刷新页面
-	function closeModalWindow()
-	{
-		$.nmTop().close();
-		window.location=window.location;
 	}
 	</script>
 </html>

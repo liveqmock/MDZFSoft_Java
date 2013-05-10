@@ -82,18 +82,18 @@
 						return false;
 					}
 					for (var i = 0; i < nodes.length; i++) {  
-						if(nodes[i].isParent==false){ 
+						//if(nodes[i].isParent==false){ 
 						    if (checkIds != '')
 						    	checkIds += ',';  
 						    checkIds += nodes[i].id;  
-						}
+						//}
 					}
 					$("#targetIds").val(checkIds);
 					$('#addForm').ajaxSubmit(function(data){
 						if(data.messageType=='1')
 					    {
 					    	alert(data.promptInfo);
-					    	parent.closeModalWindow();
+					    	parent.closeModalWindow(true);
 					    }
 					    else
 					    {

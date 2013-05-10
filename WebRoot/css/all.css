@@ -56,15 +56,16 @@ textarea { overflow:auto; resize:none;}
 .w_805{ width:805px;}
 /*image*/
 .img160{display:table-cell; *display:block; vertical-align:middle; text-align:center; overflow:hidden;}
-.img160 img{ vertical-align:middle;}
-.img160{ width:160px; height:160px;*font-size:140px;}
+.img160 img{ vertical-align:middle;width:160px; height:160px;}
+.img160{ *font-size:140px;}
 /*登录网站*/
 .login_box{ height:auto!important; min-height:900px; height:900px; background:#3987cf url(../images/loginbody.png) no-repeat center 100px;}
 .af_hd{ height:100px; background:url(../images/af_headbg.png) #5ea5e5 no-repeat right bottom;}
 .logo{ position:absolute; margin-left:40px; margin-top:10px;}
 .login_main{ padding-left:15px; position:absolute; top:340px; left:50%;}
 .input_186x25{ width:186px; height:25px; line-height:25px; background:url(../images/long_text.png) no-repeat 0 0; border:none; vertical-align:middle;}
-.input_79x19{ width:100px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
+.input_79x19{ height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
+.input_38x19{ width:38px;  height:19px; line-height:19px; border:1px solid #c9c9c9; vertical-align:middle;}
 .input_67x25{ width:67px; height:25px; line-height:25px; background:url(../images/short_text.png) no-repeat 0 0; border:none; vertical-align:middle}
 .form_list{ padding:30px 0px 0px 0px;}
 .form_list .form_item{ padding-bottom:15px;}

@@ -1,5 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ include file="/common/taglibs.jsp"%>
 <html>
 <head>
@@ -25,17 +25,30 @@
 							<div class="search_form">
 								<div class="mt_10">
 									<label>警员编号：</label>
-									<input type="text" id="operUserCode" name="filter_LIKE_operUserCode" value="${param['filter_LIKE_operUserCode']}" class="input_79x19" />
+									<input type="text" id="operUserCode"  name="filter_LIKE_operUserCode" value="${param['filter_LIKE_operUserCode']}" class="input_79x19" />
+									&nbsp;&nbsp;&nbsp;&nbsp; 
+									<label>操作类型：</label>
+									<select name="filter_EQ_operType" id="operType">
+										<option value="">--全部--</option>
+										<option value="0">登陆</option>
+										<option value="1">增加</option>
+										<option value="2">删除</option>
+										<option value="3">修改</option>
+									</select>
 									&nbsp;&nbsp;&nbsp;&nbsp; 
 									<label>操作时间：</label>
-									<input name="_startDate" id="_startDate" type="text" class="input_79x19"  style="width:130px;cursor: pointer;"  /> 
-									&nbsp;-&nbsp;<input name="_endDate" id="_endDate" type="text" class="input_79x19"  style="width:130px;cursor: pointer;"  />
+									<input name="_startDate" id="_startDate" type="text" class="input_79x19"  style="cursor: pointer;"  /> 
+									&nbsp;-&nbsp;<input name="_endDate" id="_endDate" type="text" class="input_79x19"  style="cursor: pointer;"  />
 									<div style="display: none">
 										<textarea rows="1" cols="12" name="filter_GE_operTime" id="filter_GE_operTime"></textarea>
 										<textarea rows="1" cols="12" name="filter_LE_operTime" id="filter_LE_operTime"></textarea>
 									</div>
+								</div>
+								<div class="mt_10">
+									<center>
 									<a href="javascript:$('#mainForm').submit()" class="blue_mod_btn">查&nbsp;询</a>
 									<a href="javascript:clearForm()" class="blue_mod_btn">重&nbsp;置</a>
+									</center>
 								</div>
 							</div>
 						</div>
@@ -107,8 +120,8 @@
 //页面加载初始化方法，实现查询条件下拉列表的回显功能
 function init()
 {
-	//var operType = "${param['filter_EQ_operType']}";
-	//$("#operType").val(operType);
+	var operType = "${param['filter_EQ_operType']}";
+	$("#operType").val(operType);
 	$("#_startDate").val("${param['_startDate']}");
 	$("#filter_GE_operTime").val("${param['filter_GE_operTime']}");
 	$("#_endDate").val("${param['_endDate']}");
@@ -141,7 +154,7 @@ function clearForm(){
 	$("#filter_GE_operTime").val("");
 	$("#filter_LE_operTime").val("");
 	$("#operUserCode").val("");
-	//$("#operType").val("");
+	$("#operType").val("");
 	$("#_startDate").val("");
 	$("#_endDate").val("");
 }

@@ -49,7 +49,9 @@
 										<c:forEach var="notice" items="${page.result}" varStatus="status">
 											<tr align="center">
 												<td>${status.count}</td>
-												<td>${notice.noticeTitle}</td>
+												<td>
+													<a class="nyroModal" style="color: blue" href="${ctx}/noticeMgr/view/${notice.noticeId}?mgrFlag=1&r=<%=Math.random() %>" target="_blank" title="公告查看">${notice.noticeTitle}</a>
+												</td>
 												<td>${notice.noticeContent}</td>
 												<td>
 													<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedDateTime" parseLocale="en_US">
@@ -60,7 +62,7 @@
 												<td>
 													<!--img class="move" src="images/icons/arrow-move.png" alt="Move" title="Move" /-->
 													<a href="${ctx}/noticeMgr/edit/${notice.noticeId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="公告修改"><img src="images/icons/edit.png" alt="修改" /></a>
-													<a href="#" onclick="noticeDelete('${notice.noticeId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
+													<a href="javascript:noticeDelete('${notice.noticeId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
 												</td>
 											</tr>
 										</c:forEach>
@@ -113,13 +115,6 @@
 			alert("请选择需要删除的公告!");
 		}
 	}
-	//关闭弹出窗口并刷新页面
-	function closeModalWindow()
-	{
-		$.nmTop().close();
-		//window.location=window.location;
-		window.location.reload();
-	}
 	
 	//公告删除
 	function noticeDelete(noticeId)
@@ -130,8 +125,7 @@
 				if(data.messageType=='1')
 			    {
 			    	alert(data.promptInfo);
-			    	//window.location=window.location;
-			    	window.location.reload();
+			    	location.href = location.href;
 			    }
 			    else
 			    {

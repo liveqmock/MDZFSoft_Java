@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/common/taglibs.jsp"%>
 <html>
 <head>
@@ -61,9 +61,8 @@
 												</td>
 												<td>
 													<!--img class="move" src="images/icons/arrow-move.png" alt="Move" title="Move" /-->
-													<a href="${ctx}/roleMgr/view/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色查看"><img src="images/icons/information-octagon.png" alt="查看" /></a>
 													<a href="${ctx}/roleMgr/edit/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色修改"><img src="images/icons/edit.png" alt="修改" /></a>
-													<a href="#" onclick="roleDelete('${role.roleId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
+													<a href="javascript:roleDelete('${role.roleId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
 												</td>
 											</tr>
 										</c:forEach>
@@ -116,13 +115,6 @@
 			alert("请选择需要删除的角色!");
 		}
 	}
-	//关闭弹出窗口并刷新页面
-	function closeModalWindow()
-	{
-		$.nmTop().close();
-		//window.location=window.location;
-		window.location.reload();
-	}
 	
 	//角色删除
 	function roleDelete(roleId)
@@ -133,8 +125,7 @@
 				if(data.messageType=='1')
 			    {
 			    	alert(data.promptInfo);
-			    	//window.location=window.location;
-			    	window.location.reload();
+			    	location.href = location.href;
 			    }
 			    else
 			    {

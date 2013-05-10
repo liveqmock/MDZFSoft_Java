@@ -8,8 +8,10 @@
 <%@ include file="/plugins/ztree.jsp"%>
 </head>
 <body>
-	<form:form id="editForm" name="editForm" method="POST" action="${ctx}/roleMgr/update" modelAttribute="resultObject">
+	<form:form id="editForm" name="editForm" method="POST" action="${ctx}/noticeMgr/update" modelAttribute="resultObject">
 		<form:hidden path="noticeId"/>
+		<form:hidden path="sysCorp.corpId"/>
+		<form:hidden path="createTime"/>
 			<div class="gray_bor_bg">
 				<div class="table_div">
 					<table width="100%" class="table_border">
@@ -84,18 +86,18 @@
 						return false;
 					}
 					for (var i = 0; i < nodes.length; i++) {  
-						if(nodes[i].isParent==false){ 
+						//if(nodes[i].isParent==false){ 
 						    if (checkIds != '')
 						    	checkIds += ',';  
 						    checkIds += nodes[i].id;  
-						}
+						//}
 					}
 					$("#targetIds").val(checkIds);
 					$('#editForm').ajaxSubmit(function(data){
 						if(data.messageType=='1')
 					    {
 					    	alert(data.promptInfo);
-					    	parent.closeModalWindow();
+					    	parent.closeModalWindow(true);
 					    }
 					    else
 					    {

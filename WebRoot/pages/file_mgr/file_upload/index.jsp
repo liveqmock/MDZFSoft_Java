@@ -46,27 +46,18 @@
 			</div>
 		</div>
 	</div>
-<form id="uploadForm" method="post" action="${ctx }/userAction.do?method=uploadFile" target="db">
-	<input type="hidden" id="upload_editId" name="upload_editId" value=""/>
-	<input type="hidden" id="upload_playPath" name="upload_playPath" value=""/>
-	<input type="hidden" id="upload_uploadName" name="upload_uploadName" value=""/>
-	<input type="hidden" id="upload_playCreatetime" name="upload_playCreatetime" value=""/>
-</form>
+<a id="modalWindowAction" class="nyroModal" href="#" target="_blank" style="display: none" title="采集人选择">采集人选择</a>
 <%@ include file="/pages/footer.jsp"%>
-<script>
-var ftpHost = "${sessionScope.loginToken.sysCorp.ftpIp}";
-var ftpPort = "${sessionScope.loginToken.sysCorp.ftpPort}";
-var ftpUser = "${sessionScope.loginToken.sysCorp.ftpUser}";
-var ftpPswd = "";
-</script>
 <script type="text/javascript" src="${ctx }/pages/file_mgr/file_upload/file_upload.js"></script>
 <script>
 var isPluginOk = false;
 $(document).ready(function()
 {
+	//插件检查
 	isPluginOk = checkPlugin();
 	if(isPluginOk)
-		showMsg(3,"请您选择需要上传的方式");
+		showMsg(3	,"请您选择需要上传的方式");
+	$('.nyroModal').nyroModal();
 });
 
 //根据上传方式显示相应的上传详细页面
@@ -96,13 +87,22 @@ function showUploadTypeDetail(uploadType)
 			if(i!=uploadType)
 				hideObj("uploadType"+i);
 		}
-		static_imgShow = false;
-		fileTotalNums = 0;//上传总个数 重置
-		static_uploaded = 0;//当前上传个数 重置
 	}
 	else
 		checkPlugin();
 }
+
+/**
+ * 弹出用户选择窗口
+ */
+function showUserSelectPage()
+{
+	var url = '${ctx}/userMgr/userSelect?userId=fileEditId&userName=editName&r='+Math.random();
+  	$('#modalWindowAction').attr("href",url);
+  	$('#modalWindowAction').attr("title","采集人选择");
+  	$('#modalWindowAction').click();
+}
+
 
 </script>
 </body>

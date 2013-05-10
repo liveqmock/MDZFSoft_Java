@@ -28,9 +28,9 @@
 				<li class="form_item">
 					<label class="label">验证码</label> <input type="text" class="input_67x25" id="imgCheckCode" name="imgCheckCode" tabindex="3" maxlength="5"/> <img id="checkImg" src="${ctx}/plugins/checkCode.jsp" class="validate_img" /><a
 						href="javascript:changeCheckImg()">重获验证码</a>
-					<p class="pl_50 mt_10">
+					<!-- <p class="pl_50 mt_10">
 						<input id="remeberLoginName" name="remeberLoginName" type="checkbox" value="" tabindex="4"/>记住账号
-					</p>
+					</p> -->
 					<p class="pl_50 mt_10">
 						<input type="submit" class="login_btn" value="" tabindex="5" />
 					</p>
@@ -38,8 +38,8 @@
 			</ul>
 		</form>
 		<div class="login_opt white">
-			<span class="h_l"></span> <span class="h_r"></span> <a href="#" onclick="javascript:downloadFile('mdDrivers.zip')" class="white" target="_blank">执法记录仪驱动下载</a>&nbsp;&nbsp;|&nbsp; <a
-				href="#" onclick="javascript:downloadFile('md_1.0.0.5.CAB')" class="white">上传插件下载</a>
+			<span class="h_l"></span> <span class="h_r"></span> <a href="#" onclick="javascript:downloadFile('/downloads/mdDrivers.zip')" class="white" target="_blank">执法记录仪驱动下载</a>&nbsp;&nbsp;|&nbsp; <a
+				href="#" onclick="javascript:downloadFile('/downloads/md_1.0.0.5.CAB')" class="white">上传插件下载</a>
 		</div>
 	</div>
 	<div class="footer_out">
@@ -52,7 +52,7 @@
 		top.location = self.location;
 	}	
 	
-	$(function(){
+	$(document).ready(function(){
 		//分析cookie值，显示上次的登陆信息   
 		var userNameValue = getCookieValue("loginName");   
 		document.getElementById("loginName").value = userNameValue; 
@@ -60,7 +60,7 @@
 		$('#loginForm').ajaxForm({
 			 dataType:  'json',
 			 beforeSubmit: validate,
-		     success:   onSuccess,
+		     success:   onSuccess
 		});
 		$('#loginName').focus();
 	});
@@ -70,9 +70,10 @@
 	    {
 	    	window.location='${ctx}'+data.gotoUrlForward;
 	    }
-	    else
+	    else 
 	    {
 	    	alert(data.promptInfo);
+	    	changeCheckImg();
 	    }
 	}
 	
@@ -104,9 +105,9 @@
 			$('#imgCheckCode').focus();
 			return (false);
 		}
-		if(document.getElementById("remeberLoginName").checked){     
-            setCookie("loginName",document.getElementById("loginName").value,24,"/");   
-        }  
+		//if(document.getElementById("remeberLoginName").checked){     
+          //  setCookie("loginName",document.getElementById("loginName").value,24,"/");   
+        //}  
 		return (true);
 	}
 	/**

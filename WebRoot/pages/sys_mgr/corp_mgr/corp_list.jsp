@@ -47,13 +47,6 @@
 			$('.nyroModal').nyroModal();
 		});
 		
-		//关闭弹出窗口并刷新页面
-		function closeModalWindow()
-		{
-			$.nmTop().close();
-			window.location=window.location;
-		}
-		
 		//部门新增
 		function corpAdd()
 		{
@@ -97,7 +90,7 @@
 					if(data.messageType=='1')
 				    {
 				    	alert(data.promptInfo);
-				    	window.location=window.location;
+				    	window.location.replace(window.location.href);
 				    }
 				    else
 				    {

@@ -20,10 +20,18 @@
 	<div class="nav_box">
 		<div class="layout">
 			<ul class="nav_list">
+				<li class="nav_item current" id="menuIndex_0">
+					<a class="nav_target" href="${ctx}/index">我的主页</a>
+				</li>
 				<c:forEach var="level1Menu" items="${sessionScope.loginToken.level1MenuList}" varStatus="status">
-				<li class="nav_item current" id="menuIndex_${status.index}">
-					<a class="nav_target" href="${ctx}/${level1Menu.permissionUrl}">${level1Menu.permissionName}</a>
-					<ul class="nav_sublist" id="childMenu_1">
+				<li class="nav_item" id="menuIndex_${status.count}">
+					<c:if test="${empty level1Menu.permissionUrl}">
+						<a class="nav_target" href="#">${level1Menu.permissionName}</a>
+					</c:if>
+					<c:if test="${not empty level1Menu.permissionUrl}">
+						<a class="nav_target" href="${ctx}/${level1Menu.permissionUrl}">${level1Menu.permissionName}</a>
+					</c:if>
+					<ul class="nav_sublist" id="childMenu_${status.count}">
 					<c:forEach var="level2Menu" items="${sessionScope.loginToken.level2MenuMap[level1Menu.permissionId]}">
 						<li class="nav_subitem" id="menu_${level2Menu.permissionId}"><a class="nav_subtarget" href="${ctx}/${level2Menu.permissionUrl}">${level2Menu.permissionName}</a></li>
 					</c:forEach>
@@ -37,7 +45,7 @@
 <form name="logout_form" method="post" action="${ctx}/login/logout" target="_top">
 </form>
 <script>
-var menuIndex=0;
+	var selectedIndex=0;
 	function logout()
 	{
 		if (confirm("确认退出系统吗？"))
@@ -81,18 +89,18 @@ var menuIndex=0;
     			$(this).find(".nav_sublist").show();
     		}
     		});
-    		
     	});
      });
 
-    for(var i=0; i<6; i++)
+   	var menuLenth = '${fn:length(sessionScope.loginToken.level1MenuList)}';
+    for(var i=0; i<menuLenth; i++)
     {
     	$('#menuIndex_'+i).attr('class', 'nav_item');
     }
-    $('#menuIndex_'+menuIndex).attr('class', 'nav_item current');
+    $('#menuIndex_'+selectedIndex).attr('class', 'nav_item current');
 
-    if(menuIndex>0)
-    {
-    	$('#childMenu_'+menuIndex).css('display', 'block');
-    }
+   // if(menuIndex>0)
+   // {
+    $('#childMenu_'+selectedIndex).css('display', 'block');
+   // }
 </script>
