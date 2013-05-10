@@ -18,6 +18,7 @@ import com.njmd.framework.utils.web.RequestUtils;
 import com.njmd.zfms.web.constants.ConfigConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.dao.FileTypeInfoDAO;
+import com.njmd.zfms.web.entity.dev.DevTypeInfo;
 import com.njmd.zfms.web.entity.file.FileUploadInfo;
 import com.njmd.zfms.web.entity.sys.SysCorp;
 import com.njmd.zfms.web.entity.sys.SysLog;
@@ -247,6 +248,31 @@ public class FileUploadInfoServiceImpl extends BaseCrudServiceImpl<FileUploadInf
 	{
 		String hql = "select count(model.fileId) from FileUploadInfo model where model.fileTypeInfo.typeId=?";
 		return baseDao.findLong(hql, typeId);
+	}
+
+	@Override
+	@Transactional(readOnly = false, rollbackFor = Throwable.class)
+	public int delete(Long id) throws Exception
+	{
+		FileUploadInfo entity = baseDao.findById(id);
+		entity.setFileStatus(FileUploadInfo.FILE_STATUS_WAIT_DELETE);
+		entity.setDeleteBy(this.getLoginToken().getSysLogin().getLoginId());
+		entity.setDeleteTime(DateTimeUtil.getChar14());
+		baseDao.update(entity);
+		sysLogBO.save(SysLog.OPERATE_TYPE_DELETE, "【文件删除】文件名称：" + entity.getFileUploadName());
+		return ResultConstants.DELETE_SUCCEED;
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public int batchDelete(String ids) throws Exception
+	{
+		String[] idArray = ids.split(",");
+		for (String id : idArray)
+		{
+			this.delete(Long.valueOf(id));
+		}
+		return ResultConstants.DELETE_SUCCEED;
 	}
 
 }

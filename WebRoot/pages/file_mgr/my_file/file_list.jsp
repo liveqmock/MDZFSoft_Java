@@ -17,6 +17,8 @@
 		<input type="hidden" name="pageSize" id="pageSize" value="${page.pageSize}" />
 		<input type="hidden" name="orderBy" id="orderBy" value="${page.orderBy}" />
 		<input type="hidden" name="order" id="order" value="${page.order}" />
+		
+		<input type="hidden" name="filter_EQ_editUserInfo.loginId" id="fileEditId" value="${param['filter_EQ_editUserInfo.loginId']}" />
 		<div id="container">
 			<div class="layout clearfix">
 				<div class="white_p10">
@@ -30,7 +32,7 @@
 									<label>文&nbsp;件&nbsp;名:</label>
 									<input type="text" class="input_79x19" name="filter_LIKE_fileUploadName" id="fileUploadName" value="${param['filter_LIKE_fileUploadName']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>文件分类:</label>
-							        <select style="width: 142px" id="typeId" name="filter_EQ_fileTypeInfo.typeId">
+							        <select style="width: 135px" id="typeId" name="filter_EQ_fileTypeInfo.typeId">
 							        	<option  value=""></option>
 							        	<c:forEach var="fileType" items="${fileTypeList}">
 							        		<option  value="${fileType.typeId }">${fileType.typeName }</option>
@@ -48,8 +50,8 @@
 									<label>文件备注:</label>
 									<input type="text" class="input_79x19"  name="filter_LIKE_fileRemark" id="fileRemark" value="${param['filter_LIKE_fileRemark']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>录&nbsp;制&nbsp;人:</label>
-									<input type="hidden" name="filter_EQ_editUserInfo.loginId" id="fileEditId" value="${param['filter_EQ_editUserInfo.loginId']}" />
 									<input type="text" class="input_79x19"  name="fileEditUserName" id="fileEditUserName" value="${param['fileEditUserName']}" style="cursor: pointer;"  onclick="showUserSelectPage('录制人选择','fileEditId','fileEditUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
+									
 									<label>录制时间:</label>
 									<input name="_startFileRecordTime" id="_startFileRecordTime" type="text" class="input_79x19" value="${param['_startFileRecordTime']}" style="width:130px;cursor: pointer;"  /> 
 									&nbsp;-&nbsp;<input name="_endFileRecordTime" id="_endFileRecordTime" type="text" class="input_79x19" value="${param['_endFileRecordTime']}" style="width:130px;cursor: pointer;"  />

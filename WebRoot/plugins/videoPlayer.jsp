@@ -24,7 +24,6 @@
 		padding-left: 10px;
 	}
 	</style>
-	<script type="text/javascript" src="${ctx}/plugins/ckplayer/js/offlights.js"></script>
 </head>
   
 <body >
@@ -69,8 +68,8 @@ var flashvars={
 	var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always'};//这里定义播放器的其它参数如背景色（跟flashvars中的b不同），是否支持全屏，是否支持交互
 	var attributes={id:'ckplayer_a1',name:'ckplayer_a1',menu:'false'};
 	//下面一行是调用播放器了，括号里的参数含义：（播放器文件，要显示在的div容器，宽，高，需要flash的版本，当用户没有该版本的提示，加载初始化参数，加载设置参数如背景，加载attributes参数，主要用来设置播放器的id）
-	swfobject.embedSWF('${ctx}/plugins/ckplayer/ckplayer/ckplayer.swf', 'a1', '560', '400', '10.0.0','${ctx}/plugins/ckplayer/ckplayer/expressInstall.swf', flashvars, params, attributes); //播放器地址，容器id，宽，高，需要flash插件的版本，flashvars,params,attributes	
-	//CKobject.embedSWF('${ctx}/plugins/ckplayer/ckplayer/ckplayer.swf','a1','ckplayer_a1','560','400',flashvars,params);
+	//swfobject.embedSWF('${ctx}/plugins/ckplayer/ckplayer/ckplayer.swf', 'a1', '560', '400', '10.0.0','${ctx}/plugins/ckplayer/ckplayer/expressInstall.swf', flashvars, params, attributes); //播放器地址，容器id，宽，高，需要flash插件的版本，flashvars,params,attributes	
+	CKobject.embedSWF('${ctx}/plugins/ckplayer/ckplayer/ckplayer.swf','a1','ckplayer_a1','560','400',flashvars);
 	//调用播放器结束
 </script>
 

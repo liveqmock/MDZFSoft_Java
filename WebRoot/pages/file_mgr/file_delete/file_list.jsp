@@ -13,7 +13,7 @@
 </head>
 <body>
 	<%@ include file="/pages/top.jsp"%>
-	<form id="mainForm" action="${ctx}/fileMgr" method="post">
+	<form id="mainForm" action="${ctx}/fileMgr/deleteList" method="post">
 		<input type="hidden" name="pageNo" id="pageNo" value="${page.pageNo}" />
 		<input type="hidden" name="pageSize" id="pageSize" value="${page.pageSize}" />
 		<input type="hidden" name="orderBy" id="orderBy" value="${page.orderBy}" />
@@ -58,7 +58,7 @@
 								<div class="mt_10">
 									<label>接警编号:</label>
 									<input class="input_79x19" id="policeCode" type="text" name="filter_EQ_policeCode" value="${param['filter_EQ_policeCode']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
-									<label>简要警情:</label>
+									<label>简要警情:</label>&nbsp;
 									<input class="input_79x19" id="policeDesc" type="text" name="filter_LIKE_policeDesc" value="${param['filter_LIKE_policeDesc']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>接警时间:</label>
 									<input name="_startPoliceTime" id="_startPoliceTime" type="text" class="input_79x19" value="${param['_startPoliceTime']}" style="width:130px;cursor: pointer;"  /> 
@@ -69,15 +69,15 @@
 									</div>
 								</div>
 								<div class="mt_10">
-									<label>上传部门：</label><input type="text" name="corpName" id="corpName" value="${param['corpName']}"  class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
+									<label>上传部门:</label>&nbsp;<input type="text" name="corpName" id="corpName" value="${param['corpName']}"  class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
 									<input type="hidden" name="filter_EQ_uploadCorpInfo.corpId" id="uploadCorpId" value="${param['filter_EQ_uploadCorpInfo.corpId']}"/>
 									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;">
 								         <iframe style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;z-index:-1;"></iframe>
 								         <ul id="treeDemo" class="ztree" style="width: 180px;">
 								         </ul>
 							        </div>&nbsp;&nbsp;&nbsp;
-							        <label>文件分类：</label>
-							        <select style="width: 142px" id="typeId" name="filter_EQ_fileTypeInfo.typeId">
+							        <label>文件分类:</label>
+							        <select style="width: 135px" id="typeId" name="filter_EQ_fileTypeInfo.typeId">
 							        	<option  value=""></option>
 							        	<c:forEach var="fileType" items="${fileTypeList}">
 							        		<option  value="${fileType.typeId }">${fileType.typeName }</option>
@@ -95,115 +95,83 @@
 								</div>
 							</div>
 						</div>
-						<div class=" mt_10">
+						<div style="margin-top: 10px">
+							<a href="javascript:batchDelete()" class="blue_mod_btn" >删除所选</a>
+						</div>
+						<div class="mange_table log_table mt_10">
 							<table id="tableList" cellspacing="1" class="tablesorter" width="100%">
 								<thead>
 									<tr align="center">
-										<th>序号</th>
-										<th class="sortable" onclick="javascript:sort('roleName','asc')">角色名称</th>
-										<th class="sortable" onclick="javascript:sort('status','asc')">角色状态</th>
+										<th><input class="checkbox" type="checkbox" name="operid" onclick="javascript:selectAll('id',this.checked)"></th>
+										<th class="sortable" onclick="javascript:sort('roleName','asc')">文件名</th>
+										<th class="sortable" onclick="javascript:sort('status','asc')">录制时间</th>
+										<th class="sortable" onclick="javascript:sort('status','asc')">上传时间</th>
+										<th class="sortable" onclick="javascript:sort('status','asc')">上传人</th>
+										<th class="sortable" onclick="javascript:sort('status','asc')">采集人</th>
 										<th>操作</th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:if test="${page.totalCount != '0'}">
-										<c:forEach var="role" items="${page.result}" varStatus="status">
+										<c:forEach var="file" items="${page.result}" varStatus="status">
 											<tr align="center">
-												<td>${status.count}</td>
-												<td>${role.roleName}</td>
+												<td><input class="checkbox" type="checkbox" name="id" value="${file.fileId}" /></td>
 												<td>
-													<c:choose>
-														<c:when test="${role.status=='1'}">
-															<font color="#dd6239">有效</font>
-														</c:when>
-														<c:when test="${role.status=='0'}">
-															<font color="red">无效</font>
-														</c:when>
-													</c:choose>
+													<c:if test="${file.fileStatus=='A'}">
+														<c:if test="${file.fileType=='1'}">
+															<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="nyroModal" style="color: blue">
+																${file.fileUploadName}
+															</a>
+														</c:if>
+														<c:if test="${file.fileType=='2'}">
+															<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="nyroModal" style="color: blue">
+																${file.fileUploadName}
+															</a>
+														</c:if>
+														<c:if test="${file.fileType=='3'}">
+															<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="nyroModal" style="color: blue">
+																${file.fileUploadName}
+															</a>
+														</c:if>
+													</c:if>
+													<c:if test="${file.fileStatus=='C' }">
+														<a href="javascript:alert('视频正在剪辑中，请稍后');" style="color: blue">
+															${file.fileUploadName}
+														</a>
+													</c:if>
 												</td>
 												<td>
-													<!--img class="move" src="images/icons/arrow-move.png" alt="Move" title="Move" /-->
-													<a href="${ctx}/roleMgr/edit/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色修改"><img src="images/icons/edit.png" alt="修改" /></a>
-													<a href="javascript:roleDelete('${role.roleId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
+													<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedFileRecordTime" parseLocale="en_US">
+														${file.fileRecordTime}
+													</fmt:parseDate>
+													<fmt:formatDate value='${parsedFileRecordTime}' pattern="yy-MM-dd HH:mm"/>
+												</td>
+												<td>
+													<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedFileUploadTime" parseLocale="en_US">
+														${file.fileUploadTime}
+													</fmt:parseDate>
+													<fmt:formatDate value='${parsedFileUploadTime}' pattern="yy-MM-dd HH:mm"/>
+												</td>
+												<td>
+													${file.uploadUserInfo.userName }
+												</td>
+												<td>
+													${file.editUserInfo.userName }
+												</td>
+												<td>
+													<a href="${ctx}/fileMgr/detail/${file.fileId}?r=<%=Math.random() %>" title="详情" class="nyroModal"><img src="${ctx }/images/icons/information-octagon.png" alt="详情" /></a>
+													<a href="javascript:fileDelete('${file.fileId}')" title="删除"><img src="${ctx }/images/icons/cross.png" alt="删除" /></a>
 												</td>
 											</tr>
 										</c:forEach>
 									</c:if>
 									<c:if test="${page.totalCount == '0'}">
 										<tr align="center">
-											<td colspan="4" align="left">暂无符合条件的记录</td>
+											<td colspan="7" align="left">暂无符合条件的记录</td>
 										</tr>
 									</c:if>
 								</tbody>
 							</table>
-							<ul class="upload_list">
-							<c:if test="${page.totalCount != '0'}">
-								<c:forEach var="file" items="${page.result}" varStatus="status">
-								<li class="upload_item">
-									<div class="upload_img">
-										<c:if test="${file.fileStatus=='A'}">
-											<c:if test="${file.fileType=='1'}">
-												<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal">
-													<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
-												</a>
-											</c:if>
-											<c:if test="${file.fileType=='2'}">
-												<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal">
-													<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
-												</a>
-											</c:if>
-											<c:if test="${file.fileType=='3'}">
-												<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal">
-													<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
-												</a>
-											</c:if>
-										</c:if>
-										<c:if test="${file.fileStatus=='C' }">
-											<a href="javascript:alert('视频正在剪辑中，请稍后');"  class="img160">
-												<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
-											</a>
-										</c:if>
-									</div>
-									<div title="${file.fileUploadName}" class="upload_descript" style="width:144px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-										${file.fileUploadName}
-									</div>
-									<div class="upload_opterdetails" >
-										<ul>
-											<li>
-												录制时间：
-												<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedFileRecordTime" parseLocale="en_US">
-													${file.fileRecordTime}
-												</fmt:parseDate>
-												<fmt:formatDate value='${parsedFileRecordTime}' pattern="yy-MM-dd HH:mm"/>
-											</li>
-											<li>
-												上传时间：
-												<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedFileUploadTime" parseLocale="en_US">
-													${file.fileUploadTime}
-												</fmt:parseDate>
-												<fmt:formatDate value='${parsedFileUploadTime}' pattern="yy-MM-dd HH:mm"/>
-											</li>
-											<li>
-												<span class="hd">上 传 人：</span>
-												<span class="bd">${file.uploadUserInfo.userName }</span>
-											</li>
-											<li>
-												<span class="hd">采 集 人：</span>
-												<span class="bd">${file.editUserInfo.userName }</span>
-											</li>
-										</ul>
-									</div>
-									<div class="clearfix mt_10">
-										<a href="javascript:roleDelete('${file.fileId}')" target="_blank" class="green_mod_btn fl">删除</a>&nbsp;&nbsp;&nbsp;
-										<a href="${ctx}/fileMgr/detail/${file.fileId}?r=<%=Math.random() %>" class="blue_mod_btn fr nyroModal">详情</a>
-									</div>
-								</li>
-								</c:forEach>
-							</c:if>
-							<c:if test="${page.totalCount == '0'}">
-								<li class="upload_item">暂无符合条件的记录</li>
-							</c:if>
-						</ul>
 						</div>
 						<jsp:include page="/plugins/pager.jsp" flush="true" />
 					</div>
@@ -351,7 +319,7 @@
 	  	$('#modalWindowAction').click();
 	}
 	
-	//角色删除
+	//文件删除
 	function fileDelete(fileId)
 	{
 		if(confirm("您确认删除该文件吗？"))
@@ -369,5 +337,33 @@
 			});
 		}
 	}
+	
+	//文件批量删除
+	function batchDelete()
+	{
+		var ids = getCheckboxCheckedValue("id");
+		if(ids!= "")
+		{
+			if(confirm("您确认删除所选文件吗？"))
+			{					
+				$.getJSON("${ctx}/fileMgr/batchDelete?ids="+ids+"&r="+Math.random(), function(data){
+					if(data.messageType=='1')
+				    {
+				    	alert(data.promptInfo);
+				    	location.href = location.href;
+				    }
+				    else
+				    {
+				    	alert(data.promptInfo);
+				    }
+				});
+			}
+		}
+		else
+		{
+			alert("请选择需要删除的文件！");
+		}
+	}
+
 	</script>
 </html>

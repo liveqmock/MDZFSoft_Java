@@ -36,12 +36,56 @@ function downloadFile(downloadFile){
 	window.open(getContextPath()+"/servlet/downloadFile?sourceFilePath="+downloadFile);
 }
 
-
-if(top.location != self.location)
+/**
+ * 批量选择CheckBox
+ * 
+ * @param checkboxName
+ *            checkBox名称
+ * @param checked
+ *            选中状态 true or false
+ */
+function selectAll(checkboxName, checked)
 {
-
+	var obj = document.getElementsByName(checkboxName);
+	if (obj != null)
+	{
+		for ( var i = 0; i < obj.length; i++)
+		{
+			if (!obj.item(i).disabled)
+			{
+				obj.item(i).checked = checked;
+			}
+		}
+	}
 }
 
+/**
+ * 获得下拉框所选值信息
+ * 
+ * @param checkboxName
+ *            checkbox名称
+ */
+function getCheckboxCheckedValue(checkboxName)
+{
+	var vtmp = "";
+	var obj = document.getElementsByName(checkboxName);
+	if (obj != null)
+	{
+		for ( var i = 0; i < obj.length; i++)
+		{
+			if (obj.item(i).checked == true)
+			{
+				vtmp += obj.item(i).value + ",";
+			}
+		}
+		if (vtmp.length > 0)
+		{
+			vtmp = vtmp.substring(0, vtmp.length - 1);
+			return vtmp;
+		}
+		else return "";
+	}
+}
 /**
  * 获取工程根目录路径
  * @param objId 需要载入id名称

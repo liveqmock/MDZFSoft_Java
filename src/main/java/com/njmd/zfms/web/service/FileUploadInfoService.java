@@ -13,6 +13,8 @@ import com.njmd.zfms.web.entity.file.FileUploadInfo;
  */
 public interface FileUploadInfoService extends BaseCrudService<FileUploadInfo, Long>
 {
+	public int batchDelete(String ids) throws Exception;
+
 	/**
 	 * 根据文件类型获得文件数量
 	 * 

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.httpclient.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.njmd.framework.utils.HttpUtil;
 import com.njmd.framework.utils.mapper.JsonMapper;
@@ -16,12 +17,13 @@ import com.njmd.zfms.web.constants.ConfigConstants;
 import com.njmd.zfms.web.entity.sys.SysServerInfo;
 import com.njmd.zfms.web.service.SysServerInfoService;
 
+@Component
 public class SysMonitorTask
 {
 	@Autowired
 	private SysServerInfoService syServerInfoService;
 
-	@Scheduled(fixedDelay = 60 * 60 * 1000)
+	@Scheduled(fixedRate = 10 * 60 * 1000)
 	void doSomethingWithDelay() throws Exception
 	{
 		String urls = ConfigConstants.MONITOR_URLS;

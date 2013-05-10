@@ -61,8 +61,8 @@
 												</td>
 												<td>
 													<!--img class="move" src="images/icons/arrow-move.png" alt="Move" title="Move" /-->
-													<a href="${ctx}/roleMgr/edit/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色修改"><img src="images/icons/edit.png" alt="修改" /></a>
-													<a href="javascript:roleDelete('${role.roleId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
+													<a href="${ctx}/roleMgr/edit/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色修改"><img src="${ctx }/images/icons/edit.png" alt="修改" /></a>
+													<a href="javascript:roleDelete('${role.roleId}')" title="删除"><img src="${ctx}/images/icons/cross.png" alt="删除" /></a>
 												</td>
 											</tr>
 										</c:forEach>

@@ -38,7 +38,10 @@ public class FileUploadInfo implements Serializable
 	public static final String FILE_STATUS_UNCLIP = "C";
 
 	/** 文件状态-剪辑完成 */
-	public static final String FILE_STATUS_CLIPDONE = "P";
+	public static final String FILE_STATUS_CLIPING = "I";
+
+	/** 文件状态-剪辑完成 */
+	public static final String FILE_STATUS_WAIT_DELETE = "W";
 
 	/** 文件格式-图片 */
 	public static final Long FILE_TYPE_IMAGE = 1l;
@@ -110,6 +113,12 @@ public class FileUploadInfo implements Serializable
 
 	@Column(name = "UPLOAD_USER_IP")
 	private String uploadUserIp;
+
+	@Column(name = "DELETE_BY")
+	private Long deleteBy;
+
+	@Column(name = "DELETE_TIME")
+	private String deleteTime;
 
 	// bi-directional many-to-one association to FileTypeInfo
 	@ManyToOne
@@ -377,6 +386,26 @@ public class FileUploadInfo implements Serializable
 		this.uploadCorpInfo = uploadCorpInfo;
 	}
 
+	public Long getDeleteBy()
+	{
+		return deleteBy;
+	}
+
+	public void setDeleteBy(Long deleteBy)
+	{
+		this.deleteBy = deleteBy;
+	}
+
+	public String getDeleteTime()
+	{
+		return deleteTime;
+	}
+
+	public void setDeleteTime(String deleteTime)
+	{
+		this.deleteTime = deleteTime;
+	}
+
 	public String getFileTypeDesc()
 	{
 		if (FileUploadInfo.FILE_TYPE_IMAGE.equals(this.fileType))
@@ -393,14 +422,14 @@ public class FileUploadInfo implements Serializable
 	{
 		if (FileUploadInfo.FILE_STATUS_VALID.equals(this.fileStatus))
 			return "有效";
-		else if (FileUploadInfo.FILE_STATUS_INVALID.equals(this.fileStatus))
+		else if (FileUploadInfo.FILE_STATUS_INVALID.equals(this.fileStatus) || FileUploadInfo.FILE_STATUS_WAIT_DELETE.equals(this.fileStatus))
 			return "无效";
 		else if (FileUploadInfo.FILE_STATUS_EXPIRED.equals(this.fileStatus))
 			return "过期";
 		else if (FileUploadInfo.FILE_STATUS_UNCLIP.equals(this.fileStatus))
 			return "未剪辑";
-		else if (FileUploadInfo.FILE_STATUS_CLIPDONE.equals(this.fileStatus))
-			return "剪辑完成";
+		else if (FileUploadInfo.FILE_STATUS_CLIPING.equals(this.fileStatus))
+			return "剪辑中";
 		return "";
 	}
 }

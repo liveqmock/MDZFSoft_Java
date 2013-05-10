@@ -18,6 +18,9 @@
 		<input type="hidden" name="pageSize" id="pageSize" value="${page.pageSize}" />
 		<input type="hidden" name="orderBy" id="orderBy" value="${page.orderBy}" />
 		<input type="hidden" name="order" id="order" value="${page.order}" />
+		
+		<input type="hidden" name="filter_EQ_uploadUserInfo.loginId" id="uploadUserId" value="${param['filter_EQ_uploadUserInfo.loginId']}" />
+		<input type="hidden" name="filter_EQ_editUserInfo.loginId" id="fileEditId" value="${param['filter_EQ_editUserInfo.loginId']}" />
 		<div id="container">
 			<div class="layout clearfix">
 				<div class="white_p10">
@@ -31,7 +34,6 @@
 									<label>文&nbsp;件&nbsp;名:</label>
 									<input type="text" class="input_79x19" name="filter_LIKE_fileUploadName" id="fileUploadName" value="${param['filter_LIKE_fileUploadName']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>上&nbsp;传&nbsp;人:</label>
-									<input type="hidden" name="filter_EQ_uploadUserInfo.loginId" id="uploadUserId" value="${param['filter_EQ_uploadUserInfo.loginId']}" />
 									<input type="text" class="input_79x19"  name="uploadUserName" id="uploadUserName" value="${param['uploadUserName']}" style="cursor: pointer;"  onclick="showUserSelectPage('上传人选择','uploadUserId','uploadUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>上传时间:</label>
 									<input name="_startFileUploadTime" id="_startFileUploadTime" type="text" class="input_79x19" value="${param['_startFileUploadTime']}" style="width:130px;cursor: pointer;"  /> 
@@ -45,7 +47,6 @@
 									<label>文件备注:</label>
 									<input type="text" class="input_79x19"  name="filter_LIKE_fileRemark" id="fileRemark" value="${param['filter_LIKE_fileRemark']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>录&nbsp;制&nbsp;人:</label>
-									<input type="hidden" name="filter_EQ_editUserInfo.loginId" id="fileEditId" value="${param['filter_EQ_editUserInfo.loginId']}" />
 									<input type="text" class="input_79x19"  name="fileEditUserName" id="fileEditUserName" value="${param['fileEditUserName']}" style="cursor: pointer;"  onclick="showUserSelectPage('录制人选择','fileEditId','fileEditUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>录制时间:</label>
 									<input name="_startFileRecordTime" id="_startFileRecordTime" type="text" class="input_79x19" value="${param['_startFileRecordTime']}" style="width:130px;cursor: pointer;"  /> 
@@ -69,15 +70,15 @@
 									</div>
 								</div>
 								<div class="mt_10">
-									<label>上传部门：</label><input type="text" name="corpName" id="corpName" value="${param['corpName']}"  class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
+									<label>上传部门:</label>&nbsp;<input type="text" name="corpName" id="corpName" value="${param['corpName']}"  class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
 									<input type="hidden" name="filter_EQ_uploadCorpInfo.corpId" id="uploadCorpId" value="${param['filter_EQ_uploadCorpInfo.corpId']}"/>
 									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;">
 								         <iframe style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;z-index:-1;"></iframe>
 								         <ul id="treeDemo" class="ztree" style="width: 180px;">
 								         </ul>
-							        </div>&nbsp;&nbsp;&nbsp;
-							        <label>文件分类：</label>
-							        <select style="width: 142px" id="typeId" name="filter_EQ_fileTypeInfo.typeId">
+							        </div>&nbsp;&nbsp;
+							        <label>文件分类:</label>
+							        <select style="width: 135px" id="typeId" name="filter_EQ_fileTypeInfo.typeId">
 							        	<option  value=""></option>
 							        	<c:forEach var="fileType" items="${fileTypeList}">
 							        		<option  value="${fileType.typeId }">${fileType.typeName }</option>
@@ -154,7 +155,7 @@
 										</ul>
 									</div>
 									<div class="clearfix mt_10">
-										<a href="${ctx}/fileMgr/download/${file.fileId}?r=<%=Math.random() %>" target="_blank" class="green_mod_btn fl">下载文件</a>&nbsp;&nbsp;&nbsp;
+										<a href="${ctx}/fileMgr/download/${file.fileId}?r=<%=Math.random() %>" target="_blank" class="green_mod_btn fl">下载文件</a>
 										<a href="${ctx}/fileMgr/detail/${file.fileId}?r=<%=Math.random() %>" class="blue_mod_btn fr nyroModal">详情</a>
 									</div>
 								</li>

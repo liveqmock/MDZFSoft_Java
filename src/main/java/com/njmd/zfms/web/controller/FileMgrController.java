@@ -3,10 +3,12 @@ package com.njmd.zfms.web.controller;
 import java.io.File;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,6 +63,14 @@ public class FileMgrController extends BaseController
 		// 机构查看范围
 		PropertyFilter filter = new PropertyFilter("uploadCorpInfo.treeCode", PropertyFilter.MatchType.START, this.getLoginToken().getSysCorp().getTreeCode());
 		filters.add(filter);
+		List<String> statusList = new ArrayList<String>();
+		statusList.add(FileUploadInfo.FILE_STATUS_CLIPING);
+		statusList.add(FileUploadInfo.FILE_STATUS_EXPIRED);
+		statusList.add(FileUploadInfo.FILE_STATUS_VALID);
+		statusList.add(FileUploadInfo.FILE_STATUS_UNCLIP);
+		// 状态过滤
+		PropertyFilter filter2 = new PropertyFilter("fileStatus", PropertyFilter.MatchType.IN, statusList);
+		filters.add(filter2);
 		Page pageResult = fileUploadInfoService.query(page, filters);
 		Tree tree = sysCorpService.getCorpTree(request, false);
 		model.addAttribute("fileTypeList", fileTypeService.findAll());
@@ -174,6 +184,14 @@ public class FileMgrController extends BaseController
 		// 机构查看范围
 		PropertyFilter filter = new PropertyFilter("uploadUserInfo.loginId", PropertyFilter.MatchType.EQ, this.getLoginToken().getSysLogin().getLoginId());
 		filters.add(filter);
+		List<String> statusList = new ArrayList<String>();
+		statusList.add(FileUploadInfo.FILE_STATUS_CLIPING);
+		statusList.add(FileUploadInfo.FILE_STATUS_EXPIRED);
+		statusList.add(FileUploadInfo.FILE_STATUS_VALID);
+		statusList.add(FileUploadInfo.FILE_STATUS_UNCLIP);
+		// 状态过滤
+		PropertyFilter filter2 = new PropertyFilter("fileStatus", PropertyFilter.MatchType.IN, statusList);
+		filters.add(filter2);
 		Page pageResult = fileUploadInfoService.query(page, filters);
 		model.addAttribute("fileTypeList", fileTypeService.findAll());
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
@@ -230,11 +248,68 @@ public class FileMgrController extends BaseController
 		// 机构查看范围
 		PropertyFilter filter = new PropertyFilter("uploadCorpInfo.treeCode", PropertyFilter.MatchType.START, this.getLoginToken().getSysCorp().getTreeCode());
 		filters.add(filter);
+		List<String> statusList = new ArrayList<String>();
+		statusList.add(FileUploadInfo.FILE_STATUS_CLIPING);
+		statusList.add(FileUploadInfo.FILE_STATUS_EXPIRED);
+		statusList.add(FileUploadInfo.FILE_STATUS_VALID);
+		statusList.add(FileUploadInfo.FILE_STATUS_UNCLIP);
+		// 业务状态过滤
+		PropertyFilter filter2 = new PropertyFilter("fileStatus", PropertyFilter.MatchType.IN, statusList);
+		filters.add(filter2);
 		Page pageResult = fileUploadInfoService.query(page, filters);
 		Tree tree = sysCorpService.getCorpTree(request, false);
 		model.addAttribute("fileTypeList", fileTypeService.findAll());
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
 		return BASE_DIR + "/file_delete/file_list";
+	}
+
+	/** 删除 */
+	@RequestMapping(value = "/delete/{id}")
+	@ResponseBody
+	public ResultInfo delete(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
+	{
+		try
+		{
+			int resultTag = fileUploadInfoService.delete(id);
+			if (resultTag == ResultConstants.DELETE_SUCCEED)
+			{
+				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
+			}
+			else
+			{
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
+			}
+		}
+		catch (Throwable t)
+		{
+			logger.error("文件删除异常", t);
+			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.SYSTEM_ERROR, INFORMATION_PARAMAS));
+		}
+	}
+
+	/** 批量删除 */
+	@RequestMapping(value = "/batchDelete")
+	@ResponseBody
+	public ResultInfo batchDelete(HttpServletRequest request, Model model, String ids) throws Exception
+	{
+		try
+		{
+			int resultTag = fileUploadInfoService.batchDelete(ids);
+			if (resultTag == ResultConstants.DELETE_SUCCEED)
+			{
+				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
+			}
+			else
+			{
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
+			}
+		}
+		catch (Throwable t)
+		{
+			logger.error("文件删除异常", t);
+			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.SYSTEM_ERROR, INFORMATION_PARAMAS));
+		}
+
 	}
 }

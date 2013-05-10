@@ -59,6 +59,8 @@ public class DevInfoMgrController extends BaseController
 			page.setOrderBy("devId");
 		}
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
+		PropertyFilter filter = new PropertyFilter("sysCorp.treeCode", PropertyFilter.MatchType.START, this.getLoginToken().getSysCorp().getTreeCode());
+		filters.add(filter);
 		Page pageResult = devInfoService.query(page, filters);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
 		model.addAttribute("devFacturerList", devFacturerInfoService.findAll());
@@ -85,6 +87,7 @@ public class DevInfoMgrController extends BaseController
 	{
 		try
 		{
+			entity.setSysCorp(this.getLoginToken().getSysCorp());
 			int resultTag = devInfoService.save(entity);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
@@ -137,6 +140,7 @@ public class DevInfoMgrController extends BaseController
 	{
 		try
 		{
+			entity.setSysCorp(this.getLoginToken().getSysCorp());
 			int resultTag = devInfoService.update(entity);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{
