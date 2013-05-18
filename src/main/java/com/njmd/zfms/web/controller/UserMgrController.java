@@ -263,8 +263,21 @@ public class UserMgrController extends BaseController
 			page.setOrderBy("loginName");
 		}
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
-		PropertyFilter pf = new PropertyFilter("sysCorp.treeCode", PropertyFilter.MatchType.START, this.getLoginToken().getSysCorp().getTreeCode());
-		filters.add(pf);
+		// 是否已经存在机构过滤条件，如果存在则不加入机构编码条件过滤，避免Hibernate出错
+		boolean isExistCorpFilter = false;
+		for (PropertyFilter propertyFilter : filters)
+		{
+			if (propertyFilter.getPropertyName().equals("sysCorp.corpId"))
+			{
+				isExistCorpFilter = true;
+			}
+
+		}
+		if (!isExistCorpFilter)
+		{
+			PropertyFilter pf = new PropertyFilter("sysCorp.treeCode", PropertyFilter.MatchType.START, this.getLoginToken().getSysCorp().getTreeCode());
+			filters.add(pf);
+		}
 		Page pageResult = sysLoginService.query(page, filters);
 		Tree tree = sysCorpService.getCorpTree(request, false);
 
