@@ -12,6 +12,9 @@
  	            chart: {
  	                type: 'column'
  	            },
+ 	           colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', 
+ 	                   '#FFF263', '#6AF9C4','#058DF9', '#50B532', '#ED571B', '#D00F00', '#24CEE5'
+ 	                  ,'#058CC7', '#50C432', '#ED861B', '#D7DF00', '#20CBE5', '#6FE572', '#F29655' ],
  	            title: {
  	                text: '${sysCorp.corpName} 上传文件统计图'
  	            }, 
@@ -57,10 +60,24 @@
 } 
 		</style>
 	</head>
-	<body >
-	<div id="container1" style="width: 916px; height: 410px"></div>
-	<div style="overflow: auto; height: 510px">
-		<table cellspacing="1" class="tablesorter" width="100%">
+	<body > 
+					
+	<c:if test="${fn:length(corpList)<=10}"> <div id="container1" style="width:916px; height: 410px"></div></c:if>
+	
+	<c:if test="${fn:length(corpList)>10}">
+	<div style="overflow:auto;height:410px;width:916px">
+	 <div id="container1" style="width:${fn:length(corpList)}0%;height:390px"></div>
+	 </div>
+	 </c:if>							
+ <br>
+	
+	<div style="overflow:auto; height:510px">
+	<c:if test="${fn:length(corpList)<=10}"> 
+	<table cellspacing="1" class="tablesorter" width="98%" >
+								</c:if>
+    <c:if test="${fn:length(corpList)>10}"> 
+	<table cellspacing="1" class="tablesorter" width="${fn:length(corpList)}0%" >
+								</c:if> 
 			<thead>
 				<tr align="center">
 					<th colspan=2></th>

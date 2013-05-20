@@ -109,8 +109,7 @@ return;
 								<label>所属部门：</label>
 									<input type="hidden" name="corpId" id="corpId" value=""/>
 									<input type="text" name="corpName" id="corpName" value="" size="20" class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
-									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;">
-							         	<iframe style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;z-index:-1;"></iframe>   
+									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none">
 								         <ul id="treeDemo" class="ztree" style="width: 180px;">
 								         </ul>
 							        </div>
@@ -148,7 +147,7 @@ return;
 								</div>
 					</form>
 						</div>
-					<iframe id="corpChart" name="corpChart" src="" width="916px" height="920px" frameborder="0" scrolling="no"></iframe>
+					<iframe id="corpChart" name="corpChart" src="" width="916px" height="940px" frameborder="0" scrolling="no"></iframe>
 						<div class=" mt_10">
 							
 						</div>

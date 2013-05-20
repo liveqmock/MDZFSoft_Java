@@ -83,9 +83,9 @@ return;
 					<form id="mainForm" action="<%=request.getContextPath() %>/reportStatistics/userChart" method="post" target="corpChart">
 	 
 						<div class="mt_10">
-								<label>上&nbsp;传&nbsp;人:</label>
+								<label>采&nbsp;集&nbsp;人:</label>
 									<input type="hidden" name="uploadUserId" id="uploadUserId" value="" />
-									<input type="text" class="input_79x19"  name="uploadUserName" id="uploadUserName" value="" style="cursor: pointer;"  onclick="showUserSelectPage('上传人选择','uploadUserId','uploadUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="text" class="input_79x19"  name="uploadUserName" id="uploadUserName" value="" style="cursor: pointer;"  onclick="showUserSelectPage('采集人选择','uploadUserId','uploadUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
 							        <label>统计口径：</label>
 							        <select class="input_79x19" id="queryType" name="queryType" onchange="showChooseTime()">
 									<option value="1">按年统计</option>
