@@ -207,7 +207,7 @@
 			13、是行高，这个在设置向上或向下滚动的时候有用处
 			14、控制向上或向下滚动时每次停止的时间
 		-->
-		<advmarquee></advmarquee>
+		<advmarquee>{a href='http://www.ckplayer.com'}{font color='#FFFFFF' size='12'}这里可以放文字广告，为什么要在这里放呢，{/font}{/a}{a href='http://www.ckplayer.com'}{font color='#FFFFFF' size='12'}是因为如果你想在站外调用视频并且有文字广告的话，{/a}{br}就得在这里才能被加载，在js里是不能补加载的，{br}默认使用这里的广告，如果不想在这里使用可以清空这里的内容</advmarquee>
 		<!--
 		该处是滚动文字广告的内容，如果不想在这里设置，就把这里清空并且在页面中使用js的函数定义function ckmarqueeadv(){return '广告内容'}
 		-->
