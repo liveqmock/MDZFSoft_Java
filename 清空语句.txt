@@ -1,0 +1,10 @@
+delete from sys_login_role;
+delete from sys_role_permission;
+delete from sys_role;
+delete from sys_login where login_id!=0;
+delete from sys_corp where corp_id!=1;
+delete from sys_log;
+delete from file_upload_info;
+delete from dev_info;
+delete from notice_info;
+delete from sys_server_info;
