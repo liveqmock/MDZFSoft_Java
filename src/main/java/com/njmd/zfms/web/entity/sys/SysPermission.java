@@ -61,6 +61,9 @@ public class SysPermission implements Serializable
 	@Column(name = "PERMISSION_ICO")
 	private String permissionIco;
 
+	@Column(name = "TREE_CODE")
+	private String treeCode;
+
 	// bi-directional many-to-one association to SysRolePermission
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sysPermission")
 	private List<SysRolePermission> sysRolePermissions;
@@ -172,6 +175,16 @@ public class SysPermission implements Serializable
 	public void setSysRolePermissions(List<SysRolePermission> sysRolePermissions)
 	{
 		this.sysRolePermissions = sysRolePermissions;
+	}
+
+	public String getTreeCode()
+	{
+		return treeCode;
+	}
+
+	public void setTreeCode(String treeCode)
+	{
+		this.treeCode = treeCode;
 	}
 
 }
