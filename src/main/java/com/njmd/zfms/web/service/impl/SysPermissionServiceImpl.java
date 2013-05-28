@@ -24,6 +24,7 @@ import com.njmd.framework.dao.BaseHibernateDAO;
 import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.framework.service.BaseCrudServiceImpl;
 import com.njmd.framework.utils.web.WebContextHolder;
+import com.njmd.zfms.web.constants.CommonConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.dao.SysPermissionDAO;
 import com.njmd.zfms.web.entity.sys.SysPermission;
@@ -158,7 +159,53 @@ public class SysPermissionServiceImpl extends BaseCrudServiceImpl<SysPermission,
 		sysPermission.setSystemId(1);
 		sysPermission.setPermissionSort(menuSort);
 		sysPermissionDAO.save(sysPermission);
+		// 处理树编码
+		String treeCode = String.valueOf(sysPermission.getPermissionId());
+		if (!CommonConstants.NO_PARENT_ID.equals(sysPermission.getParentPermissionId()))
+		{
+			String parentTreeCode = baseDao.findById(sysPermission.getParentPermissionId()).getTreeCode();
+			treeCode = parentTreeCode + "." + sysPermission.getPermissionId();
+		}
+		sysPermission.setTreeCode(treeCode);
+		baseDao.update(sysPermission);
 		return ResultConstants.SAVE_SUCCEED;
+	}
+
+	/**
+	 * 添加菜单
+	 * 
+	 * @param sysPermissionupd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(readOnly = false, rollbackFor = Throwable.class)
+	public int update(SysPermission sysPermission) throws Exception
+	{
+
+		// String hql =
+		// "from SysPermission as model where model.parentPermissionId=? and model.systemId=? order by model.permissionSort desc";
+		// Object[] values = new Object[] {
+		// sysPermission.getParentPermissionId(), 1 };
+		// List<SysPermission> menuList = sysPermissionDAO.findByHql(hql,
+		// values);
+		// Integer menuSort = 1;
+		// if (menuList.size() != 0)
+		// {
+		// menuSort = menuList.get(0).getPermissionSort() + 1;
+		// }
+		// sysPermission.setPermissionSort(menuSort);
+		// 处理树编码
+		String treeCode = String.valueOf(sysPermission.getPermissionId());
+		if (!CommonConstants.NO_PARENT_ID.equals(sysPermission.getParentPermissionId()))
+		{
+			String parentTreeCode = baseDao.findById(sysPermission.getParentPermissionId()).getTreeCode();
+			treeCode = parentTreeCode + "." + sysPermission.getPermissionId();
+		}
+		sysPermission.setTreeCode(treeCode);
+		baseDao.update(sysPermission);
+		return ResultConstants.UPDATE_SUCCEED;
 	}
 
 	/**
