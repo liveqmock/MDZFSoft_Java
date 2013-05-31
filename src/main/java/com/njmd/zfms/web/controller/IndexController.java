@@ -51,7 +51,7 @@ public class IndexController extends BaseController
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
 
 		SysLogin sysLogin = this.getLoginToken().getSysLogin();
-		filters.add(new PropertyFilter("targetIds", MatchType.LIKE, sysLogin.getSysCorp().getCorpId()));
+		filters.add(new PropertyFilter("targetIds", MatchType.LIKE, sysLogin.getSysCorp().getCorpId() + ","));
 		Page pageResult = noticeInfoService.query(page, filters);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
 		return BASE_DIR + "/homepage";
