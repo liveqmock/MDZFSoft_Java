@@ -115,7 +115,7 @@
 		strs=str.split(","); //字符分割      
 		for(var i=0;i<strs.length ;i++){
 			var pId = strs[i];
-			treeObj.checkNode(treeObj.getNodeByParam("id", pId,null), true, true);
+			treeObj.checkNode(treeObj.getNodeByParam("id", pId,null), true, false);
 		}
 	}
 </script>
