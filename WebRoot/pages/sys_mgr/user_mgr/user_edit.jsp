@@ -92,8 +92,7 @@
 							<td>
 								<input id="corpId" name="sysCorp.corpId" type="hidden" value="${resultObject.sysCorp.corpId}"/>
 								<input type="text" name="corpName" id="corpName" value="${resultObject.sysCorp.corpName}" size="20" class="form_input {required:true}" readonly="readonly" style="cursor: pointer;"/>
-								<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;">
-							         <iframe style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;z-index:-1;"></iframe>   
+								<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;overflow:auto">
 							         <ul id="treeDemo" class="ztree" style="width: 180px;">
 							         </ul>	
 						        </div>

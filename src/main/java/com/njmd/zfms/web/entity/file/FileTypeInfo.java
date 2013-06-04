@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -22,7 +23,9 @@ public class FileTypeInfo implements Serializable
 	private static final Long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="FILETYPEINFO_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="FILETYPEINFO_GENERATOR",sequenceName="FILETYPEINFO_SEQUENCE",allocationSize=1)
 	@Column(name = "TYPE_ID")
 	private Long typeId;
 

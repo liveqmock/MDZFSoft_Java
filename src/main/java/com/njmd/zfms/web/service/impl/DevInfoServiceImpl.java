@@ -43,8 +43,9 @@ public class DevInfoServiceImpl extends BaseCrudServiceImpl<DevInfo, Long> imple
 		{
 			if (devInfo.getDevUserInfo() != null && devInfo.getDevUserInfo().getLoginId() != null)
 			{
-				SysLogin sysLogin = sysLoginBO.findById(devInfo.getDevUserInfo().getLoginId());
-				devInfo.setSysCorp(sysLogin.getSysCorp());
+				//使用单位已经属于必填项目，因此可以注释掉。    EditBy 孙强伟
+//				SysLogin sysLogin = sysLoginBO.findById(devInfo.getDevUserInfo().getLoginId());
+//				devInfo.setSysCorp(sysLogin.getSysCorp());
 			}
 			else
 				devInfo.setDevUserInfo(null);
@@ -74,8 +75,8 @@ public class DevInfoServiceImpl extends BaseCrudServiceImpl<DevInfo, Long> imple
 		}
 		if (devInfo.getDevUserInfo() != null)
 		{
-			SysLogin sysLogin = sysLoginBO.findById(devInfo.getDevUserInfo().getLoginId());
-			devInfo.setSysCorp(sysLogin.getSysCorp());
+//			SysLogin sysLogin = sysLoginBO.findById(devInfo.getDevUserInfo().getLoginId());
+//			devInfo.setSysCorp(sysLogin.getSysCorp());
 		}
 		BeanUtils.copyProperties(devInfoTemp, devInfo);
 

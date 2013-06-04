@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -33,7 +34,9 @@ public class SysPermission implements Serializable
 	public static final long PERMISSION_TYPE_2 = 2;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="SYSPERMISSION_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="SYSPERMISSION_GENERATOR",sequenceName="SYSPERMISSION_SEQUENCE",allocationSize=1)
 	@Column(name = "PERMISSION_ID")
 	private Long permissionId;
 

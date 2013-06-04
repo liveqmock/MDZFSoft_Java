@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.njmd.framework.entity.AuditableEntity;
@@ -24,7 +25,9 @@ public class DevTypeInfo extends AuditableEntity implements Serializable
 	private static final Long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="DEVTYPEINFO_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="DEVTYPEINFO_GENERATOR",sequenceName="DEVTYPEINFO_SEQUENCE",allocationSize=1)
 	@Column(name = "DEV_TYPE_ID")
 	private Long devTypeId;
 

@@ -19,7 +19,7 @@
 						<a href="javascript:corpMoidfy()" class="blue_mod_btn">部门修改</a>
 						<a href="javascript:corpDelete()" class="blue_mod_btn">部门删除</a>
 					</div>
-					<div style="background-color:#f2edda; border:1px solid #d5cfaf;">
+					<div style="background-color:#f2edda; border:1px solid #d5cfaf; overflow:auto">
 						<ul id="treeDemo" class="ztree" style="width: 180px;height: 300px">
 						</ul>
 					</div>

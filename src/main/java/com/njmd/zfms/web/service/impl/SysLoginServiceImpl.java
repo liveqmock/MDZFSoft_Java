@@ -75,7 +75,7 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 			return ResultConstants.IMG_CODE_FAILED;
 		}
 
-		// 检查登录名和密码是否正确 MD5Utils.toMD5(loginPwd)
+		// 检查登录名和密码是否正确 MD5Utils.toMD5(loginPwd) 
 		SysLogin sysLogin = ((SysLoginDAO) baseDao).login(loginName, MD5Utils.toMD5(loginPwd), systemId);
 		if (sysLogin == null)
 		{

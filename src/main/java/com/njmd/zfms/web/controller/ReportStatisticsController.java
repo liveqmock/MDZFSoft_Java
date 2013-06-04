@@ -103,9 +103,10 @@ public class ReportStatisticsController  extends BaseController{
 		categoriesList=new ArrayList<String>();
 		corpList=sysCorpService.findByParentId(parentId);
 		fileTypeInfoList= fileTypeInfoService.findAll();
-		FileTypeInfo fileType=new FileTypeInfo();
-		fileType.setTypeName("未分类");
-		fileTypeInfoList.add(fileType);
+//Edit by 孙强伟   ，文件分类中已经添加了系统默认名称了，因此此处的可以取消了		
+//		FileTypeInfo fileType=new FileTypeInfo();
+//		fileType.setTypeName("未分类");
+//		fileTypeInfoList.add(fileType);
 		
 		if(queryType==1){
 			//按年统计
@@ -257,9 +258,10 @@ public class ReportStatisticsController  extends BaseController{
 		corpCategoriesMap=new HashMap<String,String>();
 		 
 		fileTypeInfoList= fileTypeInfoService.findAll();
-		FileTypeInfo fileType=new FileTypeInfo();
-		fileType.setTypeName("未分类");
-		fileTypeInfoList.add(fileType);
+//Edit by 孙强伟   ，文件分类中已经添加了系统默认名称了，因此此处的可以取消了		
+//		FileTypeInfo fileType=new FileTypeInfo();
+//		fileType.setTypeName("未分类");
+//		fileTypeInfoList.add(fileType);
 	    for(FileTypeInfo type:fileTypeInfoList){
 	    	StringBuffer sb=new StringBuffer("");
 	    	for(String date:categoriesList){

@@ -8,3 +8,20 @@ delete from file_upload_info;
 delete from dev_info;
 delete from notice_info;
 delete from sys_server_info;
+
+drop sequence devfacturerinfo_sequence; 
+drop sequence devtypeinfo_sequence;
+drop sequence devinfo_sequence;
+drop sequence filetypeinfo_sequence;
+drop sequence fileuploadinfo_sequence;
+drop sequence noticeinfo_sequence;
+drop sequence noticereadinfo_sequence;
+drop sequence syscorp_sequence;
+drop sequence syslog_sequence;
+drop sequence sysloginrole_sequence;
+drop sequence syspermission_sequence;
+drop sequence sysrole_sequence;
+drop sequence sysrolepermission_sequence;
+drop sequence sysserverinfo_sequence;
+drop sequence syslogin_sequence;
+

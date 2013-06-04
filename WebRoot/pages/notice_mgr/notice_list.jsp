@@ -24,7 +24,7 @@
 							<div class="search_form">
 								<div class="mt_10">
 									<label>公告标题：</label>
-									<input type="text" id="noticeName" name="filter_LIKE_noticeName" value="${param['filter_LIKE_noticeTitle']}" class="input_79x19" />
+									<input type="text" id=noticeTitle name="filter_LIKE_noticeTitle" value="${param['filter_LIKE_noticeTitle']}" class="input_79x19" />
 									<a href="javascript:$('#mainForm').submit()" class="blue_mod_btn">查&nbsp;询</a>
 									<a href="javascript:clearForm()" class="blue_mod_btn">重&nbsp;置</a>
 								</div>

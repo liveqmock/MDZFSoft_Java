@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.njmd.framework.entity.AuditableEntity;
@@ -26,7 +27,9 @@ public class NoticeInfo extends AuditableEntity implements Serializable
 	private static final Long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="NOTICEINFO_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="NOTICEINFO_GENERATOR",sequenceName="NOTICEINFO_SEQUENCE",allocationSize=1)
 	@Column(name = "NOTICE_ID")
 	private Long noticeId;
 

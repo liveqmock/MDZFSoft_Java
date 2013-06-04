@@ -20,6 +20,7 @@ import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.entity.dev.DevInfo;
+import com.njmd.zfms.web.entity.file.FileUploadInfo;
 import com.njmd.zfms.web.service.DevFacturerInfoService;
 import com.njmd.zfms.web.service.DevInfoService;
 import com.njmd.zfms.web.service.DevTypeInfoService;
@@ -74,6 +75,9 @@ public class DevInfoMgrController extends BaseController
 	@RequestMapping(value = "/add")
 	public String add(HttpServletRequest request, Model model) throws Exception
 	{
+		Tree tree = sysCorpService.getCorpTree(request, false);
+
+		model.addAttribute("tree", tree);
 		model.addAttribute("devFacturerList", devFacturerInfoService.findAll());
 		model.addAttribute("devTypeList", devTypeInfoService.findAll());
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, new DevInfo());
@@ -87,7 +91,8 @@ public class DevInfoMgrController extends BaseController
 	{
 		try
 		{
-			entity.setSysCorp(this.getLoginToken().getSysCorp());
+			//使用单位已经属于必填项目，因此可以注释掉。    EditBy 孙强伟
+//			entity.setSysCorp(this.getLoginToken().getSysCorp());
 			int resultTag = devInfoService.save(entity);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
@@ -127,6 +132,10 @@ public class DevInfoMgrController extends BaseController
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		DevInfo entity = devInfoService.findById(id);
+		
+		Tree tree = sysCorpService.getCorpTree(request, false);
+
+		model.addAttribute("tree", tree);
 		model.addAttribute("devFacturerList", devFacturerInfoService.findAll());
 		model.addAttribute("devTypeList", devTypeInfoService.findAll());
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
@@ -140,7 +149,8 @@ public class DevInfoMgrController extends BaseController
 	{
 		try
 		{
-			entity.setSysCorp(this.getLoginToken().getSysCorp());
+			//使用单位已经属于必填项目，因此可以注释掉。    EditBy 孙强伟
+//			entity.setSysCorp(this.getLoginToken().getSysCorp());
 			int resultTag = devInfoService.update(entity);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{

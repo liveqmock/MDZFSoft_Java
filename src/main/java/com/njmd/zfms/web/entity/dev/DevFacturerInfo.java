@@ -9,7 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import com.njmd.framework.entity.AuditableEntity;
 
@@ -24,7 +27,9 @@ public class DevFacturerInfo extends AuditableEntity implements Serializable
 	private static final Long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="DEVFACTURERINFO_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="DEVFACTURERINFO_GENERATOR",sequenceName="DEVFACTURERINFO_SEQUENCE",allocationSize=1)
 	@Column(name = "DEV_FACTURER_ID")
 	private Long devFacturerId;
 

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -50,7 +51,9 @@ public class FileUploadInfo implements Serializable
 	/** 文件格式-音频 */
 	public static final Long FILE_TYPE_AUDIO = 3l;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="FILEUPLOADINFO_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="FILEUPLOADINFO_GENERATOR",sequenceName="FILEUPLOADINFO_SEQUENCE",allocationSize=1)
 	@Column(name = "FILE_ID")
 	private Long fileId;
 
@@ -120,6 +123,10 @@ public class FileUploadInfo implements Serializable
 	@Column(name = "DELETE_TIME")
 	private String deleteTime;
 
+	//Editby 孙强伟，保存文件服务器保存文件时的目录
+	@Column(name="FILE_STORAGE_ROOT")
+	private String fileStorageRoot;
+	
 	// bi-directional many-to-one association to FileTypeInfo
 	@ManyToOne
 	@JoinColumn(name = "TYPE_ID")
@@ -431,5 +438,13 @@ public class FileUploadInfo implements Serializable
 		else if (FileUploadInfo.FILE_STATUS_CLIPING.equals(this.fileStatus))
 			return "剪辑中";
 		return "";
+	}
+
+	public String getFileStorageRoot() {
+		return fileStorageRoot;
+	}
+
+	public void setFileStorageRoot(String fileStorageRoot) {
+		this.fileStorageRoot = fileStorageRoot;
 	}
 }

@@ -2,8 +2,10 @@ package com.njmd.zfms.web.controller;
 
 import java.util.List;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
+import com.njmd.framework.utils.web.RequestUtils;
 import com.njmd.zfms.web.constants.CommonConstants;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
@@ -262,6 +265,7 @@ public class UserMgrController extends BaseController
 			page.setOrder(Page.ASC);
 			page.setOrderBy("loginName");
 		}
+		
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
 		// 是否已经存在机构过滤条件，如果存在则不加入机构编码条件过滤，避免Hibernate出错
 		boolean isExistCorpFilter = false;
@@ -281,6 +285,8 @@ public class UserMgrController extends BaseController
 		Page pageResult = sysLoginService.query(page, filters);
 		Tree tree = sysCorpService.getCorpTree(request, false);
 
+		//EditBy 孙强伟,fixedCorpId是用来标志是否已经选择部门
+		model.addAttribute("fixedCorpId",request.getParameter("fixedCorpId"));
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
 		return BASE_DIR + "user_select";

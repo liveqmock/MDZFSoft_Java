@@ -3,6 +3,8 @@ package com.njmd.framework.dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
@@ -558,6 +561,9 @@ public class BaseHibernateDAO<T, PK extends Serializable>
 
 		Criteria criteria = createCriteria(criterions);
 
+//		EditBy 孙强伟 2013.06.03 ,修改当前后传递过来的filter包含相关实体时，报 别名重复的问题。
+		List<String> existsAlias=new ArrayList<String>();
+		
 		if (filters != null && filters.size() > 0)
 		{
 			for (PropertyFilter filter : filters)
@@ -565,7 +571,10 @@ public class BaseHibernateDAO<T, PK extends Serializable>
 				if (filter.getPropertyName().indexOf(".") > 0)
 				{
 					String refBeanName = filter.getPropertyName().split("\\.")[0];
-					criteria.createAlias(refBeanName, refBeanName);
+					if(!existsAlias.contains(refBeanName)){
+						criteria.createAlias(refBeanName, refBeanName);
+						existsAlias.add(refBeanName);
+					}
 				}
 			}
 		}

@@ -115,6 +115,9 @@ public class ResultConstants
 
 	/** 删除异常 */
 	public static final int DELETE_FAILED_IS_REF = 6003;
+	
+	/** 系统默认设置，无法删除 */
+	public static final int DELETE_SYSTEM_DEFAULT_ERROR=6004;	//editby 孙强伟，增加系统默认设置无法删除提示
 
 	/** 查看成功 */
 	public static final int VIEW_SUCCESS = 7000;

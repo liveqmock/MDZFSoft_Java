@@ -19,6 +19,7 @@ import com.njmd.zfms.web.constants.ConfigConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.dao.FileTypeInfoDAO;
 import com.njmd.zfms.web.entity.dev.DevTypeInfo;
+import com.njmd.zfms.web.entity.file.FileTypeInfo;
 import com.njmd.zfms.web.entity.file.FileUploadInfo;
 import com.njmd.zfms.web.entity.sys.SysCorp;
 import com.njmd.zfms.web.entity.sys.SysLog;
@@ -64,6 +65,14 @@ public class FileUploadInfoServiceImpl extends BaseCrudServiceImpl<FileUploadInf
 		fileUploadInfo.setFileRemark("");
 		fileUploadInfo.setFileStatus("A");
 		fileUploadInfo.setFileContextPath(sysCorp.getFileRootUrl() + "/");
+		//Edit by 孙强伟,保存文件服务器保存文件时的目录
+		fileUploadInfo.setFileStorageRoot(ConfigConstants.FILE_STORAGE_ROOT);
+		
+		//Edit by 孙强伟，当上传的文件没有选择文件分类时，其文件分类设置为系统默认分类。
+		if(null!=fileUploadInfo && fileUploadInfo.getFileTypeInfo()==null){
+			FileTypeInfo fileTypeInfo=fileTypeInfoDAO.findById(0l);
+			fileUploadInfo.setFileTypeInfo(fileTypeInfo);
+		}
 
 		if (fileSavePath.toLowerCase().lastIndexOf(".jpg") > 0)
 		{

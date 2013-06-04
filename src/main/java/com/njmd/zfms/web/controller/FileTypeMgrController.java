@@ -45,7 +45,7 @@ public class FileTypeMgrController extends BaseController
 		// 设置默认排序方式
 		if (!page.isOrderBySetted())
 		{
-			page.setOrder(Page.DESC);
+			page.setOrder(Page.ASC);	
 			page.setOrderBy("typeId");
 		}
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
@@ -88,18 +88,24 @@ public class FileTypeMgrController extends BaseController
 	}
 
 	/** 删除 */
+	//Edit by 孙强伟，增加系统默认设置无法删除提示
 	@RequestMapping(value = "/delete/{id}")
 	@ResponseBody
 	public ResultInfo delete(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
-		int resultTag = fileTypeInfoService.delete(id);
-		if (resultTag == ResultConstants.DELETE_SUCCEED)
-		{
-			return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
-		}
-		else
-		{
-			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
+		//判断是否为默认记录
+		if(0!=id){
+			int resultTag = fileTypeInfoService.delete(id);
+			if (resultTag == ResultConstants.DELETE_SUCCEED)
+			{
+				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
+			}
+			else
+			{
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
+			}
+		}else{
+			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(ResultConstants.DELETE_SYSTEM_DEFAULT_ERROR));
 		}
 	}
 

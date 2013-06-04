@@ -90,7 +90,12 @@
 								<li class="upload_item">
 									<div class="upload_img">
 										<a href="${ctx}/fileMgr/edit/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal" target="_blank">
+										<c:if test="${file.fileType!='3'}">
 											<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
+										</c:if>
+										<c:if test="${file.fileType=='3'}">
+											<img title="${file.fileRemark }" src="${ctx}/images/wav.png" alt=""/>
+										</c:if>
 										</a>
 									</div>
 									<div title="${file.fileUploadName}" class="upload_descript" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">

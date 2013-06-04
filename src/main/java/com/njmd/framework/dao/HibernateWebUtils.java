@@ -35,7 +35,7 @@ public final class HibernateWebUtils
 	 * 根据按PropertyFilter命名规则的Request参数,创建PropertyFilter列表.
 	 * PropertyFilter命名规则为Filter属性前缀_比较类型_属性名.
 	 * 
-	 * eg. filter_EQUAL_name filter_LIKE_name_OR_email
+	 * eg. filter_EQ_name filter_LIKE_name_OR_email
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<PropertyFilter> buildPropertyFilters(final HttpServletRequest request, final String filterPrefix)

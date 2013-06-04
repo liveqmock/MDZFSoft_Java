@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -40,7 +41,9 @@ public class SysLogin extends AuditableEntity implements Serializable
 	public static final int USER_TYPE_ADMIN = 1;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="SYSLOGIN_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="SYSLOGIN_GENERATOR",sequenceName="SYSLOGIN_SEQUENCE",allocationSize=1)
 	@Column(name = "LOGIN_ID")
 	private Long loginId;
 

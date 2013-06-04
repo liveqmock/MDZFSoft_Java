@@ -55,7 +55,9 @@
 												<td>${fileType.validTime}</td>
 												<td>
 													<a href="${ctx}/fileTypeMgr/edit/${fileType.typeId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="修改"><img src="images/icons/edit.png" alt="修改" /></a>
+													<c:if test="${fileType.typeId !='0' }">
 													<a href="javascript:fileTypeDelete('${fileType.typeId}')" title="删除"><img src="images/icons/cross.png" alt="删除" /></a>
+													</c:if>
 												</td>
 											</tr>
 										</c:forEach>

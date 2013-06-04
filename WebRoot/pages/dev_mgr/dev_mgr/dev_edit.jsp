@@ -6,6 +6,8 @@
 <%@ include file="/common/header.jsp"%>
 <%@ include file="/plugins/jquery-nyroModal.jsp" %>
 <%@ include file="/plugins/jquery-validation.jsp"%>
+<%@ include file="/plugins/jquery-powerFloat.jsp" %>
+<%@ include file="/plugins/ztree.jsp"%>
 </head>
 <body>
 	<form:form id="editForm" name="editForm" method="POST" action="${ctx}/devMgr/update" modelAttribute="resultObject">
@@ -29,10 +31,10 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								设备类型
+								<font color="red">*&nbsp;</font>设备类型
 							</td>
 							<td>
-								<form:select path="devTypeInfo.devTypeId" cssClass="form_input" style="width: 140px">
+								<form:select path="devTypeInfo.devTypeId" cssClass="form_input {required:true}" style="width: 140px">
 									<form:option value=""></form:option>
 									<form:options items="${devTypeList}" itemLabel="devTypeName" itemValue="devTypeId"/>
 								</form:select>
@@ -40,13 +42,26 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								设备厂商
+								<font color="red">*&nbsp;</font>设备厂商
 							</td>
 							<td>
-								<form:select path="devFacturerInfo.devFacturerId" cssClass="form_input" style="width: 140px">
+								<form:select path="devFacturerInfo.devFacturerId" cssClass="form_input {required:true}" style="width: 140px">
 									<form:option value=""></form:option>
 									<form:options items="${devFacturerList}" itemLabel="devFacturerName" itemValue="devFacturerId"/>
 								</form:select>
+							</td>
+						</tr>
+						<tr>
+							<td class="title" width="100">
+								<font color="red">*&nbsp;</font>部门
+							</td>
+							<td>
+								<input type="hidden" name="sysCorp.corpId" value="${resultObject.sysCorp.corpId }" id="corpId"/>
+								<input type="text" name="corpName" id="corpName" value="${resultObject.sysCorp.corpName }" class="form_input {required:true}" readonly="readonly" style="cursor: pointer;"/>
+								<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;overflow:auto">
+							         <ul id="treeDemo" class="ztree" style="width: 180px;">
+							         </ul>
+						        </div>
 							</td>
 						</tr>
 						<tr>
@@ -55,7 +70,7 @@
 							</td>
 							<td>
 								<input type="hidden" name="devUserInfo.loginId" id="userId" value="${resultObject.devUserInfo.loginId}" />
-								<input type="text" class="input_79x19 form_input"  name="userName" id="userName" value="${resultObject.devUserInfo.userName}" style="cursor: pointer;"  onclick="showUserSelectPage('使用人选择','userId','userName')"/>
+								<input type="text" class="form_input"  name="userName" id="userName" value="${resultObject.devUserInfo.userName}" style="cursor: pointer;"  onclick="showUserSelectPage('使用人选择','userId','userName')"/>
 							</td>
 						</tr>
 						<tr>
@@ -72,6 +87,25 @@
 	<script>
 	
 	$(function(){
+			//树形菜单
+		var setting = {
+			data: {
+				simpleData: {enable: true}
+			},
+			callback: {
+				onClick: onClick
+			}
+		};
+		var zNodes = ${tree.json};  
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+		
+		$("#corpName").powerFloat({
+			eventType: "click",
+			target: $("#corpChooseDiv")	
+		});
+	
 		$('.nyroModal').nyroModal();
 		$('#editForm').validate();
 		
@@ -80,6 +114,18 @@
 		     success:   onSuccess
 		});
 	});
+	
+		
+	function onClick(e, treeId, treeNode) {
+		var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+		var nodes = treeObj.getSelectedNodes();
+		var corpId = nodes[0].id;
+		var corpName = nodes[0].name;
+		$("#corpName").val(corpName);
+		$("#corpId").val(corpId);
+		$.powerFloat.hide();
+		$("#corpChooseDiv").css("display","none");
+	}
 	
 	function onSuccess(data) {
 	    if(data.messageType=='1')
@@ -96,8 +142,16 @@
 	//
 	function showUserSelectPage(title,userId,userName)
 	{
-		var url = '${ctx}/userMgr/userSelect?userId='+userId+'&userName='+userName+'&r='+Math.random();
-	  	$('#modalWindowAction').attr("href",url);
+		//只能选择已选择单位下的人员
+		var corpId=$("#corpId").val();
+		var corpName=$("#corpName").val();
+		if(undefined ==corpId || corpId==""){
+			alert("请先选择设备的划归单位,于进行使用人的选择");
+			return ;
+		}
+		//增加了fixedCorpId参数，用来说明在选择人员时，不可以修改单位，也就是说只能选择某单位下的人员。   EditBy 孙强伟
+		var url = '${ctx}/userMgr/userSelect?fixedCorpId=true&filter_EQ_sysCorp.corpId='+corpId+'&corpName='+encodeURI(encodeURI(corpName))+'&userId='+userId+'&userName='+userName+'&r='+Math.random();
+		$('#modalWindowAction').attr("href",url);
 	  	$('#modalWindowAction').attr("title",title);
 	  	$('#modalWindowAction').click();
 	}

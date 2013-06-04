@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -43,7 +44,9 @@ public class SysLog implements Serializable
 	 */
 	public static final Integer OPERATE_TYPE_AUDIT = 4;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="SYSLOG_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="SYSLOG_GENERATOR",sequenceName="SYSLOG_SEQUENCE",allocationSize=1)
 	@Column(name = "LOG_ID")
 	private Long logId;
 

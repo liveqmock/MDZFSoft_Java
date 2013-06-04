@@ -109,7 +109,7 @@ return;
 								<label>所属部门：</label>
 									<input type="hidden" name="corpId" id="corpId" value=""/>
 									<input type="text" name="corpName" id="corpName" value="" size="20" class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
-									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none">
+									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;overflow:auto">
 								         <ul id="treeDemo" class="ztree" style="width: 180px;">
 								         </ul>
 							        </div>

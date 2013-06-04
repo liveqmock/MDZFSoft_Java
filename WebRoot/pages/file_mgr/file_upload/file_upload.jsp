@@ -81,7 +81,7 @@
 	var ftpHost = "${sessionScope.loginToken.sysCorp.ftpIp}";
 	var ftpPort = "${sessionScope.loginToken.sysCorp.ftpPort}";
 	var ftpUser = "${sessionScope.loginToken.sysCorp.ftpUser}";
-	var ftpPswd = "";
+	var ftpPswd = "${sessionScope.loginToken.sysCorp.ftpPwd}";
 	var supportFileExtension = "<%=ConfigConstants.SUPPORT_FILE_EXTENSION%>";//支持上传文件格式
 	var totalFileNum=0;//上传文件总数
 	var uploadedFileNum=0;//已上传文件总数

@@ -1,3 +1,4 @@
+<%@page import="java.net.URLDecoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ include file="/common/taglibs.jsp"%>
@@ -27,10 +28,17 @@
 						<input type="text" id="userCode" name="filter_LIKE_userCode" value="${param['filter_LIKE_userCode']}" class="input_79x19" size="10"/>
 						&nbsp;&nbsp;&nbsp;&nbsp;
 						<label>所属部门：</label>
+						<input type="hidden" name="fixedCorpId" id="fixedCorpId" value="${param['fixedCorpId']}"/>
 						<input type="hidden" name="filter_EQ_sysCorp.corpId" id="corpId" value="${param['filter_EQ_sysCorp.corpId']}"/>
-						<input type="text" name="corpName" id="corpName" value="${param['corpName']}" size="20" class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
-						<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;">
-					         <iframe style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;z-index:-1;"></iframe>
+						<%
+							String corpName=request.getParameter("corpName");
+							if(null!=corpName)
+								corpName=URLDecoder.decode(corpName,"UTF-8");
+							else
+								corpName="";
+						 %>
+						<input type="text" name="corpName" id="corpName" value="<%=corpName %>" size="20" class="input_79x19" readonly="readonly"  style="cursor: pointer;"/>
+						<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;overflow:auto">
 					         <ul id="treeDemo" class="ztree" style="width: 180px;">
 					         </ul>
 				        </div>
@@ -99,11 +107,13 @@
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 		});
 	});
+	
+	<c:if test="${fixedCorpId ne 'true'}">
 	$("#corpName").powerFloat({
 		eventType: "click",
 		target: $("#corpChooseDiv")	
 	});
-	
+	</c:if>
 	function onClick(e, treeId, treeNode) {
 		var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
 		var nodes = treeObj.getSelectedNodes();
@@ -117,7 +127,7 @@
 	//页面加载初始化方法，实现查询条件下拉列表的回显功能
 	function init()
 	{
-		$("#corpId").val("${param['filter_sysCorp.corpId']}");
+		$("#corpId").val("${param['filter_EQ_sysCorp.corpId']}");
 	}
 	init();
 
@@ -130,8 +140,10 @@
 	function clearForm(){
 		$("#userName").val("");
 		$("#userCode").val("");
+		<c:if test="${fixedCorpId ne 'true'}">
 		$("#corpId").val("");
 		$("#corpName").val("");
+		</c:if>
 	}
 	
 	function userSelect(userId,userName)

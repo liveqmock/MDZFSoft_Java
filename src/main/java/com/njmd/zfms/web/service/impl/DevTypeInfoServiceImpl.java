@@ -9,7 +9,6 @@ import com.njmd.framework.dao.BaseHibernateDAO;
 import com.njmd.framework.service.BaseCrudServiceImpl;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.entity.dev.DevTypeInfo;
-import com.njmd.zfms.web.entity.file.FileTypeInfo;
 import com.njmd.zfms.web.service.DevInfoService;
 import com.njmd.zfms.web.service.DevTypeInfoService;
 

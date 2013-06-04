@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -27,7 +28,9 @@ public class SysCorp extends AuditableEntity implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="SYSCORP_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="SYSCORP_GENERATOR",sequenceName="SYSCORP_SEQUENCE",allocationSize=1)
 	@Column(name = "CORP_ID")
 	private Long corpId;
 

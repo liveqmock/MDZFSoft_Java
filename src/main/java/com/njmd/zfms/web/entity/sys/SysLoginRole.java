@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -23,7 +24,9 @@ public class SysLoginRole implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator="SYSLOGINROLE_GENERATOR",strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name="SYSLOGINROLE_GENERATOR",sequenceName="SYSLOGINROLE_SEQUENCE",allocationSize=1)
 	@Column(name = "ID")
 	private Long id;
 
