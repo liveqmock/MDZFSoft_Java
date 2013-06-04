@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  * 
  */
 public class Message
-{
+{ 
 	private final static String MESSAGE_REQUEST_NAME = "";
 
 	/** 消息类型－默认 */
