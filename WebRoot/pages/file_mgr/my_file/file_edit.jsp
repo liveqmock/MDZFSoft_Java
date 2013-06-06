@@ -58,7 +58,7 @@
 				</td>
 				<td class="title" >接警编号</td>
 				<td>
-					<form:input path="policeCode" cssClass="input_79x19 form_input {maxlength:30}"/>
+					<form:input path="policeCode" style="width:180px" cssClass="input_79x19 form_input {maxlength:20}"/>
 				</td>
 			</tr>
 			<tr>

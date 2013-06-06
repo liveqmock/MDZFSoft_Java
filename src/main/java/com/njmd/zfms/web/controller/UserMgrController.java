@@ -1,5 +1,6 @@
 package com.njmd.zfms.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -69,8 +70,17 @@ public class UserMgrController extends BaseController
 		List<PropertyFilter> filters = HibernateWebUtils.buildPropertyFilters(request);
 		PropertyFilter pf = new PropertyFilter("loginId", PropertyFilter.MatchType.NE, this.getLoginToken().getSysLogin().getLoginId());
 		PropertyFilter pf2 = new PropertyFilter("userType", PropertyFilter.MatchType.NE, SysLogin.USER_TYPE_SUPER_ADMIN);
+		
+		List<SysCorp> childrens=sysCorpService.findByParentId(this.getLoginToken().getSysCorp().getCorpId());
+		List childrenIds=new ArrayList();
+		for(SysCorp sysCorp:childrens){
+			childrenIds.add(sysCorp.getCorpId());
+		}
+		PropertyFilter pf3= new PropertyFilter("sysCorp.corpId",PropertyFilter.MatchType.IN,childrenIds);
+		
 		filters.add(pf);
 		filters.add(pf2);
+		filters.add(pf3);
 		Page pageResult = sysLoginService.query(page, filters);
 		Tree tree = sysCorpService.getCorpTree(request, false);
 

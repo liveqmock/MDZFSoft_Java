@@ -9,6 +9,8 @@
 <%@ include file="/plugins/jquery-powerFloat.jsp" %>
 <%@ include file="/plugins/ztree.jsp"%>
 <%@ include file="/plugins/calendar.jsp"%>
+<script type="text/javascript" src="${ctx}/plugins/ckplayer/ckplayer/ckplayer.js" charset="utf-8"></script>
+
 </head>
 <body>
 	<%@ include file="/pages/top.jsp"%>
@@ -30,7 +32,7 @@
 							<div class="search_form">
 								<div class="mt_10">
 									<label>文&nbsp;件&nbsp;名:</label>
-									<input type="text" class="input_79x19" name="filter_LIKE_fileUploadName" id="fileUploadName" value="${param['filter_LIKE_fileUploadName']}" />&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="text" class="input_79x19" style="width:180px" name="filter_LIKE_fileUploadName" id="fileUploadName" value="${param['filter_LIKE_fileUploadName']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>文件分类:</label>
 							        <select style="width: 135px" id="typeId" name="filter_EQ_fileTypeInfo.typeId">
 							        	<option  value=""></option>
@@ -48,7 +50,7 @@
 								</div>
 								<div class="mt_10">
 									<label>文件备注:</label>
-									<input type="text" class="input_79x19"  name="filter_LIKE_fileRemark" id="fileRemark" value="${param['filter_LIKE_fileRemark']}" />&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="text" class="input_79x19" style="width:180px"  name="filter_LIKE_fileRemark" id="fileRemark" value="${param['filter_LIKE_fileRemark']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>录&nbsp;制&nbsp;人:</label>
 									<input type="text" class="input_79x19"  name="fileEditUserName" id="fileEditUserName" value="${param['fileEditUserName']}" style="cursor: pointer;"  onclick="showUserSelectPage('录制人选择','fileEditId','fileEditUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									
@@ -62,7 +64,7 @@
 								</div>
 								<div class="mt_10">
 									<label>接警编号:</label>
-									<input class="input_79x19" id="policeCode" type="text" name="filter_EQ_policeCode" value="${param['filter_EQ_policeCode']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+									<input class="input_79x19" id="policeCode" style="width:180px" type="text" name="filter_EQ_policeCode" value="${param['filter_EQ_policeCode']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>简要警情:</label>
 									<input class="input_79x19" id="policeDesc" type="text" name="filter_LIKE_policeDesc" value="${param['filter_LIKE_policeDesc']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>接警时间:</label>
@@ -75,7 +77,7 @@
 								</div>
 								<div class="mt_10">
 									<label>到达时间:</label>
-									<input type="text" class="input_38x19"  name="filter_GE_policeCostTime" id="filter_GE_policeCostTime" value="${param['filter_GE_policeCostTime']}" />&nbsp;&nbsp;-&nbsp;&nbsp;
+									<input type="text" class="input_38x19"   name="filter_GE_policeCostTime" id="filter_GE_policeCostTime" value="${param['filter_GE_policeCostTime']}" />&nbsp;&nbsp;-&nbsp;&nbsp;
 									<input type="text" class="input_38x19" name="filter_LE_policeCostTime" id="filter_LE_policeCostTime" value="${param['filter_LE_policeCostTime']}" /> 分钟内
 									&nbsp;&nbsp;&nbsp;&nbsp;
 									<a href="javascript:$('#mainForm').submit()" class="blue_mod_btn">查&nbsp;询</a>
@@ -89,16 +91,30 @@
 								<c:forEach var="file" items="${page.result}" varStatus="status">
 								<li class="upload_item">
 									<div class="upload_img">
-										<a href="${ctx}/fileMgr/edit/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal" target="_blank">
-										<c:if test="${file.fileType!='3'}">
-											<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
+										<c:if test="${file.fileStatus=='A'}">
+											<c:if test="${file.fileType=='1'}">
+												<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal">
+													<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
+												</a>
+											</c:if>
+											<c:if test="${file.fileType=='2'}">
+												<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal">
+													<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
+												</a>
+											</c:if>
+											<c:if test="${file.fileType=='3'}">
+												<a href="${ctx}/fileMgr/fileView/${file.fileId}?r=<%=Math.random() %>"  class="img160 nyroModal">
+													<img title="${file.fileRemark }" src="${ctx}/images/wav.png" alt=""/>
+												</a>
+											</c:if>
 										</c:if>
-										<c:if test="${file.fileType=='3'}">
-											<img title="${file.fileRemark }" src="${ctx}/images/wav.png" alt=""/>
+										<c:if test="${file.fileStatus=='C' }">
+											<a href="javascript:alert('视频正在剪辑中，请稍后');"  class="img160">
+												<img title="${file.fileRemark }" src="${file.fileContextPath}//${file.fileShowPath}" alt=""/>
+											</a>
 										</c:if>
-										</a>
 									</div>
-									<div title="${file.fileUploadName}" class="upload_descript" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+									<div title="${file.fileUploadName}" class="upload_descript" style="width:144px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
 										${file.fileUploadName}
 									</div>
 									<div class="upload_opterdetails" >
@@ -127,6 +143,10 @@
 												<span class="bd">${file.editUserInfo.userName }</span>
 											</li>
 										</ul>
+									</div>
+									<div class="clearfix mt_10">
+										<a href="${ctx}/fileMgr/download/${file.fileId}?r=<%=Math.random() %>" target="_blank" class="green_mod_btn fl">下载文件</a>
+										<a href="${ctx}/fileMgr/edit/${file.fileId}?r=<%=Math.random() %>" class="blue_mod_btn fr nyroModal" target="_blank">编辑</a>
 									</div>
 								</li>
 								</c:forEach>

@@ -87,8 +87,8 @@
 					}
 					for (var i = 0; i < nodes.length; i++) {  
 						//if(nodes[i].isParent==false){ 
-						   // if (checkIds != '')
-						    	//checkIds += ',';  
+						    if (checkIds== '')
+						    	checkIds += ',';  
 						    checkIds += nodes[i].id+",";  
 						//}
 					}
@@ -116,7 +116,9 @@
 		strs=str.split(","); //字符分割      
 		for(var i=0;i<strs.length ;i++){
 			var pId = strs[i];
-			treeObj.checkNode(treeObj.getNodeByParam("id", pId,null), true, true);
+			var node = treeObj.getNodeByParam("id", pId,null);
+			if(node!=null)
+			treeObj.checkNode(node, true, false);
 		}
 	}
 </script>

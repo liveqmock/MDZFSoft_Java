@@ -49,10 +49,20 @@
 										<c:forEach var="notice" items="${page.result}" varStatus="status">
 											<tr align="center">
 												<td>${status.count}</td>
-												<td>
+												<td align="left">
 													<a class="nyroModal" style="color: blue" href="${ctx}/noticeMgr/view/${notice.noticeId}?mgrFlag=1&r=<%=Math.random() %>" target="_blank" title="公告查看">${notice.noticeTitle}</a>
 												</td>
-												<td>${notice.noticeContent}</td>
+												<td align="left">
+												<c:set var="noticeContent" value="${notice.noticeContent}"></c:set>
+												<c:choose> 
+											     	<c:when test="${fn:length(noticeContent) > 40}"> 
+											     		<c:out value="${fn:substring(noticeContent, 0, 40)}..." /> 
+											     	</c:when> 
+											     	<c:otherwise> 
+											      		<c:out value="${noticeContent}" /> 
+											     	</c:otherwise>
+											    </c:choose>
+												</td>
 												<td>
 													<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedDateTime" parseLocale="en_US">
 														<c:out value="${notice.createTime}" />

@@ -32,7 +32,7 @@
 							<div class="search_form">
 								<div class="mt_10">
 									<label>文&nbsp;件&nbsp;名:</label>
-									<input type="text" class="input_79x19" name="filter_LIKE_fileUploadName" id="fileUploadName" value="${param['filter_LIKE_fileUploadName']}" />&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="text" class="input_79x19" name="filter_LIKE_fileUploadName" style="width:180px" id="fileUploadName" value="${param['filter_LIKE_fileUploadName']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>上&nbsp;传&nbsp;人:</label>
 									<input type="text" class="input_79x19"  name="uploadUserName" id="uploadUserName" value="${param['uploadUserName']}" style="cursor: pointer;"  onclick="showUserSelectPage('上传人选择','uploadUserId','uploadUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>上传时间:</label>
@@ -45,7 +45,7 @@
 								</div>
 								<div class="mt_10">
 									<label>文件备注:</label>
-									<input type="text" class="input_79x19"  name="filter_LIKE_fileRemark" id="fileRemark" value="${param['filter_LIKE_fileRemark']}" />&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="text" class="input_79x19"  name="filter_LIKE_fileRemark" id="fileRemark" style="width:180px" value="${param['filter_LIKE_fileRemark']}" />&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>录&nbsp;制&nbsp;人:</label>
 									<input type="text" class="input_79x19"  name="fileEditUserName" id="fileEditUserName" value="${param['fileEditUserName']}" style="cursor: pointer;"  onclick="showUserSelectPage('录制人选择','fileEditId','fileEditUserName')"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>录制时间:</label>
@@ -58,7 +58,7 @@
 								</div>
 								<div class="mt_10">
 									<label>接警编号:</label>
-									<input class="input_79x19" id="policeCode" type="text" name="filter_EQ_policeCode" value="${param['filter_EQ_policeCode']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+									<input class="input_79x19" id="policeCode" type="text" style="width:180px" name="filter_EQ_policeCode" value="${param['filter_EQ_policeCode']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>简要警情:</label>
 									<input class="input_79x19" id="policeDesc" type="text" name="filter_LIKE_policeDesc" value="${param['filter_LIKE_policeDesc']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>接警时间:</label>
@@ -70,7 +70,7 @@
 									</div>
 								</div>
 								<div class="mt_10">
-									<label>上传部门:</label>&nbsp;<input type="text" name="corpName" id="corpName" value="${param['corpName']}"  class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
+									<label>上传部门:</label>&nbsp;<input type="text" name="corpName" id="corpName" style="width:180px" value="${param['corpName']}"  class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
 									<input type="hidden" name="filter_EQ_uploadCorpInfo.corpId" id="uploadCorpId" value="${param['filter_EQ_uploadCorpInfo.corpId']}"/>
 									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;overflow:auto">
 								         <ul id="treeDemo" class="ztree" style="width: 180px;">

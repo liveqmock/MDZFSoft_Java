@@ -85,7 +85,7 @@
 			var pId = strs[i];
 			var node = treeObj.getNodeByParam("id", pId,null);
 			if(node!=null)
-			treeObj.checkNode(node, true, true);
+			treeObj.checkNode(node, true, false);
 		}
 	}
 	

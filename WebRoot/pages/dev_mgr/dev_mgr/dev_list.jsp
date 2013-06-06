@@ -46,17 +46,18 @@
 							   	</div>
 							   	<div class="mt_10">
 									<label>所属部门：</label>
-									<input type="hidden" name="filter_EQ_sysCorp.corpId" id="corpId" value="${param['filter_EQ_sysCorp.corpId']}"/>
 									<input type="text" name="corpName" id="corpName" value="${param['corpName']}" size="20" class="input_79x19" readonly="readonly" style="cursor: pointer;"/>
 									<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;overflow:auto">
 								         <ul id="treeDemo" class="ztree" style="width: 180px;">
 								         </ul>
 							        </div>
-							        &nbsp;&nbsp;&nbsp;&nbsp;
+							        <input type="hidden" name="filter_EQ_sysCorp.corpId" id="corpId" value="${param['filter_EQ_sysCorp.corpId']}"/>
+									
+							        &nbsp;&nbsp;&nbsp;
 							        <label>所属警员：</label>
-							        <input type="hidden" name="filter_EQ_devUserInfo.loginId" id="userId" value="${param['filter_EQ_devUserInfo.loginId']}" />
-									<input type="text" class="input_79x19"  name="userName" id="userName" value="${param['userName']}" style="cursor: pointer;"  onclick="showUserSelectPage('警员选择','userId','userName')"/>
-							        &nbsp;&nbsp;&nbsp;&nbsp;
+							        <input type="text" class="input_79x19"  name="userName" id="userName" value="${param['userName']}" style="cursor: pointer;"  onclick="showUserSelectPage('警员选择','userId','userName')"/>
+							       <input type="hidden" name="filter_EQ_devUserInfo.loginId" id="userId" value="${param['filter_EQ_devUserInfo.loginId']}" />
+									 &nbsp;&nbsp;&nbsp;&nbsp;
 									<a href="javascript:$('#mainForm').submit()" class="blue_mod_btn">查&nbsp;询</a>
 									<a href="javascript:clearForm()" class="blue_mod_btn">重&nbsp;置</a>
 								</div>

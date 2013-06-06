@@ -38,7 +38,7 @@
 										<c:forEach var="notice" items="${page.result}" varStatus="status">
 											<tr align="center">
 												<td>${status.count}</td>
-												<td>
+												<td align="left">
 													<a class="nyroModal" style="color: blue" href="${ctx}/noticeMgr/view/${notice.noticeId}?r=<%=Math.random() %>" target="_blank" title="公告查看">${notice.noticeTitle}</a>
 												</td>
 												<td>

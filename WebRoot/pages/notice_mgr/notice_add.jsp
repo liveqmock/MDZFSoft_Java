@@ -83,8 +83,8 @@
 					}
 					for (var i = 0; i < nodes.length; i++) {  
 						//if(nodes[i].isParent==false){ 
-						    //if (checkIds != '')
-						    	//checkIds += ',';  
+						    if (checkIds == '')
+						    	checkIds += ',';  
 						    checkIds += nodes[i].id+",";  
 						//}
 					}
