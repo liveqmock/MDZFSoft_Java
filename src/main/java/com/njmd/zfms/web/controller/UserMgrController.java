@@ -73,6 +73,7 @@ public class UserMgrController extends BaseController
 		
 		List<SysCorp> childrens=sysCorpService.findByParentId(this.getLoginToken().getSysCorp().getCorpId());
 		List childrenIds=new ArrayList();
+		childrenIds.add(this.getLoginToken().getSysCorp().getCorpId());
 		for(SysCorp sysCorp:childrens){
 			childrenIds.add(sysCorp.getCorpId());
 		}

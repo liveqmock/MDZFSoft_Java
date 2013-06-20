@@ -15,6 +15,9 @@
 		<input type="hidden" name="pageSize" id="pageSize" value="${page.pageSize}" />
 		<input type="hidden" name="orderBy" id="orderBy" value="${page.orderBy}" />
 		<input type="hidden" name="order" id="order" value="${page.order}" />
+		<!-- editby 孙  20130620 -->
+		<input type="hidden" name="userName" id="userName" value="${param['userName']}" />
+		<input type="hidden" name="userId" id="userId" value="${param['userId']}" />
 			<div class="clearfix">
 			<div class="white_p10">
 			<div class="gray_bor_bg">
@@ -28,8 +31,6 @@
 						<input type="text" id="userCode" name="filter_LIKE_userCode" value="${param['filter_LIKE_userCode']}" class="input_79x19" size="10"/>
 						&nbsp;&nbsp;&nbsp;&nbsp;
 						<label>所属部门：</label>
-						<input type="hidden" name="fixedCorpId" id="fixedCorpId" value="${param['fixedCorpId']}"/>
-						<input type="hidden" name="filter_EQ_sysCorp.corpId" id="corpId" value="${param['filter_EQ_sysCorp.corpId']}"/>
 						<%
 							String corpName=request.getParameter("corpName");
 							if(null!=corpName)
@@ -38,6 +39,9 @@
 								corpName="";
 						 %>
 						<input type="text" name="corpName" id="corpName" value="<%=corpName %>" size="20" class="input_79x19" readonly="readonly"  style="cursor: pointer;"/>
+						<input type="hidden" name="fixedCorpId" id="fixedCorpId" value="${param['fixedCorpId']}"/>
+						<input type="hidden" name="filter_EQ_sysCorp.corpId" id="corpId" value="${param['filter_EQ_sysCorp.corpId']}"/>
+						
 						<div id="corpChooseDiv" style="position:absolute; border:solid 1px #CCCCCC; width:250px; height:200px; top:23px; left:0px; background:#FFFFFF;display: none;z-index:99;overflow:auto">
 					         <ul id="treeDemo" class="ztree" style="width: 180px;">
 					         </ul>

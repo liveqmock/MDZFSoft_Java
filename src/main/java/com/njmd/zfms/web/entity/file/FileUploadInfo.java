@@ -127,6 +127,10 @@ public class FileUploadInfo implements Serializable
 	@Column(name="FILE_STORAGE_ROOT")
 	private String fileStorageRoot;
 	
+	//Editby 孙强伟  at 20130606 ，添加文件的大小
+	@Column(name="FILE_SIZE")
+	private Long fileSize;
+	
 	// bi-directional many-to-one association to FileTypeInfo
 	@ManyToOne
 	@JoinColumn(name = "TYPE_ID")
@@ -446,5 +450,13 @@ public class FileUploadInfo implements Serializable
 
 	public void setFileStorageRoot(String fileStorageRoot) {
 		this.fileStorageRoot = fileStorageRoot;
+	}
+	
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
 	}
 }

@@ -66,12 +66,12 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		if (baseDao.findUnique("corpName", sysCorpDTO.getCorpName()) == null)
 		{
 			baseDao.save(sysCorp);
-			// 处理组织机构树编码，编码格式为：上级机构树编码.本机构ID
-			String treeCode = String.valueOf(sysCorp.getCorpId());
+			// 处理组织机构树编码，编码格式为：上级机构树编码,本机构ID
+			String treeCode = String.valueOf(","+sysCorp.getCorpId()+",");
 			if (!CommonConstants.NO_PARENT_ID.equals(sysCorp.getParentCorpId()))
 			{
 				String parentTreeCode = baseDao.findById(sysCorp.getParentCorpId()).getTreeCode();
-				treeCode = parentTreeCode + "." + sysCorp.getCorpId();
+				treeCode = parentTreeCode + sysCorp.getCorpId()+",";
 			}
 			sysCorp.setTreeCode(treeCode);
 			baseDao.update(sysCorp);
@@ -212,12 +212,12 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 			sysCorpTemp = new SysCorp();
 		}
 		BeanUtils.copyProperties(sysCorpTemp, sysCorp);
-		// 处理组织机构树编码，编码格式为：上级机构树编码.本机构ID
-		String treeCode = String.valueOf(sysCorp.getCorpId());
+		// 处理组织机构树编码，编码格式为：上级机构树编码,本机构ID
+		String treeCode = String.valueOf(","+sysCorp.getCorpId()+",");
 		if (!CommonConstants.NO_PARENT_ID.equals(sysCorp.getParentCorpId()))
 		{
 			String parentTreeCode = baseDao.findById(sysCorp.getParentCorpId()).getTreeCode();
-			treeCode = parentTreeCode + "." + sysCorp.getCorpId();
+			treeCode = parentTreeCode + sysCorp.getCorpId()+",";
 		}
 		sysCorpTemp.setTreeCode(treeCode);
 
@@ -237,7 +237,18 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 	@Override
 	public List<SysCorp> findByParentId(Long parentId) throws Exception
 	{
-		return baseDao.findByProperty("parentCorpId", parentId);
+//		return baseDao.findByProperty("parentCorpId", parentId);
+		
+		SysCorp sysCorp=baseDao.findById(parentId);
+		if(null==sysCorp)
+			return new ArrayList<SysCorp>();
+		
+		List<SysCorp> corpList = null;
+		
+		String hql = "from SysCorp as model where model.treeCode like '" + sysCorp.getTreeCode() + "%' and status ="
+					+ CommonConstants.STATUS_VALID + " order by corpId";
+			corpList = baseDao.findByHql(hql);
+		return corpList;
 	}
 
 	@Autowired
