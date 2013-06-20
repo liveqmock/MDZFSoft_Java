@@ -44,7 +44,10 @@
 {
 	name: '${mapItem.key }',
 	data: [${mapItem.value}]}   <c:if test="${status.index!=(fn:length(corpCategoriesMap)-1)}">,</c:if>
-</c:forEach>  ]
+</c:forEach>  ],
+				credits: { href: '',                        //隐藏右下角的highchart的图标和链接
+				            text: ''
+				        }
  	        });
  	    });
 
@@ -58,8 +61,8 @@
 		</style>
 	</head>
 <body>
-	<div id="container1" style="width: 916px; height: 410px"></div>
-	<div style="overflow: auto; height: 510px">
+	<div id="container1" style="width: 916px; height: 410px;overflow: auto"></div>
+	<div style="overflow: auto; height: 490px">
 		<table cellspacing="1" class="tablesorter" width="100%">
 			<thead>
 				<tr align="center">
