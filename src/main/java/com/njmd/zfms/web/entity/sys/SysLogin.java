@@ -71,7 +71,7 @@ public class SysLogin extends AuditableEntity implements Serializable
 	@Column(name = "TEL")
 	private String tel;
 
-	@Column(name = "USER_CODE")
+	@Column(name = "USER_CODE",unique=true)
 	private String userCode;
 
 	@Column(name = "USER_NAME")
@@ -89,6 +89,9 @@ public class SysLogin extends AuditableEntity implements Serializable
 	@Column(name = "VALID_TAG")
 	private String validTag;
 
+	@Column(name="ID_CARD")
+	private String idCard;
+	
 	// bi-directional many-to-one association to SysCorp
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CORP_ID")
@@ -284,6 +287,14 @@ public class SysLogin extends AuditableEntity implements Serializable
 	public void setRoleIds(String roleIds)
 	{
 		this.roleIds = roleIds;
+	}
+
+	public String getIdCard() {
+		return idCard;
+	}
+
+	public void setIdCard(String idCard) {
+		this.idCard = idCard;
 	}
 
 }

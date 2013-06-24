@@ -136,16 +136,18 @@ public class UserMgrController extends BaseController
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
 			}
-			else if (resultTag == ResultConstants.SAVE_FAILED_NAME_IS_EXIST)
-			{
-				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
-				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
-			}
-			else
+			else if(resultTag==ResultConstants.SAVE_FAILED_CODE_IS_EXIST)
 			{
 				String[] PARAMAS = { "用户", "警员编号" };
 				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, PARAMAS));
+			}else if(resultTag==ResultConstants.SAVE_FAILED_IDCARD_IS_EXIST){
+				String[] PARAMAS = { "用户", "身份证号" };
+				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, PARAMAS));				
+			}else{
+				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
 			}
 		}
 		catch (Throwable t)
@@ -186,15 +188,20 @@ public class UserMgrController extends BaseController
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
 			}
-			else if (resultTag == ResultConstants.UPDATE_FAILED_NAME_IS_EXIST)
-			{
-				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
-			}
-			else
-			{
+			else if (resultTag == ResultConstants.UPDATE_FAILED_CODE_IS_EXIST)
+			{	
 				String[] PARAMAS = { "用户", "警员编号" };
 				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, PARAMAS));
+			}else if(resultTag== ResultConstants.UPDATE_FAILED_IDCARD_IS_EXIST){
+				String[] PARAMAS = { "用户", "身份证号" };
+				model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, PARAMAS));
+			
+			}
+			else
+			{
+				return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
 			}
 		}
 		catch (Throwable t)
@@ -293,6 +300,10 @@ public class UserMgrController extends BaseController
 			PropertyFilter pf = new PropertyFilter("sysCorp.treeCode", PropertyFilter.MatchType.START, this.getLoginToken().getSysCorp().getTreeCode());
 			filters.add(pf);
 		}
+		
+		PropertyFilter pf1 = new PropertyFilter("loginId", PropertyFilter.MatchType.NE, "0");
+		filters.add(pf1);
+		
 		Page pageResult = sysLoginService.query(page, filters);
 		Tree tree = sysCorpService.getCorpTree(request, false);
 

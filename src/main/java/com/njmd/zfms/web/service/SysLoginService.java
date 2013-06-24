@@ -31,4 +31,6 @@ public interface SysLoginService extends BaseCrudService<SysLogin, Long>
 	public LoginToken getAdminLoginToken(SysLogin sysLogin) throws Exception;
 
 	public int resetPwd(Long loginId) throws Exception;
+
+	public SysLogin findByUserCode(String userCode) throws Exception;
 }

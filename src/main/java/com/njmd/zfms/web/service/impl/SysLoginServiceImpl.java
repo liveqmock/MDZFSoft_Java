@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -271,6 +272,13 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 		{
 			return ResultConstants.SAVE_FAILED_CODE_IS_EXIST;
 		}
+		
+		hql = "select count(*) from SysLogin as model where model.idCard= ?)";
+		count = baseDao.findLong(hql, entity.getIdCard());
+		if (count > 0)
+		{
+			return ResultConstants.SAVE_FAILED_NAME_IS_EXIST;
+		}
 
 		entity.setLoginPwd(MD5Utils.toMD5(entity.getLoginPwd()));
 		baseDao.save(entity);
@@ -285,6 +293,14 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 	@Transactional(readOnly = false)
 	public int update(SysLogin entity, Long[] roleIds, String newLoginPwd) throws Exception
 	{
+		//editby 孙强伟  at 20130624 ， 由于是修改用户信息，此时，用户登陆名称是不可以修改的，国此必须先获得旧的记录将其用户登陆名称赋给新的entity.
+		SysLogin oldSysLogin=baseDao.findById(entity.getLoginId());
+		if(null==oldSysLogin){
+			return ResultConstants.UPDATE_RECORD_NOT_EXIST;
+		}
+		
+		entity.setLoginName(oldSysLogin.getLoginName());
+		
 		String hql = "select count(*) from SysLogin as model where model.loginName= ? and model.loginId != ?)";
 		long count = baseDao.findLong(hql, entity.getLoginName(), entity.getLoginId());
 		if (count > 0)
@@ -298,13 +314,23 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 		{
 			return ResultConstants.UPDATE_FAILED_CODE_IS_EXIST;
 		}
+		
+		hql = "select count(*) from SysLogin as model where model.idCard= ? and model.loginId != ?)";
+		count = baseDao.findLong(hql, entity.getIdCard(), entity.getLoginId());
+		if (count > 0)
+		{
+			return ResultConstants.UPDATE_FAILED_IDCARD_IS_EXIST;
+		}
 
 		if (newLoginPwd != null && !"".equals(newLoginPwd))
 		{
 			entity.setLoginPwd(MD5Utils.toMD5(newLoginPwd));
 		}
-		baseDao.update(entity);
-		sysLoginRoleService.updateLoginRole(entity, roleIds);
+		
+		BeanUtils.copyProperties(oldSysLogin, entity);
+		
+		baseDao.update(oldSysLogin);
+		sysLoginRoleService.updateLoginRole(oldSysLogin, roleIds);
 		// 保存系统日志
 		String operDesc = "【用户修改】用户名：" + entity.getLoginName();
 		sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, operDesc);
@@ -339,6 +365,16 @@ public class SysLoginServiceImpl extends BaseCrudServiceImpl<SysLogin, Long> imp
 		String operDesc = "【密码重置】用户名：" + sysLogin.getLoginName();
 		sysLogService.save(SysLog.OPERATE_TYPE_UPDATE, operDesc);
 		return ResultConstants.UPDATE_SUCCEED;
+	}
+
+	@Override
+	public SysLogin findByUserCode(String userCode) throws Exception {
+		String hql = "from SysLogin s where s.userCode=? and status=1";
+		List<SysLogin> list= baseDao.findByHql(hql, userCode);
+		if(null==list || list.size()==0)
+			return null;
+		else
+			return list.get(0);
 	}
 
 }

@@ -51,7 +51,7 @@
     <init-param>
       <description>不需要过滤的URL</description>
       <param-name>notFilterURL</param-name>
-      <param-value>/sys_info.jsp,/login,/footer,/css/,/images/,/js/,/plugins/,/common/,/menuMgr,/servlet/downloadFile</param-value>
+      <param-value>/sys_info.jsp,/login,/footer,/css/,/images/,/js/,/plugins/,/common/,/menuMgr,/servlet/downloadFile,/api</param-value>
     </init-param>
   </filter>
   <filter-mapping>

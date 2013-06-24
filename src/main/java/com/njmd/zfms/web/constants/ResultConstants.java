@@ -70,6 +70,8 @@ public class ResultConstants
 
 	/** 插入异常-名称重复 */
 	public static final int SAVE_FAILED_CODE_IS_EXIST = 3004;
+	
+	public static final int SAVE_FAILED_IDCARD_IS_EXIST = 3005;
 
 	/** 编辑成功 */
 	public static final int EDIT_SUCCEED = 4000;
@@ -104,6 +106,11 @@ public class ResultConstants
 	/** 密码重置更新异常 */
 	public static final int UPDATE_PWD_ERROR = 5006;
 
+	/** 需要更新的记录不存在 */
+	public static final int UPDATE_RECORD_NOT_EXIST=5007;	//editby 孙强伟 ，增加更新记录时记录不存在的错误提示。
+	
+	public static final int UPDATE_FAILED_IDCARD_IS_EXIST = 5008;
+	
 	/** 删除成功 */
 	public static final int DELETE_SUCCEED = 6000;
 
@@ -139,6 +146,7 @@ public class ResultConstants
 
 	/*** 系统错误 */
 	public static final int SYSTEM_ERROR = 9999;
+	
 
 	private static Properties resultProperties;
 

@@ -39,9 +39,17 @@
 							</td>
 						</tr>
 						<tr>
+							<td class="title" width="100">
+								身份证号
+							</td>
+							<td>
+								<form:input path="idCard" cssClass="form_input {idCard:true}" size="25"  maxlength="18"/>
+							</td>
+						</tr>
+						<tr>
 							<td class="title" width="100">警员编号</td>
 							<td>
-								<form:input path="userCode" cssClass="form_input" size="20" maxlength="11" />
+								<form:input path="userCode" cssClass="form_input" size="20" maxlength="6" />
 							</td>
 						</tr>
 						<tr>

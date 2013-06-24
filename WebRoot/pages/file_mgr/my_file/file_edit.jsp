@@ -52,7 +52,6 @@
 				<td class="title" >文件分类</td>
 				<td>
 					<form:select path="fileTypeInfo.typeId" cssClass="form_input" style="width: 140px">
-						<form:option value=""></form:option>
 						<form:options items="${fileTypeList}" itemLabel="typeName" itemValue="typeId"/>
 					</form:select>
 				</td>

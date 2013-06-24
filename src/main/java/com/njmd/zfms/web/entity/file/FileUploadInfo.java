@@ -131,6 +131,9 @@ public class FileUploadInfo implements Serializable
 	@Column(name="FILE_SIZE")
 	private Long fileSize;
 	
+	@Column(name="FILE_TIME")
+	private String fileTime;
+	
 	// bi-directional many-to-one association to FileTypeInfo
 	@ManyToOne
 	@JoinColumn(name = "TYPE_ID")
@@ -458,5 +461,13 @@ public class FileUploadInfo implements Serializable
 
 	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
+	}
+
+	public String getFileTime() {
+		return fileTime;
+	}
+
+	public void setFileTime(String fileTime) {
+		this.fileTime = fileTime;
 	}
 }

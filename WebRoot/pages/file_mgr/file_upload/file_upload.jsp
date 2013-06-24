@@ -259,9 +259,14 @@
 	  	$('#uploadForm').ajaxSubmit(function(data){
 			if(data.messageType=='1')
 		    {
-				delLocalFile(currentUploadFileUrl);
-				uploadedFileNum++;
-				window.setTimeout(uploadFile,500);
+		    	<%//editby 孙强伟  at 20130624,修改当本地磁盘文件删除失败时，上传操作停止。 %>
+				var isSuccess=delLocalFile(currentUploadFileUrl);
+				if(!isSuccess){
+					alert("本地磁盘文件删除失败,上传操作停止!");
+				}else{
+					uploadedFileNum++;
+					window.setTimeout(uploadFile,500);
+				}
 		    }
 		    else
 		    {
