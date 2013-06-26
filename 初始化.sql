@@ -7,6 +7,9 @@ alter table DEV_INFO
 alter table FILE_UPLOAD_INFO
    drop constraint FK_FILE_UPL_REFERENCE_FILE_TYP;
 
+alter table SYS_CORP
+   drop constraint FK_SYS_CORP_REFERENCE_SYS_FTP;
+
 alter table SYS_LOGIN
    drop constraint FK_SYS_LOGI_REFERENCE_SYS_CORP;
 
@@ -38,6 +41,8 @@ drop table NOTICE_READ_LOG cascade constraints;
 
 drop table SYS_CORP cascade constraints;
 
+drop table SYS_FTP cascade constraints;
+
 drop table SYS_LOG cascade constraints;
 
 drop table SYS_LOGIN cascade constraints;
@@ -52,141 +57,61 @@ drop table SYS_ROLE_PERMISSION cascade constraints;
 
 drop table SYS_SERVER_INFO cascade constraints;
 
+drop sequence DEVFACTURERINFO_SEQUENCE;
+
+drop sequence DEVINFO_SEQUENCE;
+
+drop sequence DEVTYPEINFO_SEQUENCE;
+
+drop sequence FILETYPEINFO_SEQUENCE;
+
+drop sequence FILEUPLOADINFO_SEQUENCE;
+
 drop sequence HIBERNATE_SEQUENCE;
 
-drop sequence "devfacturerinfo_sequence";
+drop sequence NOTICEINFO_SEQUENCE;
 
-drop sequence "devinfo_sequence";
+drop sequence NOTICEREADINFO_SEQUENCE;
 
-drop sequence "devtypeinfo_sequence";
+drop sequence SYSCORP_SEQUENCE;
 
-drop sequence "filetypeinfo_sequence";
+drop sequence SYSFTP_SEQUENCE;
 
-drop sequence "fileuploadinfo_sequence";
+drop sequence SYSLOGINROLE_SEQUENCE;
 
-drop sequence "noticeinfo_sequence";
+drop sequence SYSLOGIN_SEQUENCE;
 
-drop sequence "noticereadinfo_sequence";
+drop sequence SYSLOG_SEQUENCE;
 
-drop sequence "syscorp_sequence";
+drop sequence SYSPERMISSION_SEQUENCE;
 
-drop sequence "syslog_sequence";
+drop sequence SYSROLEPERMISSION_SEQUENCE;
 
-drop sequence "syslogin_sequence";
+drop sequence SYSROLE_SEQUENCE;
 
-drop sequence "sysloginrole_sequence";
+drop sequence SYSSERVERINFO_SEQUENCE;
 
-drop sequence "syspermission_sequence";
-
-drop sequence "sysrole_sequence";
-
-drop sequence "sysrolepermission_sequence";
-
-drop sequence "sysserverinfo_sequence";
-
-create sequence HIBERNATE_SEQUENCE
-increment by 1
-start with 10000
- maxvalue 9999999999
- nominvalue
-nocycle
-noorder;
-
-create sequence "devfacturerinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "devinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "devtypeinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "filetypeinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "fileuploadinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "noticeinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "noticereadinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "syscorp_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "syslog_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "syslogin_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "sysloginrole_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "syspermission_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "sysrole_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "sysrolepermission_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
-
-create sequence "sysserverinfo_sequence"
-start with 1
- maxvalue 9999999999
- nominvalue;
 
 create table DEV_FACTURER_INFO  (
-   "dev_facturer_id"    NUMBER(10)                      not null,
-   "dev_facturer_name"  VARCHAR2(100),
-   "contact"            VARCHAR2(20),
-   "phone"              VARCHAR2(21),
-   "address"            VARCHAR2(200),
+   DEV_FACTURER_ID    NUMBER(10)                      not null,
+   DEV_FACTURER_NAME  VARCHAR2(100),
+   CONTACT            VARCHAR2(20),
+   PHONE              VARCHAR2(21),
+   ADDRESS            VARCHAR2(200),
    CREATE_BY            VARCHAR2(50),
    CREATE_TIME          VARCHAR2(14),
    LAST_MODIFY_BY       VARCHAR2(50),
    LAST_MODIFY_TIME     VARCHAR2(14),
-   constraint PK_DEV_FACTURER_INFO primary key ("dev_facturer_id")
+   constraint PK_DEV_FACTURER_INFO primary key (DEV_FACTURER_ID)
 );
 
 comment on table DEV_FACTURER_INFO is
 '设备厂商信息表';
 
-comment on column DEV_FACTURER_INFO."dev_facturer_id" is
+comment on column DEV_FACTURER_INFO.DEV_FACTURER_ID is
 '设备ID';
 
-comment on column DEV_FACTURER_INFO."dev_facturer_name" is
+comment on column DEV_FACTURER_INFO.DEV_FACTURER_NAME is
 '设备编号';
 
 comment on column DEV_FACTURER_INFO.CREATE_BY is
@@ -202,71 +127,24 @@ comment on column DEV_FACTURER_INFO.LAST_MODIFY_BY is
 comment on column DEV_FACTURER_INFO.LAST_MODIFY_TIME is
 '最新一次修改时间';
 
-create table DEV_INFO  (
-   "dev_id"             NUMBER(10)                      not null,
-   "dev_type_id"        NUMBER(10),
-   "dev_facturer_id"    NUMBER(10),
-   "dev_no"             VARCHAR2(100),
-   "dev_user_id"        NUMBER(10),
-   "corp_id"            NUMBER(10),
-   CREATE_BY            VARCHAR2(50),
-   CREATE_TIME          VARCHAR2(14),
-   LAST_MODIFY_BY       VARCHAR2(50),
-   LAST_MODIFY_TIME     VARCHAR2(14),
-   constraint PK_DEV_INFO primary key ("dev_id")
-);
-
-comment on table DEV_INFO is
-'设备信息表';
-
-comment on column DEV_INFO."dev_id" is
-'设备ID';
-
-comment on column DEV_INFO."dev_type_id" is
-'设备类型ID';
-
-comment on column DEV_INFO."dev_facturer_id" is
-'设备ID';
-
-comment on column DEV_INFO."dev_no" is
-'设备编号';
-
-comment on column DEV_INFO."dev_user_id" is
-'设备使用人';
-
-comment on column DEV_INFO."corp_id" is
-'设备所属机构';
-
-comment on column DEV_INFO.CREATE_BY is
-'创建人
-系统自动创建则此处为system';
-
-comment on column DEV_INFO.CREATE_TIME is
-'创建时间';
-
-comment on column DEV_INFO.LAST_MODIFY_BY is
-'最新一次修改者';
-
-comment on column DEV_INFO.LAST_MODIFY_TIME is
-'最新一次修改时间';
-
+----------------------------------------------------------------------------
 create table DEV_TYPE_INFO  (
-   "dev_type_id"        NUMBER(10)                      not null,
-   "dev_type_name"      VARCHAR2(100),
+   DEV_TYPE_ID        NUMBER(10)                      NOT NULL,
+   DEV_TYPE_NAME      VARCHAR2(100),
    CREATE_BY            VARCHAR2(50),
    CREATE_TIME          VARCHAR2(14),
    LAST_MODIFY_BY       VARCHAR2(50),
    LAST_MODIFY_TIME     VARCHAR2(14),
-   constraint PK_DEV_TYPE_INFO primary key ("dev_type_id")
+   constraint PK_DEV_TYPE_INFO primary key (DEV_TYPE_ID)
 );
 
 comment on table DEV_TYPE_INFO is
 '设备类型表';
 
-comment on column DEV_TYPE_INFO."dev_type_id" is
+comment on column DEV_TYPE_INFO.DEV_TYPE_ID is
 '设备类型ID';
 
-comment on column DEV_TYPE_INFO."dev_type_name" is
+comment on column DEV_TYPE_INFO.DEV_TYPE_NAME is
 '设备类型名称';
 
 comment on column DEV_TYPE_INFO.CREATE_BY is
@@ -282,28 +160,79 @@ comment on column DEV_TYPE_INFO.LAST_MODIFY_BY is
 comment on column DEV_TYPE_INFO.LAST_MODIFY_TIME is
 '最新一次修改时间';
 
+-----------------------------------------------------------------------
+create table DEV_INFO  (
+   DEV_ID             NUMBER(10)                      NOT NULL,
+   DEV_TYPE_ID        NUMBER(10),
+   DEV_FACTURER_ID    NUMBER(10),
+   DEV_NO             VARCHAR2(100),
+   DEV_USER_ID        NUMBER(10),
+   CORP_ID            NUMBER(10),
+   CREATE_BY            VARCHAR2(50),
+   CREATE_TIME          VARCHAR2(14),
+   LAST_MODIFY_BY       VARCHAR2(50),
+   LAST_MODIFY_TIME     VARCHAR2(14),
+   constraint PK_DEV_INFO primary key (dev_id)
+);
+
+comment on table DEV_INFO is
+'设备信息表';
+
+comment on column DEV_INFO.DEV_ID is
+'设备ID';
+
+comment on column DEV_INFO.DEV_TYPE_ID is
+'设备类型ID';
+
+comment on column DEV_INFO.DEV_FACTURER_ID is
+'设备ID';
+
+comment on column DEV_INFO.DEV_NO is
+'设备编号';
+
+comment on column DEV_INFO.DEV_USER_ID is
+'设备使用人';
+
+comment on column DEV_INFO.CORP_ID is
+'设备所属机构';
+
+comment on column DEV_INFO.CREATE_BY is
+'创建人
+系统自动创建则此处为system';
+
+comment on column DEV_INFO.CREATE_TIME is
+'创建时间';
+
+comment on column DEV_INFO.LAST_MODIFY_BY is
+'最新一次修改者';
+
+comment on column DEV_INFO.LAST_MODIFY_TIME is
+'最新一次修改时间';
+
+----------------------------------------------------
 create table FILE_TYPE_INFO  (
-   "type_id"            NUMBER(10)                      not null,
-   "type_name"          VARCHAR2(50),
-   "valid_time"         NUMBER(10),
-   constraint PK_FILE_TYPE_INFO primary key ("type_id")
+   TYPE_ID            NUMBER(10)                      NOT NULL,
+   TYPE_NAME          VARCHAR2(50),
+   VALID_TIME         NUMBER(10),
+   constraint PK_FILE_TYPE_INFO primary key (TYPE_ID)
 );
 
 comment on table FILE_TYPE_INFO is
 '文件上传类型信息表';
 
-comment on column FILE_TYPE_INFO."type_id" is
+comment on column FILE_TYPE_INFO.TYPE_ID is
 '类型ID';
 
-comment on column FILE_TYPE_INFO."type_name" is
+comment on column FILE_TYPE_INFO.TYPE_NAME is
 '类型名称';
 
-comment on column FILE_TYPE_INFO."valid_time" is
+comment on column FILE_TYPE_INFO.VALID_TIME is
 '有效时间（单位：天）';
 
+-----------------------------------------------------
 create table FILE_UPLOAD_INFO  (
    FILE_ID              NUMBER(10)                      not null,
-   "type_id"            NUMBER(10),
+   TYPE_ID            NUMBER(10),
    FILE_UPLOAD_NAME     VARCHAR2(100),
    FILE_TYPE            NUMBER(2),
    FILE_CONTEXT_PATH    VARCHAR2(50),
@@ -330,20 +259,7 @@ create table FILE_UPLOAD_INFO  (
    DELETE_BY            NUMBER(10),
    DELETE_TIME          VARCHAR2(14),
    constraint PK_FILE_UPLOAD_INFO primary key (FILE_ID)
-)
-pctfree 10
-initrans 1
-storage
-(
-    initial 3072K
-    minextents 1
-    maxextents unlimited
-)
-tablespace USERS
-logging
-nocompress
- monitoring
- noparallel;
+);
 
 comment on table FILE_UPLOAD_INFO is
 '文件上传信息表';
@@ -351,7 +267,7 @@ comment on table FILE_UPLOAD_INFO is
 comment on column FILE_UPLOAD_INFO.FILE_ID is
 'ID,主键';
 
-comment on column FILE_UPLOAD_INFO."type_id" is
+comment on column FILE_UPLOAD_INFO.TYPE_ID is
 '类型ID';
 
 comment on column FILE_UPLOAD_INFO.FILE_UPLOAD_NAME is
@@ -420,6 +336,7 @@ comment on column FILE_UPLOAD_INFO.DELETE_BY is
 comment on column FILE_UPLOAD_INFO.DELETE_TIME is
 '删除时间';
 
+----------------------------------------------------------------
 create table NOTICE_INFO  (
    NOTICE_ID            NUMBER(10)                      not null,
    NOTICE_TITLE         VARCHAR2(100),
@@ -468,6 +385,7 @@ comment on column NOTICE_INFO.LAST_MODIFY_BY is
 comment on column NOTICE_INFO.LAST_MODIFY_TIME is
 '最新一次修改时间';
 
+--------------------------------------------------------------
 create table NOTICE_READ_LOG  (
    ID                   NUMBER(10)                      not null,
    NOTICE_ID            NUMBER(10),
@@ -491,16 +409,72 @@ comment on column NOTICE_READ_LOG.LOGIN_ID is
 comment on column NOTICE_READ_LOG.READ_TIME is
 '公告查看时间';
 
-create table SYS_CORP  (
-   CORP_ID              NUMBER(10)                      not null,
-   PARENT_CORP_ID       NUMBER(10)                      not null,
-   CORP_NAME            VARCHAR2(50)                    not null,
-   CORP_TYPE            NUMBER(2)                       not null,
+create table SYS_FTP  (
+   FTP_ID               NUMBER(10)                      not null,
    FTP_IP               VARCHAR2(100),
    FTP_PORT             VARCHAR2(20),
    FTP_USER             VARCHAR2(20),
    FTP_PWD              VARCHAR2(20),
    FILE_ROOT_URL        VARCHAR2(200),
+   FTP_DESC             VARCHAR2(200),
+   STATUS               NUMBER(2)                       not null,
+   CREATE_BY            VARCHAR2(50),
+   CREATE_TIME          VARCHAR2(14),
+   LAST_MODIFY_BY       VARCHAR2(50),
+   LAST_MODIFY_TIME     VARCHAR2(14),
+   constraint PK_SYS_FTP primary key (FTP_ID)
+);
+
+comment on table SYS_FTP is
+'FTP信息';
+
+comment on column SYS_FTP.FTP_ID is
+'ID，主键';
+
+comment on column SYS_FTP.FTP_IP is
+'FTP地址';
+
+comment on column SYS_FTP.FTP_PORT is
+'FTP端口';
+
+comment on column SYS_FTP.FTP_USER is
+'FTP用户名';
+
+comment on column SYS_FTP.FTP_PWD is
+'FTP密码';
+
+comment on column SYS_FTP.FILE_ROOT_URL is
+'文件存储URL';
+
+comment on column SYS_FTP.FTP_DESC is
+'单位描述';
+
+comment on column SYS_FTP.STATUS is
+'状态
+0－无效
+1－有效';
+
+comment on column SYS_FTP.CREATE_BY is
+'创建人
+系统自动创建则此处为system';
+
+comment on column SYS_FTP.CREATE_TIME is
+'创建时间';
+
+comment on column SYS_FTP.LAST_MODIFY_BY is
+'最新一次修改者';
+
+comment on column SYS_FTP.LAST_MODIFY_TIME is
+
+
+--------------------------------------------------------------
+create table SYS_CORP  (
+   CORP_ID              NUMBER(10)                      not null,
+   ID                   NUMBER(10),
+   PARENT_CORP_ID       NUMBER(10)                      not null,
+   CORP_NAME            VARCHAR2(50)                    not null,
+   CORP_TYPE            NUMBER(2)                       not null,
+   FTP_ID               NUMBER(10),
    CORP_DESC            VARCHAR2(200),
    TREE_CODE            VARCHAR2(200),
    STATUS               NUMBER(2)                       not null,
@@ -517,6 +491,9 @@ comment on table SYS_CORP is
 comment on column SYS_CORP.CORP_ID is
 'ID，主键';
 
+comment on column SYS_CORP.ID is
+'ID，主键';
+
 comment on column SYS_CORP.PARENT_CORP_ID is
 '无上级单位则为空';
 
@@ -528,20 +505,8 @@ comment on column SYS_CORP.CORP_TYPE is
 2 - 部门
 ';
 
-comment on column SYS_CORP.FTP_IP is
+comment on column SYS_CORP.FTP_ID is
 'FTP地址';
-
-comment on column SYS_CORP.FTP_PORT is
-'FTP端口';
-
-comment on column SYS_CORP.FTP_USER is
-'FTP用户名';
-
-comment on column SYS_CORP.FTP_PWD is
-'FTP密码';
-
-comment on column SYS_CORP.FILE_ROOT_URL is
-'文件存储URL';
 
 comment on column SYS_CORP.CORP_DESC is
 '单位描述';
@@ -568,6 +533,271 @@ comment on column SYS_CORP.LAST_MODIFY_BY is
 comment on column SYS_CORP.LAST_MODIFY_TIME is
 '最新一次修改时间';
 
+
+-------------------------------------------------------
+create table SYS_LOGIN  (
+   LOGIN_ID           NUMBER(10)                      NOT NULL,
+   LOGIN_NAME         VARCHAR2(50)                    NOT NULL,
+   LOGIN_PWD          VARCHAR2(32)                    NOT NULL,
+   USER_NAME          VARCHAR2(20),
+   ID_CARD            VARCHAR2(20),
+   USER_TYPE          NUMBER(2)                       NOT NULL,
+   CORP_ID            NUMBER(10),
+   SYSTEM_ID          NUMBER(2)                       NOT NULL,
+   USER_CODE          VARCHAR2(50),
+   SEX                VARCHAR2(20),
+   TEL                VARCHAR2(21),
+   VALID_TAG          CHAR(1),
+   VALID_DATE         VARCHAR2(14),
+   USER_REMARK        VARCHAR2(200),
+   RECORD_CORP_ID     NUMBER(10),
+   LOGIN_LAST_TIME    VARCHAR2(14),
+   STATUS             NUMBER(2)                       not null,
+   CREATE_BY            VARCHAR2(50),
+   CREATE_TIME          VARCHAR2(14),
+   LAST_MODIFY_BY       VARCHAR2(50),
+   LAST_MODIFY_TIME     VARCHAR2(14),
+   constraint PK_SYS_LOGIN primary key (LOGIN_ID)
+);
+
+comment on table SYS_LOGIN is
+'定义登录帐号信息';
+
+comment on column SYS_LOGIN.LOGIN_ID is
+'ID，主键';
+
+comment on column SYS_LOGIN.LOGIN_NAME is
+'登录用户名';
+
+comment on column SYS_LOGIN.LOGIN_PWD is
+'登录密码';
+
+comment on column SYS_LOGIN.USER_NAME is
+' 用户真实姓名';
+
+comment on column SYS_LOGIN.USER_TYPE is
+'0－超级管理员
+1－普通用户';
+
+comment on column SYS_LOGIN.CORP_ID is
+'用户所属单位编号';
+
+comment on column SYS_LOGIN.SYSTEM_ID is
+'用户所属系统';
+
+comment on column SYS_LOGIN.USER_CODE is
+'用户编号（警员编号）';
+
+comment on column SYS_LOGIN.SEX is
+'性别';
+
+comment on column SYS_LOGIN.TEL is
+'联系电话';
+
+comment on column SYS_LOGIN.VALID_TAG is
+'是否永久有效
+Y：永久有效
+N：有时间限制';
+
+comment on column SYS_LOGIN.VALID_DATE is
+'有效日期，当是否永久有效为N时此字段才有值';
+
+comment on column SYS_LOGIN.USER_REMARK is
+'用户描述';
+
+comment on column SYS_LOGIN.RECORD_CORP_ID is
+'用户的创建单位，默认谁创建谁管理';
+
+comment on column SYS_LOGIN.LOGIN_LAST_TIME is
+'最后一次登录时间';
+
+comment on column SYS_LOGIN.STATUS is
+'状态
+0－无效
+1－有效';
+
+comment on column SYS_LOGIN.CREATE_BY is
+'创建人
+系统自动创建则此处为system';
+
+comment on column SYS_LOGIN.CREATE_TIME is
+'创建时间';
+
+comment on column SYS_LOGIN.LAST_MODIFY_BY is
+'最新一次修改者';
+
+comment on column SYS_LOGIN.LAST_MODIFY_TIME is
+'最新一次修改时间';
+
+-----------------------------------------------------
+create table SYS_LOGIN_ROLE  (
+   ID                 NUMBER(10)                      NOT NULL,
+   ROLE_ID            NUMBER(10),
+   LOGIN_ID           NUMBER(10),
+   constraint PK_SYS_LOGIN_ROLE primary key (ID)
+);
+
+comment on table SYS_LOGIN_ROLE is
+'定义登录者与角色的关联关系，一个登录者可以有一个或多个角色';
+
+comment on column SYS_LOGIN_ROLE.ID is
+'ID，主键';
+
+comment on column SYS_LOGIN_ROLE.ROLE_ID is
+'ID，主键';
+
+comment on column SYS_LOGIN_ROLE.LOGIN_ID is
+'ID，主键';
+
+---------------------------------------------------------
+create table SYS_PERMISSION  (
+   PERMISSION_ID      NUMBER(10)                      NOT NULL,
+   PERMISSION_NAME    VARCHAR2(50)                    NOT NULL,
+   PERMISSION_TYPE    NUMBER(2)                       NOT NULL,
+   PERMISSION_URL     VARCHAR2(250),
+   PERMISSION_SORT    NUMBER(10)                      NOT NULL,
+   PARENT_PERMISSION_ID NUMBER(10),
+   SYSTEM_ID          NUMBER(2)                       NOT NULL,
+   PERMISSION_ICO     VARCHAR2(100),
+   TREE_CODE          VARCHAR(200),
+   STATUS             NUMBER(2)                       not null,
+   CREATE_BY            VARCHAR2(50),
+   CREATE_TIME          VARCHAR2(14),
+   LAST_MODIFY_BY       VARCHAR2(50),
+   LAST_MODIFY_TIME     VARCHAR2(14),
+   constraint PK_SYS_PERMISSION primary key (PERMISSION_ID)
+);
+
+comment on column SYS_PERMISSION.PERMISSION_ID is
+'ID，主键';
+
+comment on column SYS_PERMISSION.PERMISSION_NAME is
+'权限名称';
+
+comment on column SYS_PERMISSION.PERMISSION_TYPE is
+'权限类型
+1－菜单
+2－操作';
+
+comment on column SYS_PERMISSION.PERMISSION_URL is
+'当权限类型为菜单时，该处表示菜单的URL
+当权限类型为操作时，该处表示操作对应的按钮名称';
+
+comment on column SYS_PERMISSION.PERMISSION_SORT is
+'树形展现的排列顺序，类似
+1 
+   11
+   12
+2
+   21
+   22';
+
+comment on column SYS_PERMISSION.PARENT_PERMISSION_ID is
+'上级权限ID';
+
+comment on column SYS_PERMISSION.SYSTEM_ID is
+'该菜单的所属系统';
+
+comment on column SYS_PERMISSION.PERMISSION_ICO is
+'权限图标';
+
+comment on column SYS_PERMISSION.TREE_CODE is
+'树编码
+编码规则：上级权限树编码.本权限编号';
+
+comment on column SYS_PERMISSION.STATUS is
+'状态
+0－无效
+1－有效';
+
+comment on column SYS_PERMISSION.CREATE_BY is
+'创建人
+系统自动创建则此处为system';
+
+comment on column SYS_PERMISSION.CREATE_TIME is
+'创建时间';
+
+comment on column SYS_PERMISSION.LAST_MODIFY_BY is
+'最新一次修改者';
+
+comment on column SYS_PERMISSION.LAST_MODIFY_TIME is
+'最新一次修改时间';
+
+
+-------------------------------------------------------
+create table SYS_ROLE  (
+   ROLE_ID            NUMBER(10)                      NOT NULL,
+   ROLE_NAME          VARCHAR2(50)                    NOT NULL,
+   ROLE_DESC          VARCHAR2(200),
+   CORP_ID            NUMBER(10)                      NOT NULL,
+   SYSTEM_ID          NUMBER(2)                       NOT NULL,
+   STATUS             NUMBER(2)                       not null,
+   CREATE_BY            VARCHAR2(50),
+   CREATE_TIME          VARCHAR2(14),
+   LAST_MODIFY_BY       VARCHAR2(50),
+   LAST_MODIFY_TIME     VARCHAR2(14),
+   constraint PK_SYS_ROLE primary key (ROLE_ID)
+);
+
+comment on table SYS_ROLE is
+'定义系统角色信息，角色是一组权限的集合';
+
+comment on column SYS_ROLE.ROLE_ID is
+'ID，主键';
+
+comment on column SYS_ROLE.ROLE_NAME is
+'角色名称';
+
+comment on column SYS_ROLE.ROLE_DESC is
+'角色描述';
+
+comment on column SYS_ROLE.CORP_ID is
+'角色所属单位编号';
+
+comment on column SYS_ROLE.SYSTEM_ID is
+'角色所属系统
+';
+
+comment on column SYS_ROLE.STATUS is
+'状态
+0－无效
+1－有效';
+
+comment on column SYS_ROLE.CREATE_BY is
+'创建人
+系统自动创建则此处为system';
+
+comment on column SYS_ROLE.CREATE_TIME is
+'创建时间';
+
+comment on column SYS_ROLE.LAST_MODIFY_BY is
+'最新一次修改者';
+
+comment on column SYS_ROLE.LAST_MODIFY_TIME is
+'最新一次修改时间';
+
+
+-----------------------------------------------------------
+create table SYS_ROLE_PERMISSION  (
+   ID                 NUMBER(10)                      NOT NULL,
+   PERMISSION_ID      NUMBER(10),
+   ROLE_ID            NUMBER(10),
+   constraint PK_SYS_ROLE_PERMISSION primary key (ID)
+);
+
+comment on table SYS_ROLE_PERMISSION is
+'定义角色与权限的关联关系，一个角色可以有一个或多个权限';
+
+comment on column SYS_ROLE_PERMISSION.ID is
+'ID，主键';
+
+comment on column SYS_ROLE_PERMISSION.PERMISSION_ID is
+'菜单ID，主键';
+
+comment on column SYS_ROLE_PERMISSION.ROLE_ID is
+'ID，主键';
+
+-------------------------------------------------------------
 create table SYS_LOG  (
    LOG_ID               NUMBER(10)                      not null,
    OPER_USER_ID         NUMBER(10)                      not null,
@@ -619,262 +849,8 @@ comment on column SYS_LOG.OPER_DESC is
 comment on column SYS_LOG.SYSTEM_ID is
 '日志所属系统';
 
-create table SYS_LOGIN  (
-   "login_id"           NUMBER(10)                      not null,
-   "login_name"         VARCHAR2(50)                    not null,
-   "login_pwd"          VARCHAR2(32)                    not null,
-   "user_name"          VARCHAR2(20),
-   "id_card"            varchar2(20),
-   "user_type"          NUMBER(2)                       not null,
-   "corp_id"            NUMBER(10),
-   "system_id"          NUMBER(2)                       not null,
-   "user_code"          VARCHAR2(50),
-   "sex"                VARCHAR2(20),
-   "tel"                VARCHAR2(21),
-   "valid_tag"          CHAR(1),
-   "valid_date"         VARCHAR2(14),
-   "user_remark"        VARCHAR2(200),
-   "record_corp_id"     NUMBER(10),
-   "login_last_time"    VARCHAR2(14),
-   "status"             NUMBER(2)                       not null,
-   CREATE_BY            VARCHAR2(50),
-   CREATE_TIME          VARCHAR2(14),
-   LAST_MODIFY_BY       VARCHAR2(50),
-   LAST_MODIFY_TIME     VARCHAR2(14),
-   constraint PK_SYS_LOGIN primary key ("login_id")
-);
 
-comment on table SYS_LOGIN is
-'定义登录帐号信息';
-
-comment on column SYS_LOGIN."login_id" is
-'ID，主键';
-
-comment on column SYS_LOGIN."login_name" is
-'登录用户名';
-
-comment on column SYS_LOGIN."login_pwd" is
-'登录密码';
-
-comment on column SYS_LOGIN."user_name" is
-' 用户真实姓名';
-
-comment on column SYS_LOGIN."user_type" is
-'0－超级管理员
-1－普通用户';
-
-comment on column SYS_LOGIN."corp_id" is
-'用户所属单位编号';
-
-comment on column SYS_LOGIN."system_id" is
-'用户所属系统';
-
-comment on column SYS_LOGIN."user_code" is
-'用户编号（警员编号）';
-
-comment on column SYS_LOGIN."sex" is
-'性别';
-
-comment on column SYS_LOGIN."tel" is
-'联系电话';
-
-comment on column SYS_LOGIN."valid_tag" is
-'是否永久有效
-Y：永久有效
-N：有时间限制';
-
-comment on column SYS_LOGIN."valid_date" is
-'有效日期，当是否永久有效为N时此字段才有值';
-
-comment on column SYS_LOGIN."user_remark" is
-'用户描述';
-
-comment on column SYS_LOGIN."record_corp_id" is
-'用户的创建单位，默认谁创建谁管理';
-
-comment on column SYS_LOGIN."login_last_time" is
-'最后一次登录时间';
-
-comment on column SYS_LOGIN."status" is
-'状态
-0－无效
-1－有效';
-
-comment on column SYS_LOGIN.CREATE_BY is
-'创建人
-系统自动创建则此处为system';
-
-comment on column SYS_LOGIN.CREATE_TIME is
-'创建时间';
-
-comment on column SYS_LOGIN.LAST_MODIFY_BY is
-'最新一次修改者';
-
-comment on column SYS_LOGIN.LAST_MODIFY_TIME is
-'最新一次修改时间';
-
-create table SYS_LOGIN_ROLE  (
-   "id"                 NUMBER(10)                      not null,
-   "role_id"            NUMBER(10),
-   "login_id"           NUMBER(10),
-   constraint PK_SYS_LOGIN_ROLE primary key ("id")
-);
-
-comment on table SYS_LOGIN_ROLE is
-'定义登录者与角色的关联关系，一个登录者可以有一个或多个角色';
-
-comment on column SYS_LOGIN_ROLE."id" is
-'ID，主键';
-
-comment on column SYS_LOGIN_ROLE."role_id" is
-'ID，主键';
-
-comment on column SYS_LOGIN_ROLE."login_id" is
-'ID，主键';
-
-create table SYS_PERMISSION  (
-   "permission_id"      NUMBER(10)                      not null,
-   "permission_name"    VARCHAR2(50)                    not null,
-   "permission_type"    NUMBER(2)                       not null,
-   "permission_url"     VARCHAR2(250),
-   "permission_sort"    NUMBER(10)                      not null,
-   "parent_permission_id" NUMBER(10),
-   "system_id"          NUMBER(2)                       not null,
-   "permission_ico"     VARCHAR2(100),
-   "tree_code"          varchar(200),
-   "status"             NUMBER(2)                       not null,
-   CREATE_BY            VARCHAR2(50),
-   CREATE_TIME          VARCHAR2(14),
-   LAST_MODIFY_BY       VARCHAR2(50),
-   LAST_MODIFY_TIME     VARCHAR2(14),
-   constraint PK_SYS_PERMISSION primary key ("permission_id")
-);
-
-comment on column SYS_PERMISSION."permission_id" is
-'ID，主键';
-
-comment on column SYS_PERMISSION."permission_name" is
-'权限名称';
-
-comment on column SYS_PERMISSION."permission_type" is
-'权限类型
-1－菜单
-2－操作';
-
-comment on column SYS_PERMISSION."permission_url" is
-'当权限类型为菜单时，该处表示菜单的URL
-当权限类型为操作时，该处表示操作对应的按钮名称';
-
-comment on column SYS_PERMISSION."permission_sort" is
-'树形展现的排列顺序，类似
-1 
-   11
-   12
-2
-   21
-   22';
-
-comment on column SYS_PERMISSION."parent_permission_id" is
-'上级权限ID';
-
-comment on column SYS_PERMISSION."system_id" is
-'该菜单的所属系统';
-
-comment on column SYS_PERMISSION."permission_ico" is
-'权限图标';
-
-comment on column SYS_PERMISSION."tree_code" is
-'树编码
-编码规则：上级权限树编码.本权限编号';
-
-comment on column SYS_PERMISSION."status" is
-'状态
-0－无效
-1－有效';
-
-comment on column SYS_PERMISSION.CREATE_BY is
-'创建人
-系统自动创建则此处为system';
-
-comment on column SYS_PERMISSION.CREATE_TIME is
-'创建时间';
-
-comment on column SYS_PERMISSION.LAST_MODIFY_BY is
-'最新一次修改者';
-
-comment on column SYS_PERMISSION.LAST_MODIFY_TIME is
-'最新一次修改时间';
-
-create table SYS_ROLE  (
-   "role_id"            NUMBER(10)                      not null,
-   "role_name"          VARCHAR2(50)                    not null,
-   "role_desc"          VARCHAR2(200),
-   "corp_id"            NUMBER(10)                      not null,
-   "system_id"          NUMBER(2)                       not null,
-   "status"             NUMBER(2)                       not null,
-   CREATE_BY            VARCHAR2(50),
-   CREATE_TIME          VARCHAR2(14),
-   LAST_MODIFY_BY       VARCHAR2(50),
-   LAST_MODIFY_TIME     VARCHAR2(14),
-   constraint PK_SYS_ROLE primary key ("role_id")
-);
-
-comment on table SYS_ROLE is
-'定义系统角色信息，角色是一组权限的集合';
-
-comment on column SYS_ROLE."role_id" is
-'ID，主键';
-
-comment on column SYS_ROLE."role_name" is
-'角色名称';
-
-comment on column SYS_ROLE."role_desc" is
-'角色描述';
-
-comment on column SYS_ROLE."corp_id" is
-'角色所属单位编号';
-
-comment on column SYS_ROLE."system_id" is
-'角色所属系统
-';
-
-comment on column SYS_ROLE."status" is
-'状态
-0－无效
-1－有效';
-
-comment on column SYS_ROLE.CREATE_BY is
-'创建人
-系统自动创建则此处为system';
-
-comment on column SYS_ROLE.CREATE_TIME is
-'创建时间';
-
-comment on column SYS_ROLE.LAST_MODIFY_BY is
-'最新一次修改者';
-
-comment on column SYS_ROLE.LAST_MODIFY_TIME is
-'最新一次修改时间';
-
-create table SYS_ROLE_PERMISSION  (
-   "id"                 NUMBER(10)                      not null,
-   "permission_id"      NUMBER(10),
-   "role_id"            NUMBER(10),
-   constraint PK_SYS_ROLE_PERMISSION primary key ("id")
-);
-
-comment on table SYS_ROLE_PERMISSION is
-'定义角色与权限的关联关系，一个角色可以有一个或多个权限';
-
-comment on column SYS_ROLE_PERMISSION."id" is
-'ID，主键';
-
-comment on column SYS_ROLE_PERMISSION."permission_id" is
-'菜单ID，主键';
-
-comment on column SYS_ROLE_PERMISSION."role_id" is
-'ID，主键';
-
+----------------------------------------------------
 create table SYS_SERVER_INFO  (
    SERVERINFO_ID        NUMBER(10)                      not null,
    RATIO_CPU            NUMBER(3),
@@ -886,20 +862,7 @@ create table SYS_SERVER_INFO  (
    CREATE_TIME          VARCHAR2(14),
    SAVE_IP              VARCHAR2(15),
    constraint PK_SYS_SERVER_INFO primary key (SERVERINFO_ID)
-)
-pctfree 10
-initrans 1
-storage
-(
-    initial 64K
-    minextents 1
-    maxextents unlimited
-)
-tablespace USERS
-logging
-nocompress
- monitoring
- noparallel;
+);
 
 comment on table SYS_SERVER_INFO is
 '服务器状况';
@@ -931,35 +894,193 @@ comment on column SYS_SERVER_INFO.CREATE_TIME is
 comment on column SYS_SERVER_INFO.SAVE_IP is
 '服务器IP';
 
+------------------------------------------------------
 alter table DEV_INFO
-   add constraint FK_DEV_INFO_REFERENCE_DEV_TYPE foreign key ("dev_type_id")
-      references DEV_TYPE_INFO ("dev_type_id");
+   add constraint FK_DEV_INFO_REFERENCE_DEV_TYPE foreign key (DEV_TYPE_ID)
+      references DEV_TYPE_INFO (DEV_TYPE_ID);
 
 alter table DEV_INFO
-   add constraint FK_DEV_INFO_REFERENCE_DEV_FACT foreign key ("dev_facturer_id")
-      references DEV_FACTURER_INFO ("dev_facturer_id");
+   add constraint FK_DEV_INFO_REFERENCE_DEV_FACT foreign key (DEV_FACTURER_ID)
+      references DEV_FACTURER_INFO (DEV_FACTURER_ID);
 
 alter table FILE_UPLOAD_INFO
-   add constraint FK_FILE_UPL_REFERENCE_FILE_TYP foreign key ("type_id")
-      references FILE_TYPE_INFO ("type_id");
+   add constraint FK_FILE_UPL_REFERENCE_FILE_TYP foreign key (TYPE_ID)
+      references FILE_TYPE_INFO (TYPE_ID);
 
 alter table SYS_LOGIN
-   add constraint FK_SYS_LOGI_REFERENCE_SYS_CORP foreign key ("corp_id")
+   add constraint FK_SYS_LOGI_REFERENCE_SYS_CORP foreign key (CORP_ID)
       references SYS_CORP (CORP_ID);
 
 alter table SYS_LOGIN_ROLE
-   add constraint FK_SYS_LOGI_REFERENCE_SYS_ROLE foreign key ("role_id")
-      references SYS_ROLE ("role_id");
+   add constraint FK_SYS_LOGI_REFERENCE_SYS_ROLE foreign key (ROLE_ID)
+      references SYS_ROLE (ROLE_ID);
 
 alter table SYS_LOGIN_ROLE
-   add constraint FK_SYS_LOGI_REFERENCE_SYS_LOGI foreign key ("login_id")
-      references SYS_LOGIN ("login_id");
+   add constraint FK_SYS_LOGI_REFERENCE_SYS_LOGI foreign key (LOGIN_ID)
+      references SYS_LOGIN (LOGIN_ID);
 
 alter table SYS_ROLE_PERMISSION
-   add constraint FK_SYS_ROLE_REFERENCE_SYS_ROLE foreign key ("role_id")
-      references SYS_ROLE ("role_id");
+   add constraint FK_SYS_ROLE_REFERENCE_SYS_ROLE foreign key (ROLE_ID)
+      references SYS_ROLE (ROLE_ID);
 
 alter table SYS_ROLE_PERMISSION
-   add constraint FK_SYS_ROLE_REFERENCE_SYS_PERM foreign key ("permission_id")
-      references SYS_PERMISSION ("permission_id");
+   add constraint FK_SYS_ROLE_REFERENCE_SYS_PERM foreign key (PERMISSION_ID)
+      references SYS_PERMISSION (PERMISSION_ID);
+
+-----------------------------------------------------
+create sequence HIBERNATE_SEQUENCE
+increment by 1
+start with 10000
+ maxvalue 9999999999
+ nominvalue
+nocycle
+noorder;
+
+create sequence DEVFACTURERINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence DEVINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence DEVTYPEINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence FILETYPEINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence FILEUPLOADINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence NOTICEINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence NOTICEREADINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSCORP_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSLOG_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSLOGIN_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSLOGINROLE_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSPERMISSION_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSROLE_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSROLEPERMISSION_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSSERVERINFO_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+create sequence SYSFTP_SEQUENCE
+start with 1
+ maxvalue 9999999999
+ nominvalue;
+
+------------------------------------------------------------------
+insert into sys_corp(CORP_ID,CORP_NAME,CORP_TYPE,PARENT_CORP_ID,STATUS,TREE_CODE)
+values( SYSCORP_SEQUENCE.NEXTVAL,'XXX公安局','0','0','1',',1,');
+
+insert into sys_login(LOGIN_ID,LOGIN_NAME,LOGIN_PWD,USER_NAME,USER_TYPE,CORP_ID,SYSTEM_ID,
+		USER_CODE,STATUS)
+values( SYSLOGIN_SEQUENCE.NEXTVAL ,'admin','96e79218965eb72c92a549dd5a330112','超级管理员','0','1','1','0000','1');
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values(SYSPERMISSION_SEQUENCE.NEXTVAL, '公告管理','1','','1','0','1','1',',1,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'文件管理','1','','2','0','1','1',',2,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'设备管理','1','','3','0','1','1',',3,');
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'统计查询','1','','4','0','1','1',',4,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'组织管理','1','','5','0','1','1',',5,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'系统管理','1','','6','0','1','1',',6,');
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'公告管理','1','/noticeMgr','7','1','1','1',',1,7,');
+
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'文件上传','1','/pages/file_mgr/file_upload/index.jsp','11','2','1','1',',2,11,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'文件查看','1','/fileMgr','12','2','1','1',',2,12,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'文件删除','1','','12','2','1','1',',2,12,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'文件类型管理','1','/fileTypeMgr','14','2','1','1',',2,14,');
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'设备管理','1','/devMgr','8','3','1','1',',3,8,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'设备类型管理','1','/devTypeMgr','10','3','1','1',',3,10,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'设备厂商管理','1','/devFacturerMgr','9','3','1','1',',3,9,');
+
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'部门统计','1','/reportStatistics/corpStatistics','15','4','1','1',',4,15,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'警员统计','1','/reportStatistics/userStatistics','16','4','1','1',',4,16,');
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'部门管理','1','/corpMgr','19','5','1','1',',5,19,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'角色管理','1','/roleMgr','20','5','1','1',',5,20,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'用户管理','1','/userMgr','21','5','1','1',',5,21,');
+
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'操作日志','1','/logMgr','17','6','1','1',',6,17,');
+insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
+values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'系统监控','1','/sysMonitor','18','6','1','1',',6,18,');
+
+
+
+insert into FILE_TYPE_INFO(TYPE_ID,TYPE_NAME,VALID_TIME)
+values( FILETYPEINFO_SEQUENCE.NEXTVAL ,'未分类','30');
+
+
+
 
