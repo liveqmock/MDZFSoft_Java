@@ -1,9 +1,11 @@
 package com.njmd.zfms.web.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.njmd.framework.service.BaseCrudService;
 import com.njmd.zfms.web.entity.file.FileUploadInfo;
+import com.njmd.zfms.web.entity.sys.SysCorp;
 
 /**
  * 系统公告业务处理对象接口
@@ -36,6 +38,8 @@ public interface FileUploadInfoService extends BaseCrudService<FileUploadInfo, L
 	 */
 	public Map<String, Integer> getCorpChartData(Integer queryType, Long corpId, String year, String month, String startDate, String endDate);
 
+	public Map<String,Integer> getCorpChartData(Integer queryType, Long corpId,String treeCode,String year,String month,String startDate,String endDate );
+	
 	/**
 	 * 获取机构详细数据
 	 * 
@@ -49,6 +53,8 @@ public interface FileUploadInfoService extends BaseCrudService<FileUploadInfo, L
 	 */
 	public Map<String, Integer> getCorpDetialData(Integer queryType, Long corpId, String year, String month, String startDate, String endDate);
 
+	public Map<String,Integer> getCorpDetialData(Integer queryType, Long corpId, String treeCode,String year,String month,String startDate,String endDate);
+	
 	/**
 	 * 获取用户图标数据
 	 * 

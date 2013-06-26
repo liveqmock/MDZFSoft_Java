@@ -53,9 +53,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="title" width="100">警员编号</td>
+							<td class="title" width="100"><font color="red">*&nbsp;</font>警员编号</td>
 							<td>
-								<form:input path="userCode" cssClass="form_input" size="20" maxlength="6" />
+								<form:input path="userCode" cssClass="form_input {required:true,digits:true,minlength:6,maxlength:8}" size="20" maxlength="8" />
 							</td>
 						</tr>
 						<tr>
@@ -92,7 +92,6 @@
 									<form:option value="1">有效</form:option>
 									<form:option  value="0">无效</form:option>
 								</form:select>
-								</iframe>
 							</td>
 						</tr>
 						<tr>

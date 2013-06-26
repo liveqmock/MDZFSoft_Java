@@ -72,7 +72,9 @@ public class ResultConstants
 	public static final int SAVE_FAILED_CODE_IS_EXIST = 3004;
 	
 	public static final int SAVE_FAILED_IDCARD_IS_EXIST = 3005;
-
+	
+	public static final int SAVE_FAILED_IP_IS_EXIST = 3006;
+	
 	/** 编辑成功 */
 	public static final int EDIT_SUCCEED = 4000;
 
@@ -111,6 +113,9 @@ public class ResultConstants
 	
 	public static final int UPDATE_FAILED_IDCARD_IS_EXIST = 5008;
 	
+
+	public static final int UPDATE_FAILED_IP_IS_EXIST = 5009;
+	
 	/** 删除成功 */
 	public static final int DELETE_SUCCEED = 6000;
 
@@ -146,6 +151,7 @@ public class ResultConstants
 
 	/*** 系统错误 */
 	public static final int SYSTEM_ERROR = 9999;
+
 	
 
 	private static Properties resultProperties;

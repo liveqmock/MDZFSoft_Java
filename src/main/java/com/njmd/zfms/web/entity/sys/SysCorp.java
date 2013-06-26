@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -46,20 +48,24 @@ public class SysCorp extends AuditableEntity implements Serializable
 	@Column(name = "PARENT_CORP_ID")
 	private Long parentCorpId = 0l;
 
-	@Column(name = "FTP_IP")
-	private String ftpIp;
-
-	@Column(name = "FTP_PORT")
-	private String ftpPort;
-
-	@Column(name = "FTP_USER")
-	private String ftpUser;
-
-	@Column(name = "FTP_PWD")
-	private String ftpPwd;
-
-	@Column(name = "FILE_ROOT_URL")
-	private String fileRootUrl;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="FTP_ID")
+	private SysFtp sysFtp;
+	
+//	@Column(name = "FTP_IP")
+//	private String ftpIp;
+//
+//	@Column(name = "FTP_PORT")
+//	private String ftpPort;
+//
+//	@Column(name = "FTP_USER")
+//	private String ftpUser;
+//
+//	@Column(name = "FTP_PWD")
+//	private String ftpPwd;
+//
+//	@Column(name = "FILE_ROOT_URL")
+//	private String fileRootUrl;
 
 	@Column(name = "TREE_CODE")
 	private String treeCode;
@@ -160,35 +166,35 @@ public class SysCorp extends AuditableEntity implements Serializable
 		return parentCorpName;
 	}
 
-	public String getFtpIp()
-	{
-		return ftpIp;
-	}
+//	public String getFtpIp()
+//	{
+//		return ftpIp;
+//	}
+//
+//	public void setFtpIp(String ftpIp)
+//	{
+//		this.ftpIp = ftpIp;
+//	}
 
-	public void setFtpIp(String ftpIp)
-	{
-		this.ftpIp = ftpIp;
-	}
+//	public String getFtpPort()
+//	{
+//		return ftpPort;
+//	}
+//
+//	public void setFtpPort(String ftpPort)
+//	{
+//		this.ftpPort = ftpPort;
+//	}
 
-	public String getFtpPort()
-	{
-		return ftpPort;
-	}
-
-	public void setFtpPort(String ftpPort)
-	{
-		this.ftpPort = ftpPort;
-	}
-
-	public String getFtpUser()
-	{
-		return ftpUser;
-	}
-
-	public void setFtpUser(String ftpUser)
-	{
-		this.ftpUser = ftpUser;
-	}
+//	public String getFtpUser()
+//	{
+//		return ftpUser;
+//	}
+//
+//	public void setFtpUser(String ftpUser)
+//	{
+//		this.ftpUser = ftpUser;
+//	}
 
 	public String getTreeCode()
 	{
@@ -200,24 +206,32 @@ public class SysCorp extends AuditableEntity implements Serializable
 		this.treeCode = treeCode;
 	}
 
-	public String getFtpPwd()
-	{
-		return ftpPwd;
+	public SysFtp getSysFtp() {
+		return sysFtp;
 	}
 
-	public void setFtpPwd(String ftpPwd)
-	{
-		this.ftpPwd = ftpPwd;
+	public void setSysFtp(SysFtp sysFtp) {
+		this.sysFtp = sysFtp;
 	}
 
-	public String getFileRootUrl()
-	{
-		return fileRootUrl;
-	}
-
-	public void setFileRootUrl(String fileRootUrl)
-	{
-		this.fileRootUrl = fileRootUrl;
-	}
+//	public String getFtpPwd()
+//	{
+//		return ftpPwd;
+//	}
+//
+//	public void setFtpPwd(String ftpPwd)
+//	{
+//		this.ftpPwd = ftpPwd;
+//	}
+//
+//	public String getFileRootUrl()
+//	{
+//		return fileRootUrl;
+//	}
+//
+//	public void setFileRootUrl(String fileRootUrl)
+//	{
+//		this.fileRootUrl = fileRootUrl;
+//	}
 
 }

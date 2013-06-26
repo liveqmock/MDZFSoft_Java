@@ -207,11 +207,18 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		// (this.validationCorp(sysCorpDTO.getCorpId())))
 		// return ResultConstants.CORP_USER_QUOTED;
 
+		sysCorpTemp=baseDao.findById(sysCorp.getCorpId());
+		
 		if (sysCorpTemp == null)
 		{
 			sysCorpTemp = new SysCorp();
 		}
+		
+		String oldPath=sysCorpTemp.getTreeCode();
+		List childrens=baseDao.findByHql("from SysCorp sysCorp where sysCorp.treeCode like ? ", oldPath+"%");
+		
 		BeanUtils.copyProperties(sysCorpTemp, sysCorp);
+		
 		// 处理组织机构树编码，编码格式为：上级机构树编码,本机构ID
 		String treeCode = String.valueOf(","+sysCorp.getCorpId()+",");
 		if (!CommonConstants.NO_PARENT_ID.equals(sysCorp.getParentCorpId()))
@@ -222,6 +229,14 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 		sysCorpTemp.setTreeCode(treeCode);
 
 		baseDao.update(sysCorpTemp);
+		
+		//editby 孙强伟  at 20130626 当修改部门时，如果修改了上级部门，则需要更新其子部门的所有的treeCode。
+		for(int i=0;i<childrens.size();i++){
+			SysCorp children=(SysCorp)childrens.get(i);
+			children.setTreeCode(children.getTreeCode().replace(oldPath, sysCorpTemp.getTreeCode()));
+			baseDao.update(children);
+		}
+		
 		sysLogBO.save(SysLog.OPERATE_TYPE_UPDATE, "【部门更新】部门名称：" + sysCorp.getCorpName());
 		return ResultConstants.UPDATE_SUCCEED;
 	}
@@ -293,9 +308,25 @@ public class SysCorpServiceImpl extends BaseCrudServiceImpl<SysCorp, Long> imple
 			else
 				treeNode.setIcon(context + "/plugins/zTree/css/zTreeStyle/img/diy/8.png");
 			treeNode.setNocheck(!enableCheckBox);
+			
+			treeNode.setPath(sysCorp.getTreeCode());
 			tree.addNode(treeNode);
 		}
 
 		return tree;
+	}
+
+	@Override
+	public List<SysCorp> findChildsByParentId(Long parentId) throws Exception {
+		SysCorp sysCorp=baseDao.findById(parentId);
+		if(null==sysCorp)
+			return new ArrayList<SysCorp>();
+		
+		List<SysCorp> corpList = null;
+		
+		String hql = "from SysCorp as model where model.parentCorpId = '" + sysCorp.getCorpId() + "' and status ="
+					+ CommonConstants.STATUS_VALID + " order by corpId";
+			corpList = baseDao.findByHql(hql);
+		return corpList;
 	}
 }

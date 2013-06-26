@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <%@ include file="/common/header.jsp"%>
+<%@ include file="/plugins/jquery-nyroModal.jsp" %>
 <%@ include file="/plugins/jquery-validation.jsp"%>
 <%@ include file="/plugins/jquery-powerFloat.jsp" %>
 <%@ include file="/plugins/ztree.jsp"%>
@@ -45,42 +46,12 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP地址
+								<font color="red">*&nbsp;</font>FTP服务器
 							</td>
 							<td>
-								<form:input path="ftpIp" cssClass="form_input {required:true,ipv4:true}" size="20" />
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP端口
-							</td>
-							<td>
-								<form:input path="ftpPort" cssClass="form_input {required:true,maxlength:20}" size="20" />
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP用户名
-							</td>
-							<td>
-								<form:input path="ftpUser" cssClass="form_input {required:true,maxlength:20}" size="20"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP密码
-							</td>
-							<td>
-								<form:password path="ftpPwd" cssClass="form_input {required:true,maxlength:20}" size="20" showPassword="true"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>文件服务地址
-							</td>
-							<td>
-								<form:input path="fileRootUrl" cssClass="form_input {required:true,maxlength:100}" size="30" maxlength="100"/>
+								<input type="hidden" value="${resultObject.sysFtp.ftpId }" name="sysFtp.ftpId" id="ftpId">
+								<input type="text" size="20" value="${resultObject.sysFtp.ftpIp }" style="cursor: pointer;" onclick="showFtpSelectPage('FTP服务器选择','ftpId','ftpIp','ftpDesc')" class="form_input {required:true}" name="ftpIp" id="ftpIp">
+								<br/><span id='ftpDesc' >${resultObject.sysFtp.ftpDesc }</span>
 							</td>
 						</tr>
 						<tr>
@@ -93,6 +64,8 @@
 				</div>
 			</div>
 	</form:form>
+	<a  id="modalWindowAction" class="nyroModal" href="#" target="_blank" style="display:none" title="选择FTP服务器">选择FTP服务器</a>
+	
 	<script>
 	
 	$(function(){
@@ -107,7 +80,14 @@
 		};
 		var zNodes = ${tree.json};  
 		$(document).ready(function(){
-			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			var treeObj=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+
+			<%//editby 孙强伟  at 20130626  在进行父部门时，不显示当前正在修改的部门及其子部门 %>
+			var tmpCorpId=$("#corpId").val();
+			var nodes = treeObj.getNodesByParamFuzzy("path", ","+tmpCorpId+",", null);
+			for (var i=0, l=nodes.length; i < l; i++) {
+				treeObj.removeNode(nodes[i]);
+			}
 		});
 		
 		$('#addForm').validate();
@@ -116,6 +96,8 @@
 			 dataType:  'json',
 		     success:   onSuccess
 		});
+		
+		$('.nyroModal').nyroModal({});
 	});
 	$("#parentCorpName").powerFloat({
 		eventType: "click",
@@ -127,6 +109,13 @@
 		var nodes = treeObj.getSelectedNodes();
 		var corpId = nodes[0].id;
 		var corpName = nodes[0].name;
+		var tmpCorpId=$("#corpId").val();
+		<%//editby 孙强伟  at 20130626 在进行父部门时，不能选择当前正在修改的部门及其子部门 %>
+		var path=nodes[0].path;
+		if(path.indexOf(","+tmpCorpId+",")>=0){
+			alert("对不起，不能选择需要修改部门及其子部门作为其上级部门!");
+			return ;
+		}
 		$("#parentCorpName").val(corpName);
 		$("#parentCorpId").val(corpId);
 		$.powerFloat.hide();
@@ -142,6 +131,14 @@
 	    {
 	    	alert(data.promptInfo);
 	    }
+	}
+	
+	function showFtpSelectPage(title,ftpId,ftpIp,ftpDesc)
+	{	
+		var url = '${ctx}/ftpMgr/ftpSelect?ftpId='+ftpId+'&ftpIp='+ftpIp+'&ftpDesc='+ftpDesc+'&r='+Math.random();
+	  	$('#modalWindowAction').attr("href",url);
+	  	$('#modalWindowAction').attr("title",title);
+	  	$('#modalWindowAction').click();
 	}
 </script>
 </body>

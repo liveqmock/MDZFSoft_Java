@@ -99,9 +99,15 @@ public class ReportStatisticsController  extends BaseController{
 		String endDate= request.getParameter("endDate") ;
 		String year = request.getParameter("year");
 		String month = request.getParameter("month");
+		
 		Long parentId=request.getParameter("corpId")==null?1:Long.parseLong(request.getParameter("corpId"));
 		categoriesList=new ArrayList<String>();
-		corpList=sysCorpService.findByParentId(parentId);
+		//获得本部门的下一级部门，如果没有下一级则直接显示它自己部门的内容。
+		corpList=sysCorpService.findChildsByParentId(parentId);
+		if(null==corpList || corpList.size()==0){
+			corpList.add(0,sysCorpService.findById(parentId));
+		}
+		
 		fileTypeInfoList= fileTypeInfoService.findAll();
 //Edit by 孙强伟   ，文件分类中已经添加了系统默认名称了，因此此处的可以取消了		
 //		FileTypeInfo fileType=new FileTypeInfo();
@@ -152,22 +158,27 @@ public class ReportStatisticsController  extends BaseController{
 			categories.append(s);
 		}
 		
-		
-		
 		model.addAttribute("categories", categories.toString());
-		chartData=fileUploadInfoService.getCorpChartData(queryType, parentId, year, month, startDate, endDate);
+//		chartData=fileUploadInfoService.getCorpChartData(queryType, parentId, year, month, startDate, endDate);
 		corpCategoriesMap=new HashMap<String,String>();
+		
+		detialData=new HashMap<String,Integer>();
 	    for(SysCorp corp:corpList){
+	    	//统计每个部门的文件个数(图形)
+	    	chartData=fileUploadInfoService.getCorpChartData(queryType,corp.getCorpId(), corp.getTreeCode(), year, month, startDate, endDate);
 	    	StringBuffer sb=new StringBuffer("");
-	    	for(String date:categoriesList){
+	    	for(String date:categoriesList){ 
 	    		if(!sb.toString().equals("")){
 	    			sb.append(",");
 	    		}
+	    		
 	    		sb.append(chartData.get(corp.getCorpId()+"_"+date));
 	    	}
 	    	corpCategoriesMap.put(corp.getCorpName(), sb.toString());
+	    	
+	    	//统计每个部门的文件个数(表格)
+	    	detialData.putAll(fileUploadInfoService.getCorpDetialData(queryType, corp.getCorpId(), corp.getTreeCode(), year, month, startDate, endDate));
 	    }
-	    detialData=fileUploadInfoService.getCorpDetialData(queryType, parentId, year, month, startDate, endDate);
 	    
 	    model.addAttribute("detialData", detialData);
 	    model.addAttribute("corpList", corpList);

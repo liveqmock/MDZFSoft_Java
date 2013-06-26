@@ -159,12 +159,13 @@ public class SysPermissionServiceImpl extends BaseCrudServiceImpl<SysPermission,
 		sysPermission.setSystemId(1);
 		sysPermission.setPermissionSort(menuSort);
 		sysPermissionDAO.save(sysPermission);
+		//editby 孙强伟 at 20130626 修改treeCode中的分隔问题.
 		// 处理树编码
-		String treeCode = String.valueOf(sysPermission.getPermissionId());
+		String treeCode = String.valueOf(","+sysPermission.getPermissionId()+",");
 		if (!CommonConstants.NO_PARENT_ID.equals(sysPermission.getParentPermissionId()))
 		{
 			String parentTreeCode = baseDao.findById(sysPermission.getParentPermissionId()).getTreeCode();
-			treeCode = parentTreeCode + "." + sysPermission.getPermissionId();
+			treeCode = parentTreeCode + sysPermission.getPermissionId()+",";
 		}
 		sysPermission.setTreeCode(treeCode);
 		baseDao.update(sysPermission);
@@ -197,11 +198,12 @@ public class SysPermissionServiceImpl extends BaseCrudServiceImpl<SysPermission,
 		// }
 		// sysPermission.setPermissionSort(menuSort);
 		// 处理树编码
-		String treeCode = String.valueOf(sysPermission.getPermissionId());
+		//editby 孙强伟 at 20130626 修改treeCode中的分隔问题.
+		String treeCode = String.valueOf(","+sysPermission.getPermissionId()+",");
 		if (!CommonConstants.NO_PARENT_ID.equals(sysPermission.getParentPermissionId()))
 		{
 			String parentTreeCode = baseDao.findById(sysPermission.getParentPermissionId()).getTreeCode();
-			treeCode = parentTreeCode + "." + sysPermission.getPermissionId();
+			treeCode = parentTreeCode + sysPermission.getPermissionId()+",";
 		}
 		sysPermission.setTreeCode(treeCode);
 		baseDao.update(sysPermission);

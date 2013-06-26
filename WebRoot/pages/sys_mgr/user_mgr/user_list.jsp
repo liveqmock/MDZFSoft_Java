@@ -82,7 +82,7 @@
 												<td>
 													<c:choose>
 														<c:when test="${user.status=='1'}">
-															<font color="#dd6239">有效</font>
+															<font color="blue">有效</font>
 														</c:when>
 														<c:when test="${user.status=='0'}">
 															<font color="red">无效</font>

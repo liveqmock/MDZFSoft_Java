@@ -34,7 +34,7 @@
 								公告内容
 							</td>
 							<td>
-								<form:textarea path="noticeContent" cols="80" rows="9" cssClass="form_input {maxlength:500}"/>
+								<form:textarea path="noticeContent" cols="80" rows="9" cssClass="form_input {maxlength:5000}"/>
 							</td>
 						</tr>
 						<tr>

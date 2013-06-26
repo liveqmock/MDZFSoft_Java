@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <%@ include file="/common/header.jsp"%>
+<%@ include file="/plugins/jquery-nyroModal.jsp" %>
 <%@ include file="/plugins/jquery-validation.jsp"%>
 <%@ include file="/plugins/jquery-powerFloat.jsp" %>
 <%@ include file="/plugins/ztree.jsp"%>
@@ -44,42 +45,12 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP地址
+								<font color="red">*&nbsp;</font>FTP服务器
 							</td>
 							<td>
-								<form:input path="ftpIp" cssClass="form_input {required:true,ipv4:true}" size="20" />
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP端口
-							</td>
-							<td>
-								<form:input path="ftpPort" cssClass="form_input {required:true,maxlength:20}" size="20" />
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP用户名
-							</td>
-							<td>
-								<form:input path="ftpUser" cssClass="form_input {required:true,maxlength:20}" size="20"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP密码
-							</td>
-							<td>
-								<form:password path="ftpPwd" cssClass="form_input {required:true,maxlength:20}" size="20"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>文件服务地址
-							</td>
-							<td>
-								<form:input path="fileRootUrl" cssClass="form_input {required:true,maxlength:100}" size="30" maxlength="100"/>
+								<input type="hidden" value="" name="sysFtp.ftpId" id="ftpId">
+								<input type="text" size="20" value="" style="cursor: pointer;" onclick="showFtpSelectPage('FTP服务器选择','ftpId','ftpIp','ftpDesc')" class="form_input {required:true}" name="ftpIp" id="ftpIp">
+								<br/><span id='ftpDesc' ></span>
 							</td>
 						</tr>
 						<tr>
@@ -92,6 +63,8 @@
 				</div>
 			</div>
 	</form:form>
+</body>
+	<a  id="modalWindowAction" class="nyroModal" href="#" target="_blank" style="display:none" title="选择FTP服务器">选择FTP服务器</a>
 	<script>
 	
 	$(function(){
@@ -115,6 +88,8 @@
 			 dataType:  'json',
 		     success:   onSuccess
 		});
+		
+		$('.nyroModal').nyroModal({});
 	});
 	$("#parentCorpName").powerFloat({
 		eventType: "click",
@@ -142,6 +117,13 @@
 	    	alert(data.promptInfo);
 	    }
 	}
+	
+	function showFtpSelectPage(title,ftpId,ftpIp,ftpDesc)
+	{	
+		var url = '${ctx}/ftpMgr/ftpSelect?ftpId='+ftpId+'&ftpIp='+ftpIp+'&ftpDesc='+ftpDesc+'&r='+Math.random();
+	  	$('#modalWindowAction').attr("href",url);
+	  	$('#modalWindowAction').attr("title",title);
+	  	$('#modalWindowAction').click();
+	}
 </script>
-</body>
 </html>

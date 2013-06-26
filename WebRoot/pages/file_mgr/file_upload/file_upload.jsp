@@ -78,10 +78,10 @@
 <iframe id="uploadProgressFrame" src="" width="400px" height="300px" frameborder="0"></iframe>
 
 <script type="text/javascript">
-	var ftpHost = "${sessionScope.loginToken.sysCorp.ftpIp}";
-	var ftpPort = "${sessionScope.loginToken.sysCorp.ftpPort}";
-	var ftpUser = "${sessionScope.loginToken.sysCorp.ftpUser}";
-	var ftpPswd = "${sessionScope.loginToken.sysCorp.ftpPwd}";
+	var ftpHost = "${sessionScope.loginToken.sysCorp.sysFtp.ftpIp}";
+	var ftpPort = "${sessionScope.loginToken.sysCorp.sysFtp.ftpPort}";
+	var ftpUser = "${sessionScope.loginToken.sysCorp.sysFtp.ftpUser}";
+	var ftpPswd = "${sessionScope.loginToken.sysCorp.sysFtp.ftpPwd}";
 	var supportFileExtension = "<%=ConfigConstants.SUPPORT_FILE_EXTENSION%>";//支持上传文件格式
 	var totalFileNum=0;//上传文件总数
 	var uploadedFileNum=0;//已上传文件总数

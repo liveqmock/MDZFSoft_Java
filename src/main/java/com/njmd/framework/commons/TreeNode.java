@@ -19,7 +19,8 @@ public class TreeNode implements Serializable
 	private String pId;
 	// 节点名称
 	private String name;
-
+	// 树的ID path
+	private String path;
 	// 超链接URL
 	private String url;
 
@@ -169,6 +170,14 @@ public class TreeNode implements Serializable
 
 	public void setNocheck(boolean nocheck) {
 		this.isNocheck = nocheck;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 }

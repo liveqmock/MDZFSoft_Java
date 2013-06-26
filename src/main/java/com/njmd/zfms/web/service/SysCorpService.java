@@ -32,6 +32,14 @@ public interface SysCorpService extends BaseCrudService<SysCorp, Long>
 	List<SysCorp> findByParentId(Long parentId) throws Exception;
 
 	/**
+	 * 根据父单位ID查询下一级单位
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	List<SysCorp> findChildsByParentId(Long parentId) throws Exception;
+	
+	/**
 	 * 获得单位树
 	 * 
 	 * @param request

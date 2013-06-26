@@ -64,7 +64,7 @@ public class FileUploadInfoServiceImpl extends BaseCrudServiceImpl<FileUploadInf
 		fileUploadInfo.setFileShowPath(fileSavePath);
 		fileUploadInfo.setFileRemark("");
 		fileUploadInfo.setFileStatus("A");
-		fileUploadInfo.setFileContextPath(sysCorp.getFileRootUrl() + "/");
+		fileUploadInfo.setFileContextPath(sysCorp.getSysFtp().getFileRootUrl() + "/");
 		//Edit by 孙强伟,保存文件服务器保存文件时的目录
 		fileUploadInfo.setFileStorageRoot(ConfigConstants.FILE_STORAGE_ROOT);
 		
@@ -177,7 +177,44 @@ public class FileUploadInfoServiceImpl extends BaseCrudServiceImpl<FileUploadInf
 
 		return re;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Integer> getCorpChartData(Integer queryType, Long corpId,String treeCode, String year, String month, String startDate, String endDate)
+	{
+		Map<String, Integer> re = new HashMap<String, Integer>();
+		String hql = "";
+		if (queryType == 1)
+		{
+			// 按年统计
+			hql = "select '"+corpId+"',substr(model.fileUploadTime,0,6)   ,count(*)   from FileUploadInfo as model "
+					+ "where   model.fileUploadTime like '" + year + "%' and model.uploadCorpInfo.treeCode like '" + treeCode+"%' "
+					+ " group by  substr(model.fileUploadTime,0,6) ";
+		}
+		if (queryType == 2)
+		{
+			// 按月统计
+			hql = "select '"+corpId+"',substr(model.fileUploadTime,7,2),count(*)   from FileUploadInfo as model "
+					+ "where   model.fileUploadTime like '" + year + month + "%' and model.uploadCorpInfo.treeCode like '" + treeCode+"%' "
+					+ "   group by  substr(model.fileUploadTime,7,2)  ";
+		}
+		if (queryType == 3)
+		{
+			// 按天统计
+			hql = "select '"+corpId+"',substr(model.fileUploadTime,0,8)   ,count(*)   from FileUploadInfo as model "
+					+ "where   substr(model.fileUploadTime,0,8)>= '" + startDate + "' and substr(model.fileUploadTime,0,8)<='" + endDate
+					+ "' and model.uploadCorpInfo.treeCode like '" + treeCode + "%'   group by  substr(model.fileUploadTime,0,8) ";
+		}
+		Object[] param = new Object[] {};
+		List<Object[]> list = (List<Object[]>) baseDao.findByHql(hql, param);
+		for (Object[] obj : list)
+		{
+			re.put(obj[0] + "_" + obj[1], obj[2] == null ? 0 : Integer.parseInt(obj[2].toString()));
+		}
 
+		return re;
+	}
+	
 	@Override
 	public Map<String, Integer> getCorpDetialData(Integer queryType, Long corpId, String year, String month, String startDate, String endDate)
 	{
@@ -204,6 +241,41 @@ public class FileUploadInfoServiceImpl extends BaseCrudServiceImpl<FileUploadInf
 					+ "where   substr(model.fileUploadTime,0,8)>= '" + startDate + "' and substr(model.fileUploadTime,0,8)<='" + endDate
 					+ "'  and model.uploadCorpInfo.parentCorpId=" + corpId
 					+ "  group by  substr(model.fileUploadTime,0,8),model.uploadCorpInfo.id,model.fileTypeInfo.id ";
+		}
+		Object[] param = new Object[] {};
+		List<Object[]> list = (List<Object[]>) baseDao.findByHql(hql, param);
+		for (Object[] obj : list)
+		{
+			re.put(obj[0] + "_" + obj[1] + "_" + obj[2], obj[3] == null ? 0 : Integer.parseInt(obj[3].toString()));
+		}
+
+		return re;
+	}
+	
+	public Map<String,Integer> getCorpDetialData(Integer queryType, Long corpId, String treeCode,String year,String month,String startDate,String endDate){
+		Map<String, Integer> re = new HashMap<String, Integer>();
+		String hql = "";
+		if (queryType == 1)
+		{
+			// 按年统计
+			hql = "select '"+corpId+"',model.fileTypeInfo.id,substr(model.fileUploadTime,0,6),count(*)from FileUploadInfo as model "
+					+ "where   model.fileUploadTime like '" + year + "%'  and model.uploadCorpInfo.treeCode like '" + treeCode+"%' "
+					+ "  group by  substr(model.fileUploadTime,0,6),model.fileTypeInfo.id";
+		}
+		if (queryType == 2)
+		{
+			// 按月统计
+			hql = "select '"+corpId+"',model.fileTypeInfo.id,substr(model.fileUploadTime,7,2),count(*)   from FileUploadInfo as model "
+					+ "where   model.fileUploadTime like '" + year + month + "%'  and model.uploadCorpInfo.treeCode like '" + treeCode+"%' "
+					+ "  group by  substr(model.fileUploadTime,7,2),model.fileTypeInfo.id  ";
+		}
+		if (queryType == 3)
+		{
+			// 按天统计
+			hql = "select '"+corpId+"',model.fileTypeInfo.id,substr(model.fileUploadTime,0,8)   ,count(*)   from FileUploadInfo as model "
+					+ "where   substr(model.fileUploadTime,0,8)>= '" + startDate + "' and substr(model.fileUploadTime,0,8)<='" + endDate
+					+ "'  and model.uploadCorpInfo.treeCode like '" + treeCode+"%' "
+					+ "  group by  substr(model.fileUploadTime,0,8),model.fileTypeInfo.id ";
 		}
 		Object[] param = new Object[] {};
 		List<Object[]> list = (List<Object[]>) baseDao.findByHql(hql, param);
