@@ -34,6 +34,8 @@
 										<option value="1">增加</option>
 										<option value="2">删除</option>
 										<option value="3">修改</option>
+										<option value="4">查询</option>
+										<option value="7">下载</option>
 									</select>
 									&nbsp;&nbsp;&nbsp;&nbsp; 
 									<label>操作时间：</label>
@@ -57,6 +59,7 @@
 									<thead>
 									<tr align="center">
 										<th class="sortable" onclick="javascript:sort('operUserCode','asc')">警员编号</th>
+										<th class="sortable" onclick="javascript:sort('operUserName','asc')">真实姓名</th>
 										<th class="sortable" onclick="javascript:sort('operIp','asc')">操作IP</th>
 										<th class="sortable" onclick="javascript:sort('operTime','asc')">操作时间</th>
 										<th class="sortable" onclick="javascript:sort('operCorpName','asc')">所属部门</th>
@@ -70,6 +73,9 @@
 											<tr align="center">
 												<td>
 													${log.operUserCode}
+												</td>
+												<td>
+													${log.operUserName}
 												</td>
 												<td>
 													${log.operIp}

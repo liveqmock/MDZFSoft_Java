@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.njmd.framework.commons.ResultInfo;
 import com.njmd.framework.commons.Tree;
 import com.njmd.framework.controller.BaseController;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.constants.CommonConstants;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
@@ -35,6 +36,7 @@ public class CorpMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping
+	@Permission(resource=Permission.Resources.SYSCORP,action=Permission.Actions.LIST)
 	public String index(HttpServletRequest request, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -45,6 +47,7 @@ public class CorpMgrController extends BaseController
 
 	/** 进入新增 */
 	@RequestMapping(value = "/add")
+	@Permission(resource=Permission.Resources.SYSCORP,action=Permission.Actions.ADD)
 	public String add(HttpServletRequest request, Long parentCorpId, Model model) throws Exception
 	{
 		SysCorp sysCorp = new SysCorp();
@@ -55,6 +58,9 @@ public class CorpMgrController extends BaseController
 			SysCorp entity = sysCorpService.findById(parentCorpId);
 			sysCorp.setParentCorpId(parentCorpId);
 			sysCorp.setParentCorpName(entity.getCorpName());
+			//EditBy 孙强伟  at 20130711 ，当新建下级部门时，如果上级部门已经设置了文件服务器，
+			//则子部门默认使用的文件服务器与父部门的文件服务器一致。
+			model.addAttribute("parent",entity);
 		}
 		Tree tree = sysCorpService.getCorpTree(request, false);
 		model.addAttribute("tree", tree);
@@ -66,11 +72,13 @@ public class CorpMgrController extends BaseController
 	/** 保存新增 */
 	@RequestMapping(value = "/save")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSCORP,action=Permission.Actions.ADD)
 	public ResultInfo save(HttpServletRequest request, Model model, SysCorp entity) throws Exception
 	{
 		try
 		{
 			int resultTag = sysCorpService.save(entity);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
@@ -91,11 +99,13 @@ public class CorpMgrController extends BaseController
 	/** 删除 */
 	@RequestMapping(value = "/delete/{id}")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSCORP,action=Permission.Actions.DELETE)
 	public ResultInfo delete(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
+		SysCorp entity=sysCorpService.findById(id);
 		int resultTag = sysCorpService.delete(id);
 		if (resultTag == ResultConstants.DELETE_SUCCEED)
-		{
+		{	savedObjectForLog(entity);
 			return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
 		}
 		else
@@ -106,6 +116,7 @@ public class CorpMgrController extends BaseController
 
 	/** 批量删除 */
 	@RequestMapping(value = "/batchDelete")
+	@Permission(resource=Permission.Resources.SYSCORP,action=Permission.Actions.BATCHDELETE)
 	public String batchDelete(HttpServletRequest request, Model model, Long[] id) throws Exception
 	{
 
@@ -124,10 +135,13 @@ public class CorpMgrController extends BaseController
 
 	/** 进入编辑 */
 	@RequestMapping(value = "/edit/{id}")
+	@Permission(resource=Permission.Resources.SYSCORP,action=Permission.Actions.UPDATE)
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		SysCorp entity = sysCorpService.findById(id);
 		Tree tree = sysCorpService.getCorpTree(request, false);
+		
+		savedObjectForLog(entity);
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 
@@ -137,11 +151,13 @@ public class CorpMgrController extends BaseController
 	/** 修改保存 */
 	@RequestMapping(value = "/update")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSCORP,action=Permission.Actions.UPDATE)
 	public ResultInfo update(HttpServletRequest request, Model model, SysCorp entity) throws Exception
 	{
 		try
 		{
 			int resultTag = sysCorpService.update(entity);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);

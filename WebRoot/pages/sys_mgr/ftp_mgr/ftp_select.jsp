@@ -24,7 +24,7 @@
 				<table id="tableList" cellspacing="1" class="tablesorter" width="100%">
 					<thead>
 						<tr align="center">
-							<th style='width:100px;' class="sortable" onclick="javascript:sort('ftpIp','asc')">IP地址</th>
+							<th style='width:100px;' class="sortable" onclick="javascript:sort('ftpIp','asc')">服务器名称</th>
 							<th class="sortable" onclick="javascript:sort('ftpDesc','asc')">描述</th>
 							<th style='width:100px;'>选择</th>
 						</tr>
@@ -33,9 +33,9 @@
 						<c:if test="${page.totalCount != '0'}">
 							<c:forEach var="ftp" items="${page.result}" varStatus="status">
 								<tr align="center">
-									<td>${ftp.ftpIp}</td>
+									<td>${ftp.serverName}</td>
 									<td id='${ftp.ftpId }'>${ftp.ftpDesc}</td>
-									<td><a href="javascript:ftpSelect(this,'${ftp.ftpId}','${ftp.ftpIp }')" class="green_mod_btn">选择</a></td>
+									<td><a href="javascript:ftpSelect(this,'${ftp.ftpId}','${ftp.serverName }')" class="green_mod_btn">选择</a></td>
 								</tr>
 							</c:forEach>
 						</c:if>
@@ -53,10 +53,10 @@
 	</form>
 </body>
 <script type="text/javascript">
-	function ftpSelect(obj,ftpId,ftpIp)
+	function ftpSelect(obj,ftpId,servername)
 	{
 		window.parent.document.getElementById("${param['ftpId']}").value=ftpId;
-		window.parent.document.getElementById("${param['ftpIp']}").value=ftpIp;
+		window.parent.document.getElementById("${param['ftpIp']}").value=servername;
 		window.parent.document.getElementById("${param['ftpDesc']}").innerHTML=$("#"+ftpId).html();
 		parent.closeModalWindow(false);
 	}

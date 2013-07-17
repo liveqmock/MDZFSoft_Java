@@ -7,7 +7,7 @@
 <%@ include file="/plugins/jquery-validation.jsp"%>
 </head>
 <body>
-	<form:form id="mainForm" name="mainForm" method="POST" action="${ctx}/login/updatePwd"  modelAttribute="resultObject">
+	<form:form id="mainForm" name="mainForm" method="POST" action="${ctx}/userMgr/updatePwd"  modelAttribute="resultObject">
 		<div class="gray_bor_bg">
 		<div class="table_div">
 			<table width="100%" class="table_border">

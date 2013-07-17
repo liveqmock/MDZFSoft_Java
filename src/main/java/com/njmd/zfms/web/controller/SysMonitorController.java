@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.Page;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.entity.sys.SysServerInfo;
 import com.njmd.zfms.web.service.SysServerInfoService;
 
@@ -35,6 +36,7 @@ public class SysMonitorController extends BaseController
 
 	/** 主页面 */
 	@RequestMapping 
+	@Permission(resource=Permission.Resources.SYSMONITOR,action=Permission.Actions.LIST)
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		 
@@ -42,6 +44,7 @@ public class SysMonitorController extends BaseController
 	}
 	/** 图标*/
 	@RequestMapping(value = "/chart")
+	@Permission(resource=Permission.Resources.SYSMONITOR,action=Permission.Actions.LIST)
 	public String chart(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		int queryType = request.getParameter("queryType")==null?1:Integer.parseInt(request.getParameter("queryType"));
@@ -126,7 +129,7 @@ public class SysMonitorController extends BaseController
 						categories.append(obj[0]);
 						ratioCpuData.append(obj[1]);
 						ratioMemoryData.append(obj[2]);
-						ratioHarddiskData.append(obj[3]);
+						ratioHarddiskData.append(obj[3]); 
 					}
 				}
 			break;

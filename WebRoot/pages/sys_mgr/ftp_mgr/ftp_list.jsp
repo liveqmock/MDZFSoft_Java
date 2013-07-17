@@ -17,7 +17,7 @@
 		<div id="container">
 			<div class="layout clearfix">
 				<div class="white_p10">
-					<h4 class="content_hd long_content_hd">FTP服务器管理</h4>
+					<h4 class="content_hd long_content_hd">文件服务器管理</h4>
 					<div class="content_bd">
 						<div style="margin-top: 10px">
 							<a href="${ctx}/ftpMgr/add?r=<%=Math.random() %>" class="blue_mod_btn nyroModal" target="_blank" title="新增FTP服务器">新增FTP</a>
@@ -29,9 +29,10 @@
 										<th>
 											
 										</th>
-										<th class="sortable" onclick="javascript:sort('ftpIp','asc')">FTP地址</th>
-										<th class="sortable" onclick="javascript:sort('ftpPort','asc')">FTP端口</th>
-										<th class="sortable" onclick="javascript:sort('ftpUser','asc')">FTP用户名</th>
+										<th class="sortable" onclick="javascript:sort('serverName','asc')">服务器名称</th>
+										<th class="sortable" onclick="javascript:sort('ftpIp','asc')">服务器地址</th>
+										<th class="sortable" onclick="javascript:sort('ftpPort','asc')">服务器端口</th>
+										<th class="sortable" onclick="javascript:sort('ftpUser','asc')">登陆用户名</th>
 										<th class="sortable" onclick="javascript:sort('fileRootUrl','asc')">文件存储URL</th>
 										<th class="sortable" onclick="javascript:sort('status','asc')">状态</th>
 										<th>操作</th>
@@ -43,6 +44,8 @@
 											<tr align="center">
 												<td>
 													${status.count}
+												</td>
+												<td> ${sysFtp.serverName}
 												</td>
 												<td> ${sysFtp.ftpIp}
 												</td>

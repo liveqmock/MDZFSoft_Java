@@ -18,6 +18,7 @@ import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.framework.dao.PropertyFilter.MatchType;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.UrlConstants;
@@ -54,6 +55,7 @@ public class RoleMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping
+	@Permission(resource=Permission.Resources.SYSROLE,action=Permission.Actions.LIST)
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -82,6 +84,7 @@ public class RoleMgrController extends BaseController
 
 	/** 进入新增 */
 	@RequestMapping(value = "/add")
+	@Permission(resource=Permission.Resources.SYSROLE,action=Permission.Actions.ADD)
 	public String add(HttpServletRequest request, Model model) throws Exception
 	{
 		Tree tree = sysPermissionService.getMenuTree(request);
@@ -93,11 +96,13 @@ public class RoleMgrController extends BaseController
 	/** 保存新增 */
 	@RequestMapping(value = "/save")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSROLE,action=Permission.Actions.ADD)
 	public ResultInfo save(HttpServletRequest request, Model model, SysRole entity) throws Exception
 	{
 		try
 		{
 			int resultTag = sysRoleService.save(entity);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
@@ -119,12 +124,13 @@ public class RoleMgrController extends BaseController
 	/** 删除 */
 	@RequestMapping(value = "/delete/{id}")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSROLE,action=Permission.Actions.DELETE)
 	public ResultInfo delete(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
-
+		SysRole entity=sysRoleService.findById(id);
 		int resultTag = sysRoleService.delete(id);
 		if (resultTag == ResultConstants.DELETE_SUCCEED)
-		{
+		{	savedObjectForLog(entity);
 			return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
 		}
 		else
@@ -135,6 +141,7 @@ public class RoleMgrController extends BaseController
 
 	/** 批量删除 */
 	@RequestMapping(value = "/batchDelete")
+	@Permission(resource=Permission.Resources.SYSROLE,action=Permission.Actions.BATCHDELETE)
 	public String batchDelete(HttpServletRequest request, Model model, Long[] id) throws Exception
 	{
 
@@ -153,12 +160,15 @@ public class RoleMgrController extends BaseController
 
 	/** 进入编辑 */
 	@RequestMapping(value = "/edit/{id}")
+	@Permission(resource=Permission.Resources.SYSROLE,action=Permission.Actions.UPDATE)
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 
 		SysRole entity = sysRoleService.findById(id);
 		String rolePermissIds = sysRolePermissionService.findPermissionIdsByRoleIds(id);
 		Tree tree = sysPermissionService.getMenuTree(request);
+		
+		savedObjectForLog(entity);
 		model.addAttribute("rolePermissIds", rolePermissIds);
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
@@ -169,11 +179,13 @@ public class RoleMgrController extends BaseController
 	/** 修改保存 */
 	@RequestMapping(value = "/update")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSROLE,action=Permission.Actions.UPDATE)
 	public ResultInfo update(HttpServletRequest request, Model model, SysRole entity) throws Exception
 	{
 		try
 		{
 			int resultTag = sysRoleService.update(entity);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);

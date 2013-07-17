@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.njmd.framework.commons.ResultInfo;
 import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.utils.web.SessionUtils;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.SessionNameConstants;
@@ -32,6 +33,7 @@ import com.njmd.zfms.web.service.SysPermissionService;
 @RequestMapping("/login")
 public class LoginController extends BaseController
 {
+	public static String LOGINNAME="loginName";
 	private static Long SYSTEM_ID = 1l;
 
 	@Autowired
@@ -58,6 +60,7 @@ public class LoginController extends BaseController
 	 */
 	@RequestMapping
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.LOGIN,required=false)
 	public ResultInfo login(HttpServletRequest request, String loginName, String loginPwd, String imgCheckCode)
 	{
 		try
@@ -87,36 +90,11 @@ public class LoginController extends BaseController
 	 * @return
 	 */
 	@RequestMapping(value = "/logout")
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.LOGOUT,required=false)
 	public String loginOut(HttpServletRequest request)
 	{
 		SessionUtils.removeObjectAttribute(request, SessionNameConstants.LOGIN_TOKEN);
 		return "login";
 	}
 
-	/**
-	 * <p>
-	 * Description:[用户修改密码]
-	 * </p>
-	 * 
-	 * @param request
-	 * @param loginName
-	 * @param loginPwd
-	 * @param newLoginPwd
-	 * @return
-	 */
-	@RequestMapping(value = "/updatePwd")
-	@ResponseBody
-	public ResultInfo updatePwd(HttpServletRequest request, Model model, String loginPwd, String newLoginPwd) throws Exception
-	{
-		int resultTag = sysLoginService.updPassword(loginPwd, newLoginPwd, request);
-		if (resultTag == ResultConstants.UPDATE_SUCCEED)
-		{
-			model.addAttribute(RequestNameConstants.RESULT_OBJECT, this.getLoginToken().getSysLogin());
-			return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
-		}
-		else
-		{
-			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
-		}
-	}
 }

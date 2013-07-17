@@ -22,6 +22,7 @@ import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.constants.ConfigConstants;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
@@ -50,6 +51,7 @@ public class FileMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.LIST)
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -81,10 +83,12 @@ public class FileMgrController extends BaseController
 
 	/** 文件查看 */
 	@RequestMapping(value = "/fileView/{id}")
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.VIEW)
 	public String fileView(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		FileUploadInfo fileInfo = fileUploadInfoService.findById(id);
 		String filePath = fileInfo.getFileContextPath() + "//" + fileInfo.getFilePlayPath();
+		savedObjectForLog(fileInfo);
 		model.addAttribute("filePath", filePath);
 		if (FileUploadInfo.FILE_TYPE_IMAGE.equals(fileInfo.getFileType()))
 		{
@@ -103,18 +107,22 @@ public class FileMgrController extends BaseController
 
 	/** 文件详情 */
 	@RequestMapping(value = "/detail/{id}")
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.DETAIL)
 	public String detail(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		FileUploadInfo fileInfo = fileUploadInfoService.findById(id);
+		savedObjectForLog(fileInfo);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, fileInfo);
 		return BASE_DIR + "file_detail";
 	}
 
 	/** 文件查看 */
 	@RequestMapping(value = "/download/{id}")
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.DOWNLOAD)
 	public String download(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		FileUploadInfo fileInfo = fileUploadInfoService.findById(id);
+		savedObjectForLog(fileInfo);
 		String filePath = fileInfo.getFileContextPath() + "//" + fileInfo.getFileSavePath();
 		return "forward:/servlet/downloadFile?sourceFilePath=" + URLEncoder.encode(filePath, "utf-8") + "&targetFileName="
 				+ URLEncoder.encode(fileInfo.getFileUploadName(), "utf-8");
@@ -123,11 +131,13 @@ public class FileMgrController extends BaseController
 	/** 保存新增 */
 	@RequestMapping(value = "/save")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.ADD)
 	public ResultInfo save(HttpServletRequest request, Model model, FileUploadInfo fileUploadInfo) throws Exception
 	{
 		try
 		{
 			int resultTag = fileUploadInfoService.save(fileUploadInfo);
+			savedObjectForLog(fileUploadInfo);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
@@ -171,6 +181,7 @@ public class FileMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping(value = "/myFileList")
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.MYFILELIST)
 	public String myFileList(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -200,9 +211,11 @@ public class FileMgrController extends BaseController
 
 	/** 文件修改 */
 	@RequestMapping(value = "/edit/{id}")
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.UPDATE)
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		FileUploadInfo fileInfo = fileUploadInfoService.findById(id);
+		savedObjectForLog(fileInfo);
 		model.addAttribute("fileTypeList", fileTypeService.findAll());
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, fileInfo);
 		return BASE_DIR + "/my_file/file_edit";
@@ -211,11 +224,13 @@ public class FileMgrController extends BaseController
 	/** 修改保存 */
 	@RequestMapping(value = "/update")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.UPDATE)
 	public ResultInfo update(HttpServletRequest request, Model model, FileUploadInfo entity) throws Exception
 	{
 		try
 		{
 			int resultTag = fileUploadInfoService.update(entity);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
@@ -235,6 +250,7 @@ public class FileMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping(value = "/deleteList")
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.DELETE)
 	public String deleteList(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -267,13 +283,15 @@ public class FileMgrController extends BaseController
 	/** 删除 */
 	@RequestMapping(value = "/delete/{id}")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.DELETE)
 	public ResultInfo delete(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		try
 		{
+			FileUploadInfo entity=fileUploadInfoService.findById(id);
 			int resultTag = fileUploadInfoService.delete(id);
 			if (resultTag == ResultConstants.DELETE_SUCCEED)
-			{
+			{	savedObjectForLog(entity);
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
 			}
 			else
@@ -291,6 +309,7 @@ public class FileMgrController extends BaseController
 	/** 批量删除 */
 	@RequestMapping(value = "/batchDelete")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.FILE,action=Permission.Actions.BATCHDELETE)
 	public ResultInfo batchDelete(HttpServletRequest request, Model model, String ids) throws Exception
 	{
 		try

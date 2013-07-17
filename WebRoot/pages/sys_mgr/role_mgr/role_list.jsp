@@ -39,7 +39,7 @@
 									<tr align="center">
 										<th>序号</th>
 										<th class="sortable" onclick="javascript:sort('roleName','asc')">角色名称</th>
-										<th class="sortable" onclick="javascript:sort('status','asc')">角色状态</th>
+									<!-- 	<th class="sortable" onclick="javascript:sort('status','asc')">角色状态</th>  -->
 										<th>操作</th>
 									</tr>
 								</thead>
@@ -49,7 +49,7 @@
 											<tr align="center">
 												<td>${status.count}</td>
 												<td>${role.roleName}</td>
-												<td>
+											<!--	<td>
 													<c:choose>
 														<c:when test="${role.status=='1'}">
 															<font color="#dd6239">有效</font>
@@ -58,7 +58,7 @@
 															<font color="red">无效</font>
 														</c:when>
 													</c:choose>
-												</td>
+												</td>  -->
 												<td>
 													<!--img class="move" src="images/icons/arrow-move.png" alt="Move" title="Move" /-->
 													<a href="${ctx}/roleMgr/edit/${role.roleId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="角色修改"><img src="${ctx }/images/icons/edit.png" alt="修改" /></a>

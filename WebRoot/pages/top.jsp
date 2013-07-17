@@ -46,6 +46,34 @@
 </form>
 <script>
 	var selectedIndex=0;
+	<% //EditBy 孙强伟  at 20130711  ，修正不管单击哪个菜单项之后，current class 总是被附给首页的问题。
+	   //提示，request.getRequestURI和getRequestURL在经过Spring mvc 执行之后其前后值是不一样的。
+	   //因此为了实现功能，我在LogInterceptor.java的拦截器中添加了preHandle的方法，
+	   //对需要经过Spring mvc处理的URL事先取到并放到request中，只有这样才能实现需求。
+	   //对于不需要经过Spring MVC处理的URL请求，就直接使用request.getRequestURL来处理。
+	%>
+	<c:if test="${!empty(requestScope.oldRequestURI)}">
+		<c:if test="${!fn:endsWith(requestScope.oldRequestURI,'index')}">
+			<c:forEach var="level1Menu" items="${sessionScope.loginToken.level1MenuList}" varStatus="status">
+				<c:forEach var="level2Menu" items="${sessionScope.loginToken.level2MenuMap[level1Menu.permissionId]}">
+					<c:if test="${fn:endsWith(requestScope.oldRequestURI,level2Menu.permissionUrl)}">
+						var selectedIndex=${status.count};
+					</c:if>			
+				</c:forEach>
+			</c:forEach>
+		</c:if>
+	</c:if>
+	<c:if test="${empty(requestScope.oldRequestURI)}">
+		<c:if test="${!fn:endsWith(pageContext.request.requestURI,'index')}">
+			<c:forEach var="level1Menu" items="${sessionScope.loginToken.level1MenuList}" varStatus="status">
+				<c:forEach var="level2Menu" items="${sessionScope.loginToken.level2MenuMap[level1Menu.permissionId]}">
+					<c:if test="${fn:endsWith(pageContext.request.requestURI,level2Menu.permissionUrl)}">
+						var selectedIndex=${status.count};
+					</c:if>			
+				</c:forEach>
+			</c:forEach>
+		</c:if>
+	</c:if>
 	function logout()
 	{
 		if (confirm("确认退出系统吗？"))

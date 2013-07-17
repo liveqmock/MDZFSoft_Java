@@ -13,6 +13,7 @@ import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.service.SysLogService;
 
@@ -32,6 +33,7 @@ public class LogMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping
+	@Permission(resource=Permission.Resources.SYSLOG,action=Permission.Actions.LIST)
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式

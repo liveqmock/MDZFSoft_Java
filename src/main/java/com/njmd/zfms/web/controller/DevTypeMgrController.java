@@ -16,6 +16,7 @@ import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.entity.dev.DevTypeInfo;
@@ -40,6 +41,7 @@ public class DevTypeMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping
+	@Permission(resource=Permission.Resources.DEVTYPE,action=Permission.Actions.LIST)
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -56,6 +58,7 @@ public class DevTypeMgrController extends BaseController
 
 	/** 进入新增 */
 	@RequestMapping(value = "/add")
+	@Permission(resource=Permission.Resources.DEVTYPE,action=Permission.Actions.ADD)
 	public String add(HttpServletRequest request, Model model) throws Exception
 	{
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, new DevTypeInfo());
@@ -65,11 +68,13 @@ public class DevTypeMgrController extends BaseController
 	/** 保存新增 */
 	@RequestMapping(value = "/save")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.DEVTYPE,action=Permission.Actions.ADD)
 	public ResultInfo save(HttpServletRequest request, Model model, DevTypeInfo entity) throws Exception
 	{
 		try
 		{
 			int resultTag = devTypeInfoService.save(entity);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
@@ -90,11 +95,13 @@ public class DevTypeMgrController extends BaseController
 	/** 删除 */
 	@RequestMapping(value = "/delete/{id}")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.DEVTYPE,action=Permission.Actions.DELETE)
 	public ResultInfo delete(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
+		DevTypeInfo entity=devTypeInfoService.findById(id);
 		int resultTag = devTypeInfoService.delete(id);
 		if (resultTag == ResultConstants.DELETE_SUCCEED)
-		{
+		{	savedObjectForLog(entity);
 			return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);
 		}
 		else
@@ -105,9 +112,12 @@ public class DevTypeMgrController extends BaseController
 
 	/** 进入编辑 */
 	@RequestMapping(value = "/edit/{id}")
+	@Permission(resource=Permission.Resources.DEVTYPE,action=Permission.Actions.UPDATE)
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		DevTypeInfo entity = devTypeInfoService.findById(id);
+		
+		savedObjectForLog(entity);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 		return EDIT_PAGE;
 	}
@@ -115,11 +125,13 @@ public class DevTypeMgrController extends BaseController
 	/** 修改保存 */
 	@RequestMapping(value = "/update")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.DEVTYPE,action=Permission.Actions.UPDATE)
 	public ResultInfo update(HttpServletRequest request, Model model, DevTypeInfo entity) throws Exception
 	{
 		try
 		{
 			int resultTag = devTypeInfoService.update(entity);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), REDIRECT_PATH);

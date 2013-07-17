@@ -32,6 +32,9 @@ public class SysFtp extends AuditableEntity implements Serializable
 	@Column(name = "FTP_ID")
 	private Long ftpId;
 
+	@Column(name="SERVER_NAME")
+	private String serverName;
+	
 	@Column(name = "FTP_DESC")
 	private String ftpDesc;
 
@@ -144,6 +147,15 @@ public class SysFtp extends AuditableEntity implements Serializable
 
 	public void setSysCorps(List<SysCorp> sysCorps) {
 		this.sysCorps = sysCorps;
+	}
+	
+	public String getServerName() {
+		return serverName;
+	}
+
+
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
 	}
 
 }

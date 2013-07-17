@@ -31,5 +31,21 @@ public class ConfigConstants
 
 	@Property(key = "monitor.urls")
 	public static String MONITOR_URLS;
+	
+	@Property(key="log_ad")
+	public static Integer LOG_ADD;
+	
+	@Property(key="log_delete")
+	public static Integer LOG_DELETE;
+	
+	@Property(key="log_update")
+	public static Integer LOG_UPDATE;
+	
+	@Property(key="log_view")
+	public static Integer LOG_VIEW;
+	
+	@Property(key="log_download")
+	public static Integer LOG_DOWNLOAD;
+	
 
 }

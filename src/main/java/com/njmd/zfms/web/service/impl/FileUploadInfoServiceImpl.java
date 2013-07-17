@@ -127,8 +127,11 @@ public class FileUploadInfoServiceImpl extends BaseCrudServiceImpl<FileUploadInf
 			entity.setPoliceTime(fileUploadInfo.getPoliceTime());
 		if (fileUploadInfo.getFileRecordTime() != null)
 			entity.setFileRecordTime(fileUploadInfo.getFileRecordTime());
+		if (fileUploadInfo.getEditUserInfo()!=null)
+			entity.setEditUserInfo(fileUploadInfo.getEditUserInfo());
 
 		baseDao.update(entity);
+		fileUploadInfo.setFileUploadName(entity.getFileUploadName());
 		sysLogBO.save(SysLog.OPERATE_TYPE_UPDATE, "【文件更新】文件名称：" + entity.getFileUploadName());
 		return ResultConstants.UPDATE_SUCCEED;
 	}

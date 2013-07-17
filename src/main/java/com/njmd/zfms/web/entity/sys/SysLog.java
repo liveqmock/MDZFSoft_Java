@@ -24,6 +24,8 @@ public class SysLog implements Serializable
 	 */
 	public static final Integer OPERATE_TYPE_LOGIN = 0;
 
+	public static final Integer OPERATE_TYPE_LOGOUT = 8;
+	
 	/**
 	 * 操作类型-增加
 	 */
@@ -40,9 +42,20 @@ public class SysLog implements Serializable
 	public static final Integer OPERATE_TYPE_UPDATE = 3;
 
 	/**
+	 * 操作类型-查询
+	 */
+	public static final Integer OPERATE_TYPE_VIEW   = 4;
+	
+	/**
 	 * 操作类型-审核
 	 */
-	public static final Integer OPERATE_TYPE_AUDIT = 4;
+	public static final Integer OPERATE_TYPE_AUDIT = 6;
+	
+	/**
+	 * 操作类型-下载
+	 */
+	public static final Integer OPERATE_TYPE_DOWNLOAD=7;
+	
 	@Id
 //	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(generator="SYSLOG_GENERATOR",strategy=GenerationType.SEQUENCE)
@@ -80,6 +93,15 @@ public class SysLog implements Serializable
 	@Column(name = "SYSTEM_ID")
 	private Integer systemId;
 
+	@Column(name = "OPER_RESOURCE")
+	private String operResource;
+	
+	@Column(name="OPER_ACTION")
+	private String operAction;
+	
+	@Column(name = "OPER_RECORD_ID")
+	private String operRecordId;
+	
 	public SysLog()
 	{
 	}
@@ -192,6 +214,30 @@ public class SysLog implements Serializable
 	public void setOperUserCode(String operUserCode)
 	{
 		this.operUserCode = operUserCode;
+	}
+
+	public String getOperRecordId() {
+		return operRecordId;
+	}
+
+	public void setOperRecordId(String operRecordId) {
+		this.operRecordId = operRecordId;
+	}
+
+	public String getOperResource() {
+		return operResource;
+	}
+
+	public void setOperResource(String operResource) {
+		this.operResource = operResource;
+	}
+
+	public String getOperAction() {
+		return operAction;
+	}
+
+	public void setOperAction(String operAction) {
+		this.operAction = operAction;
 	}
 
 }

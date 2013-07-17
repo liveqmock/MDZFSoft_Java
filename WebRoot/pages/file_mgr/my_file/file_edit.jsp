@@ -6,6 +6,8 @@
 <%@ include file="/common/header.jsp"%>
 <%@ include file="/plugins/calendar.jsp"%>
 <%@ include file="/plugins/jquery-validation.jsp"%>
+<%@ include file="/plugins/jquery-nyroModal.jsp" %>
+<%@ include file="/plugins/jquery-powerFloat.jsp" %>
 </head>
 <body>
 <form:form id="editForm" name="editForm" method="POST" action="${ctx}/fileMgr/update" modelAttribute="resultObject">
@@ -32,7 +34,12 @@
 			</tr>
 			<tr>
 				<td class="title" >采集人</td>
-				<td>${resultObject.editUserInfo.userName}</td>
+				<td>
+				<input type="text" class="input_79x19"  
+				name="fileEditUserName" id="fileEditUserName" value="${resultObject.editUserInfo.userName}" 
+				style="cursor: pointer;"  onclick="showUserSelectPage('采集人选择','fileEditId','fileEditUserName')"/>
+				<input type="hidden" name="editUserInfo.loginId" id="fileEditId" value="${resultObject.editUserInfo.loginId }";
+				</td>
 				<td class="title" >创建时间</td>
 				<td>
 					<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedFileCreateTime" parseLocale="en_US">
@@ -104,6 +111,8 @@
 	</div>
 </div>
 </form:form>
+<a id="modalWindowAction" class="nyroModal" href="#" target="_blank" style="display: none" title="采集人选择">采集人选择</a>
+
 <script>
 	Calendar.setup(
 	{
@@ -132,6 +141,16 @@
 			 dataType:  'json',
 		     success:   onSuccess
 		});
+		
+		$('.nyroModal').nyroModal({
+			callbacks:{
+			close:function(){
+				if(document.getElementById('audioPlayerObj')!=null)
+				{
+					audioPlayerObj.controls.stop();
+				}
+			}
+		}});
 	});
 
 	function onSuccess(data) {
@@ -144,6 +163,14 @@
 	    {
 	    	alert(data.promptInfo);
 	    }
+	}
+	
+	function showUserSelectPage(title,userId,userName)
+	{
+		var url = '${ctx}/userMgr/userSelect?userId='+userId+'&userName='+userName+'&r='+Math.random();
+	  	$('#modalWindowAction').attr("href",url);
+	  	$('#modalWindowAction').attr("title",title);
+	  	$('#modalWindowAction').click();
 	}
 </script>
 </body>

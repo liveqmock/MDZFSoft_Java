@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.njmd.framework.utils.DateTimeUtil;
 import com.njmd.framework.utils.web.SessionUtils;
 import com.njmd.framework.utils.web.WebContextHolder;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.commons.LoginToken;
+import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
 import com.njmd.zfms.web.constants.SessionNameConstants;
 import com.njmd.zfms.web.entity.file.FileUploadInfo;
@@ -40,6 +42,7 @@ public class ApiController {
 	private static List<String> METHODS=new ArrayList<String>(){{
 		add("getFtpPath".toLowerCase());
 		add("uploadFile".toLowerCase());
+		add("checkUser".toLowerCase());
 	}};
 	
 	@Autowired
@@ -64,6 +67,23 @@ public class ApiController {
 				!(METHODS.contains(method.trim().toLowerCase()))){
 			response.getWriter().print("1;您要进行的操作本服务器目前没有支持，请检查!");
 			return null;
+		}
+		
+		method=method.trim().toLowerCase();
+		if(method.equals(METHODS.get(2))){
+			if(null==userCode || userCode.trim().length()==0){
+				response.getWriter().print("您请求的参数中没有包含警员编号，请检查!");
+				return null;
+			}
+			
+			SysLogin userSysLogin= sysLoginService.findByUserCode(userCode.trim());
+			if(null==userSysLogin){
+				response.getWriter().print("1;对不起，警员编号不存在!");
+				return null;
+			}
+			
+			 response.getWriter().print("0;"+(userSysLogin.getSysCorp()==null?"":userSysLogin.getSysCorp().getCorpName()+" ")+userSysLogin.getUserName()+" "+userSysLogin.getUserCode());
+			 return null;
 		}
 		
 		if(null==userCode || userCode.trim().length()==0 || null==editCode || editCode.trim().length()==0){
@@ -93,7 +113,6 @@ public class ApiController {
 		// 保存系统日志
 		sysLogService.save(SysLog.OPERATE_TYPE_LOGIN, "【用户登录】用户名：" + userSysLogin.getLoginName());
 		
-		method=method.trim().toLowerCase();
 		if(method.equals(METHODS.get(0))){
 			 SimpleDateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
 			 String path=userSysLogin.getSysCorp().getCorpId()+"/"+userSysLogin.getLoginId()+"/"+dateformat.format(new Date())+"/";
@@ -111,6 +130,7 @@ public class ApiController {
 				fileUploadInfo.setFileUploadName(uploadName);
 				fileUploadInfo.setFileCreateTime(createTime);
 				fileUploadInfo.setFileTime(fileTime);
+				fileUploadInfo.setEditUserInfo(editSysLogin);
 				try {
 					fileUploadInfo.setFileSize(Long.valueOf(fileSize));
 				} catch (Exception e) {

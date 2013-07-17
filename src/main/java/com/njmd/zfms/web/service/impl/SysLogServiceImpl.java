@@ -14,6 +14,7 @@ import com.njmd.framework.service.BaseCrudServiceImpl;
 import com.njmd.framework.utils.DateTimeUtil;
 import com.njmd.framework.utils.web.RequestUtils;
 import com.njmd.framework.utils.web.WebContextHolder;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.commons.LoginToken;
 import com.njmd.zfms.web.entity.sys.SysLog;
 import com.njmd.zfms.web.service.SysLogService;
@@ -58,9 +59,34 @@ public class SysLogServiceImpl extends BaseCrudServiceImpl<SysLog, Long> impleme
 			sysLog.setOperCorpName(loginToken.getSysLogin().getSysCorp().getCorpName());
 		}
 		sysLog.setSystemId(loginToken.getSysLogin().getSystemId());
-		baseDao.save(sysLog);
+//		baseDao.save(sysLog);
 	}
 
+	@Override
+	public void save(String operAction, String operResource, String operDesc,
+			String operRecordId) {
+		LoginToken loginToken = WebContextHolder.getCurrLoginToken();
+		HttpServletRequest request = WebContextHolder.getRequest();
+		SysLog sysLog = new SysLog();
+		sysLog.setOperDesc(operDesc);
+		sysLog.setOperIp(RequestUtils.getIpAddr(request));
+		sysLog.setOperTime(DateTimeUtil.getChar14());
+		sysLog.setOperType(Permission.Actions.valueOf(operAction).ordinal());
+		sysLog.setOperUserId(loginToken.getSysLogin().getLoginId());
+		sysLog.setOperUserName(loginToken.getSysLogin().getUserName());
+		sysLog.setOperUserCode(loginToken.getSysLogin().getUserCode());
+		if (loginToken.getSysLogin().getSysCorp() != null)
+		{
+			sysLog.setOperCorpId(loginToken.getSysLogin().getSysCorp().getCorpId());
+			sysLog.setOperCorpName(loginToken.getSysLogin().getSysCorp().getCorpName());
+		}
+		sysLog.setSystemId(loginToken.getSysLogin().getSystemId());
+		sysLog.setOperResource(operResource);
+		sysLog.setOperAction(operAction);
+		sysLog.setOperRecordId(operRecordId);
+		baseDao.save(sysLog);
+	}
+	
 	@Autowired
 	@Qualifier("sysLogDAO")
 	@Override
@@ -69,4 +95,6 @@ public class SysLogServiceImpl extends BaseCrudServiceImpl<SysLog, Long> impleme
 		this.baseDao = baseDao;
 
 	}
+
+
 }

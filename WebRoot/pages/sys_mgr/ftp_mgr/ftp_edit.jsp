@@ -20,7 +20,15 @@
 				</tr>
 				<tr>
 					<td class="title" width="100">
-						<font color="red">*&nbsp;</font>FTP地址
+						<font color="red">*&nbsp;</font>服务器名称
+					</td>
+					<td>
+						<form:input path="serverName" cssClass="form_input {required:true}" size="20" />
+					</td>
+				</tr>
+				<tr>
+					<td class="title" width="100">
+						<font color="red">*&nbsp;</font>服务器地址
 					</td>
 					<td>
 						<form:input path="ftpIp" cssClass="form_input {required:true,ipv4:true}" size="20" />
@@ -28,7 +36,7 @@
 				</tr>
 				<tr>
 					<td class="title" width="100">
-						<font color="red">*&nbsp;</font>FTP端口
+						<font color="red">*&nbsp;</font>服务器端口
 					</td>
 					<td>
 						<form:input path="ftpPort" cssClass="form_input {required:true,maxlength:20}" size="20" />
@@ -36,7 +44,7 @@
 				</tr>
 				<tr>
 					<td class="title" width="100">
-						<font color="red">*&nbsp;</font>FTP用户名
+						<font color="red">*&nbsp;</font>登陆用户名
 					</td>
 					<td>
 						<form:input path="ftpUser" cssClass="form_input {required:true,maxlength:20}" size="20"/>
@@ -44,7 +52,7 @@
 				</tr>
 				<tr>
 					<td class="title" width="100">
-						<font color="red">*&nbsp;</font>FTP密码
+						<font color="red">*&nbsp;</font>登陆密码
 					</td>
 					<td>
 					<input type="password" size="20" value="${resultObject.ftpPwd }" class="form_input {required:true,maxlength:20}" name="ftpPwd" id="ftpPwd">
@@ -52,7 +60,7 @@
 				</tr>
 				<tr>
 					<td class="title" width="100">
-						<font color="red">*&nbsp;</font>文件服务地址
+						<font color="red">*&nbsp;</font>路径url
 					</td>
 					<td>
 						<form:input path="fileRootUrl" cssClass="form_input {required:true,maxlength:100}" size="60" maxlength="100"/>

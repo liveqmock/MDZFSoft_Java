@@ -45,12 +45,12 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP服务器
+								<font color="red">*&nbsp;</font>文件服务器
 							</td>
 							<td>
-								<input type="hidden" value="" name="sysFtp.ftpId" id="ftpId">
-								<input type="text" size="20" value="" style="cursor: pointer;" onclick="showFtpSelectPage('FTP服务器选择','ftpId','ftpIp','ftpDesc')" class="form_input {required:true}" name="ftpIp" id="ftpIp">
-								<br/><span id='ftpDesc' ></span>
+								<input type="hidden" name="sysFtp.ftpId" id="ftpId" value="${parent.sysFtp.ftpId}">
+								<input type="text" size="20" value="${parent.sysFtp.serverName}" style="cursor: pointer;" onclick="showFtpSelectPage('FTP服务器选择','ftpId','ftpIp','ftpDesc')" class="form_input {required:true}" name="ftpIp" id="ftpIp">
+								<br/><span id='ftpDesc' >${parent.sysFtp.ftpDesc}</span>
 							</td>
 						</tr>
 						<tr>

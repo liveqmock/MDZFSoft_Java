@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import com.njmd.zfms.web.commons.LoginToken;
+import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.SessionNameConstants;
 
 public class WebContextHolder
@@ -40,4 +41,20 @@ public class WebContextHolder
 			return null;
 		}
 	}
+
+	public static void savedObjectForLog(Object entity) {
+		HttpServletRequest request = requestHolder.get();
+		if(null!=request){
+			request.setAttribute(RequestNameConstants.SAVED_OBJECT, entity);
+		}
+	}
+	
+	public static Object getSavedObject(){
+		HttpServletRequest request = requestHolder.get();
+		if(null!=request){
+			return request.getAttribute(RequestNameConstants.SAVED_OBJECT);
+		}else
+			return null;
+	}
+	
 }

@@ -16,6 +16,7 @@ import com.njmd.framework.commons.Tree;
 import com.njmd.framework.controller.BaseController;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.utils.DateTimeUtil;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.entity.file.FileTypeInfo;
 import com.njmd.zfms.web.entity.sys.SysCorp;
 import com.njmd.zfms.web.entity.sys.SysLogin;
@@ -50,6 +51,7 @@ public class ReportStatisticsController  extends BaseController{
 	
 	/** 主页面 */
 	@RequestMapping 
+	@Permission(resource=Permission.Resources.REPORTSTATISTICS,action=Permission.Actions.CORPSTATISTICS)
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		Tree tree = sysCorpService.getCorpTree(request, false);
@@ -59,6 +61,7 @@ public class ReportStatisticsController  extends BaseController{
 	}
 	/** 部门统计 */
 	@RequestMapping(value = "/corpStatistics")
+	@Permission(resource=Permission.Resources.REPORTSTATISTICS,action=Permission.Actions.CORPSTATISTICS)
 	public String corpStatistics(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		Tree tree = sysCorpService.getCorpTree(request, false);
@@ -68,6 +71,7 @@ public class ReportStatisticsController  extends BaseController{
 	}
 	/** 警员统计 */
 	@RequestMapping(value = "/userStatistics")
+	@Permission(resource=Permission.Resources.REPORTSTATISTICS,action=Permission.Actions.USERSTATISTICS)
 	public String userStatistics(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		Tree tree = sysCorpService.getCorpTree(request, false);
@@ -78,6 +82,7 @@ public class ReportStatisticsController  extends BaseController{
 	
 	/** 机构报表 */
 	@RequestMapping(value = "/corpChart")
+	@Permission(resource=Permission.Resources.REPORTSTATISTICS,action=Permission.Actions.CORPSTATISTICS)
 	public String corpChart(HttpServletRequest request, Model model) throws Exception
 	{
 		//横坐标
@@ -194,6 +199,7 @@ public class ReportStatisticsController  extends BaseController{
 
 	/** 个人报表 */
 	@RequestMapping(value = "/userChart")
+	@Permission(resource=Permission.Resources.REPORTSTATISTICS,action=Permission.Actions.USERSTATISTICS)
 	public String userChart(HttpServletRequest request, Model model) throws Exception
 	{
 		//横坐标

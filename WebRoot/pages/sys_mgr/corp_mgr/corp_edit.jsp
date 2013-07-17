@@ -46,11 +46,11 @@
 						</tr>
 						<tr>
 							<td class="title" width="100">
-								<font color="red">*&nbsp;</font>FTP服务器
+								<font color="red">*&nbsp;</font>文件服务器
 							</td>
 							<td>
 								<input type="hidden" value="${resultObject.sysFtp.ftpId }" name="sysFtp.ftpId" id="ftpId">
-								<input type="text" size="20" value="${resultObject.sysFtp.ftpIp }" style="cursor: pointer;" onclick="showFtpSelectPage('FTP服务器选择','ftpId','ftpIp','ftpDesc')" class="form_input {required:true}" name="ftpIp" id="ftpIp">
+								<input type="text" size="20" value="${resultObject.sysFtp.serverName }" style="cursor: pointer;" onclick="showFtpSelectPage('FTP服务器选择','ftpId','ftpIp','ftpDesc')" class="form_input {required:true}" name="ftpIp" id="ftpIp">
 								<br/><span id='ftpDesc' >${resultObject.sysFtp.ftpDesc }</span>
 							</td>
 						</tr>

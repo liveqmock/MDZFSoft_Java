@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.njmd.framework.utils.web.WebContextHolder;
 import com.njmd.zfms.web.commons.LoginToken;
+import com.njmd.zfms.web.constants.RequestNameConstants;
 
 /**
  * Controller基类
@@ -19,5 +20,9 @@ public class BaseController
 	protected LoginToken getLoginToken()
 	{
 		return WebContextHolder.getCurrLoginToken();
+	}
+	
+	protected void savedObjectForLog(Object entity){
+		WebContextHolder.savedObjectForLog(entity);
 	}
 }

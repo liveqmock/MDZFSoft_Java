@@ -16,37 +16,37 @@
 					<font color="red">*&nbsp;</font>用户帐号
 				</td>
 				<td>
-					<form:input path="loginName" cssClass="form_input" size="20" />
+				<!-- 	<form:input path="loginName" cssClass="form_input" size="20" />  -->
+				${resultObject.loginName }
 				</td>
 			</tr>
 			<tr>
 				<td class="title" width="100">
-				<!-- 	<font color="red">*&nbsp;</font>用户姓名  -->
+				 	<font color="red">*&nbsp;</font>用户姓名  
 				</td>
 				<td>
 				<!-- 	<form:input path="userName" cssClass="form_input" size="20" />  -->
-					${resultObject.loginName }
+					${resultObject.userName }
 				</td>
 			</tr>
 			<tr>
 				<td class="title" width="100">身份证号 </td>
 				<td>
-					<form:input path="idCard" cssClass="form_input" size="25" maxlength="18" />
+				<!-- 	<form:input path="idCard" cssClass="form_input" size="25" maxlength="18" />  -->
+				${resultObject.idCard }
 				</td>
 			</tr>
 			<tr>
 				<td class="title" width="100">警员编号</td>
 				<td>
-					<form:input path="userCode" cssClass="form_input" size="20" maxlength="6" />
+				<!--  	<form:input path="userCode" cssClass="form_input" size="20" maxlength="6" />  -->
+				${resultObject.userCode }
 				</td>
 			</tr>
 			<tr>
 				<td class="title" width="100">性别</td>
 				<td>
-					<form:select path="sex" class="form_input">
-						<form:option value="男">男</form:option>
-						<form:option value="女">女</form:option>
-					</form:select>
+					${resultObject.sex }
 				</td>
 			</tr>
 			<tr>
@@ -54,29 +54,23 @@
 					<font color="red">*&nbsp;</font>所属部门
 				</td>
 				<td>
-					<form:select path="sysCorp.corpId" cssClass="form_input {required:true}" cssStyle="width: 150px;">
-						<form:option  value="">--请选择--</form:option>
-						<c:if test="${not empty corpList}">
-							<c:forEach var="corp" items="${corpList}" varStatus="status">
-								<form:option value="${corp.corpId}">${corp.corpName}</form:option>
-							</c:forEach>
-						</c:if>
-					</form:select>
+					<c:if test="${not empty corpList}">
+						<c:forEach var="corp" items="${corpList}" varStatus="status">
+							<c:if test="${resultObject.sysCorp.corpId eq corp.corpId }">${corp.corpName}</c:if>
+						</c:forEach>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
 				<td class="title" width="100">
 					<font color="red">*&nbsp;</font>用户角色
 				</td>
-				<td>
-					<select name="roleIds" id="roleIds" class="form_input {required:true}" style="width: 150px;">
-						<option value="">--请选择--</option>
-						<c:if test="${not empty roleList}">
-							<c:forEach var="role" items="${roleList}" varStatus="status">
-								<option value="${role.roleId}">${role.roleName}</option>
-							</c:forEach>
-						</c:if>
-					</select>
+				<td>	
+					<c:if test="${fn:length(resultObject.sysLoginRoles) gt 0 }">
+						<c:forEach var="role" items="${resultObject.sysLoginRoles}">
+							${role.sysRole.roleName }
+					    </c:forEach>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
@@ -84,10 +78,8 @@
 					<font color="red">*&nbsp;</font>状态
 				</td>
 				<td>
-					<form:select path="status" cssClass="form_input">
-						<form:option value="1">有效</form:option>
-						<form:option  value="0">无效</form:option>
-					</form:select>
+					<c:if test="${resultObject.status eq '1' }">有效</c:if>
+					<c:if test="${resultObject.status eq '0' }">无效</c:if>
 				</td>
 			</tr>
 			<tr>

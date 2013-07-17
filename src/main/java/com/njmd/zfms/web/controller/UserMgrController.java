@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.njmd.framework.dao.HibernateWebUtils;
 import com.njmd.framework.dao.Page;
 import com.njmd.framework.dao.PropertyFilter;
 import com.njmd.framework.utils.web.RequestUtils;
+import com.njmd.zfms.annotation.Permission;
 import com.njmd.zfms.web.constants.CommonConstants;
 import com.njmd.zfms.web.constants.RequestNameConstants;
 import com.njmd.zfms.web.constants.ResultConstants;
@@ -59,6 +61,7 @@ public class UserMgrController extends BaseController
 
 	/** 列表查询 */
 	@RequestMapping
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.LIST)
 	public String index(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -92,6 +95,7 @@ public class UserMgrController extends BaseController
 
 	/** 查看 */
 	@RequestMapping(value = "/view/{id}")
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.VIEW)
 	public String view(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		SysLogin entity = sysLoginService.findById(id);
@@ -99,6 +103,7 @@ public class UserMgrController extends BaseController
 		model.addAttribute("roleList", roleList);
 		List<SysCorp> corpList = sysCorpService.findAll();
 
+		savedObjectForLog(entity);
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("corpList", corpList);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
@@ -108,6 +113,7 @@ public class UserMgrController extends BaseController
 
 	/** 进入新增 */
 	@RequestMapping(value = "/add")
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.ADD)
 	public String add(HttpServletRequest request, Model model) throws Exception
 	{
 		List<SysRole> roleList = sysRoleService.findAll();
@@ -125,6 +131,7 @@ public class UserMgrController extends BaseController
 	/** 保存新增 */
 	@RequestMapping(value = "/save")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.ADD)
 	public ResultInfo save(HttpServletRequest request, Model model, SysLogin entity, Long[] roleIds, Long deptId) throws Exception
 	{
 		try
@@ -132,6 +139,7 @@ public class UserMgrController extends BaseController
 			entity.setSystemId(this.getLoginToken().getSysLogin().getSystemId());
 			entity.setLoginPwd(CommonConstants.DEFAULT_PWD);
 			int resultTag = sysLoginService.save(entity, roleIds, deptId);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.SAVE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
@@ -160,6 +168,7 @@ public class UserMgrController extends BaseController
 
 	/** 进入编辑 */
 	@RequestMapping(value = "/edit/{id}")
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.UPDATE)
 	public String edit(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		SysLogin entity = sysLoginService.findById(id);
@@ -170,6 +179,7 @@ public class UserMgrController extends BaseController
 		model.addAttribute("corpList", corpList);
 		Tree tree = sysCorpService.getCorpTree(request, false);
 
+		savedObjectForLog(entity);
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.RESULT_OBJECT, entity);
 		return BASE_DIR + "user_edit";
@@ -179,11 +189,13 @@ public class UserMgrController extends BaseController
 	/** 修改保存 */
 	@RequestMapping(value = "/update")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.UPDATE)
 	public ResultInfo update(HttpServletRequest request, Model model, SysLogin entity, Long[] roleIds, String newLoginPwd) throws Exception
 	{
 		try
 		{
 			int resultTag = sysLoginService.update(entity, roleIds, newLoginPwd);
+			savedObjectForLog(entity);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
 			{
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
@@ -214,12 +226,13 @@ public class UserMgrController extends BaseController
 
 	/** 删除 */
 	@RequestMapping(value = "/delete/{id}")
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.DELETE)
 	public String delete(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
-
+		SysLogin entity=sysLoginService.findById(id);
 		int resultTag = sysLoginService.delete(id);
 		if (resultTag == ResultConstants.DELETE_SUCCEED)
-		{
+		{	savedObjectForLog(entity);
 			ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), request, REDIRECT_PATH);
 		}
 		else
@@ -232,6 +245,7 @@ public class UserMgrController extends BaseController
 
 	/** 批量删除 */
 	@RequestMapping(value = "/batchDelete")
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.BATCHDELETE)
 	public String batchDelete(HttpServletRequest request, Model model, Long[] id) throws Exception
 	{
 
@@ -251,13 +265,14 @@ public class UserMgrController extends BaseController
 	/** 密码重置 */
 	@RequestMapping(value = "/resetPwd/{id}")
 	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.RESETPWD)
 	public ResultInfo resetPwd(HttpServletRequest request, Model model, @PathVariable("id") Long id) throws Exception
 	{
 		try
 		{
 			int resultTag = sysLoginService.resetPwd(id);
 			if (resultTag == ResultConstants.UPDATE_SUCCEED)
-			{
+			{	savedObjectForLog(sysLoginService.findById(id));
 				return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, "用户密码"), null);
 			}
 			else
@@ -275,6 +290,7 @@ public class UserMgrController extends BaseController
 
 	/** 弹出用户选择列表 */
 	@RequestMapping(value = "/userSelect")
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.SELECT)
 	public String userSelect(HttpServletRequest request, Page page, Model model) throws Exception
 	{
 		// 设置默认排序方式
@@ -312,5 +328,34 @@ public class UserMgrController extends BaseController
 		model.addAttribute("tree", tree);
 		model.addAttribute(RequestNameConstants.PAGE_OBJECT, pageResult);
 		return BASE_DIR + "user_select";
+	}
+	
+	/**
+	 * <p>
+	 * Description:[用户修改密码]
+	 * </p>
+	 * 
+	 * @param request
+	 * @param loginName
+	 * @param loginPwd
+	 * @param newLoginPwd
+	 * @return
+	 */
+	@RequestMapping(value = "/updatePwd")
+	@ResponseBody
+	@Permission(resource=Permission.Resources.SYSLOGIN,action=Permission.Actions.UPDATEPWD)
+	public ResultInfo updatePwd(HttpServletRequest request, Model model, String loginPwd, String newLoginPwd) throws Exception
+	{
+		int resultTag = sysLoginService.updPassword(loginPwd, newLoginPwd, request);
+		if (resultTag == ResultConstants.UPDATE_SUCCEED)
+		{
+			model.addAttribute(RequestNameConstants.RESULT_OBJECT, this.getLoginToken().getSysLogin());
+			savedObjectForLog(this.getLoginToken().getSysLogin());
+			return ResultInfo.saveMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS), null);
+		}
+		else
+		{
+			return ResultInfo.saveErrorMessage(ResultConstants.getResultInfo(resultTag, INFORMATION_PARAMAS));
+		}
 	}
 }

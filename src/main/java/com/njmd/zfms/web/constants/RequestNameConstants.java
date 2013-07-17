@@ -47,5 +47,10 @@ public class RequestNameConstants
 	 * 分页对象
 	 */
 	public static final String PAGE_OBJECT = "page";
+	
+	/**
+	 * 保存记录时，保存的ID。
+	 */
+	public static final String SAVED_OBJECT="savedObject";
 
 }

@@ -20,6 +20,8 @@
 	<mvc:view-controller path="/" view-name="forward:/index" />
 	<mvc:default-servlet-handler />
 
+ 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>  
+
 	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
@@ -39,4 +41,10 @@
 			</props>
 		</property>
 	</bean>
+	
+	<mvc:interceptors>  
+       <bean class="com.njmd.zfms.web.listener.LogInterceptor" />
+   </mvc:interceptors>  
+   
+   
 </beans>

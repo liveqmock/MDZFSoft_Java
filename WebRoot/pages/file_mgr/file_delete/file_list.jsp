@@ -58,7 +58,7 @@
 								<div class="mt_10">
 									<label>接警编号:</label>
 									<input class="input_79x19" id="policeCode" type="text" name="filter_EQ_policeCode" value="${param['filter_EQ_policeCode']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
-									<label>简要警情:</label>&nbsp;
+									<label>简要警情:</label>
 									<input class="input_79x19" id="policeDesc" type="text" name="filter_LIKE_policeDesc" value="${param['filter_LIKE_policeDesc']}"/>&nbsp;&nbsp;&nbsp;&nbsp;
 									<label>接警时间:</label>
 									<input name="_startPoliceTime" id="_startPoliceTime" type="text" class="input_79x19" value="${param['_startPoliceTime']}" style="width:130px;cursor: pointer;"  /> 
@@ -143,13 +143,13 @@
 													<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedFileRecordTime" parseLocale="en_US">
 														${file.fileRecordTime}
 													</fmt:parseDate>
-													<fmt:formatDate value='${parsedFileRecordTime}' pattern="yy-MM-dd HH:mm"/>
+													<fmt:formatDate value='${parsedFileRecordTime}' pattern="yyyy-MM-dd HH:mm"/>
 												</td>
 												<td>
 													<fmt:parseDate pattern="yyyyMMddHHmmss" var="parsedFileUploadTime" parseLocale="en_US">
 														${file.fileUploadTime}
 													</fmt:parseDate>
-													<fmt:formatDate value='${parsedFileUploadTime}' pattern="yy-MM-dd HH:mm"/>
+													<fmt:formatDate value='${parsedFileUploadTime}' pattern="yyyy-MM-dd HH:mm"/>
 												</td>
 												<td>
 													${file.uploadUserInfo.userName }
@@ -159,6 +159,7 @@
 												</td>
 												<td>
 													<a href="${ctx}/fileMgr/detail/${file.fileId}?r=<%=Math.random() %>" title="详情" class="nyroModal"><img src="${ctx }/images/icons/information-octagon.png" alt="详情" /></a>
+													<a href="${ctx}/fileMgr/edit/${file.fileId}?r=<%=Math.random() %>" class="nyroModal" target="_blank" title="修改"><img src="${ctx }/images/icons/edit.png" alt="修改" /></a>
 													<a href="javascript:fileDelete('${file.fileId}')" title="删除"><img src="${ctx }/images/icons/cross.png" alt="删除" /></a>
 												</td>
 											</tr>
@@ -327,7 +328,7 @@
 				if(data.messageType=='1')
 			    {
 			    	alert(data.promptInfo);
-			    	location.href = location.href;
+			    	jumpPage(document.getElementById('pageNum').value);
 			    }
 			    else
 			    {
@@ -349,7 +350,8 @@
 					if(data.messageType=='1')
 				    {
 				    	alert(data.promptInfo);
-				    	location.href = location.href;
+				    	//location.href = location.href;
+				    	jumpPage(document.getElementById('pageNum').value);
 				    }
 				    else
 				    {

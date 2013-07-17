@@ -25,5 +25,7 @@ public interface SysLogService extends BaseCrudService<SysLog, Long>
 	 * @throws Exception
 	 */
 	void save(Integer operType, String operDesc);
+	
+	void save(String operResource,String operAction, String operDesc, String operRecordId);
 
 }
