@@ -413,7 +413,7 @@ comment on column NOTICE_READ_LOG.READ_TIME is
 
 create table SYS_FTP  (
    FTP_ID               NUMBER(10)                      not null,
-   SEVER_NAME		    VARCHAR2(20),
+   SERVER_NAME		    VARCHAR2(20),
    FTP_IP               VARCHAR2(100),
    FTP_PORT             VARCHAR2(20),
    FTP_USER             VARCHAR2(20),
