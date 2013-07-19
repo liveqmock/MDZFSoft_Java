@@ -57,6 +57,8 @@ drop table SYS_ROLE_PERMISSION cascade constraints;
 
 drop table SYS_SERVER_INFO cascade constraints;
 
+drop table SYS_CONFIG cascade constraints;
+
 drop sequence DEVFACTURERINFO_SEQUENCE;
 
 drop sequence DEVINFO_SEQUENCE;
@@ -799,6 +801,28 @@ comment on column SYS_ROLE_PERMISSION.ROLE_ID is
 'ID，主键';
 
 -------------------------------------------------------------
+create table SYS_CONFIG  (
+   ID                   NUMBER(10)                      not null,
+   PARENT_ID            NUMBER(10),
+   CODE                 VARCHAR(20),
+   VAL                  VARCHAR(500),
+   constraint PK_SYS_CONFIG primary key (ID)
+);
+
+comment on column SYS_CONFIG.ID is
+'ID，主键';
+
+comment on column SYS_CONFIG.PARENT_ID is
+'父类编号';
+
+comment on column SYS_CONFIG.CODE is
+'属性编码';
+
+comment on column SYS_CONFIG.VAL is
+'属性值';
+
+
+-------------------------------------------------------------
 create table SYS_LOG  (
    LOG_ID               NUMBER(10)                      not null,
    OPER_USER_ID         NUMBER(10)                      not null,
@@ -938,93 +962,141 @@ nocycle
 noorder;
 
 create sequence DEVFACTURERINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence DEVINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence DEVTYPEINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence FILETYPEINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence FILEUPLOADINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence NOTICEINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence NOTICEREADINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence SYSCORP_SEQUENCE
-start with 1
+increment by 1
+start with 0
  maxvalue 9999999999
- nominvalue;
+ minvalue 0
+ nocycle
+ cache 20;
 
 create sequence SYSLOG_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ minvalue 0
+ nocycle
+ cache 20;
 
 create sequence SYSLOGIN_SEQUENCE
-start with 1
+increment by 1
+start with 0
  maxvalue 9999999999
- nominvalue;
+ minvalue 0
+ nocycle
+ cache 20;
 
 create sequence SYSLOGINROLE_SEQUENCE
-start with 1
+increment by 1
+start with 0
  maxvalue 9999999999
- nominvalue;
+ minvalue 0
+ nocycle
+ cache 20;
 
 create sequence SYSPERMISSION_SEQUENCE
-start with 1
+increment by 1
+start with 0
  maxvalue 9999999999
- nominvalue;
+ minvalue 0
+ nocycle
+ cache 20;
 
 create sequence SYSROLE_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence SYSROLEPERMISSION_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence SYSSERVERINFO_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 create sequence SYSFTP_SEQUENCE
+increment by 1
 start with 1
  maxvalue 9999999999
- nominvalue;
+ nominvalue
+ nocycle
+ cache 20;
 
 ------------------------------------------------------------------
 insert into sys_corp(CORP_ID,CORP_NAME,CORP_TYPE,PARENT_CORP_ID,STATUS,TREE_CODE)
-values( '1','XXX公安局','0','0','1',',1,');
+values( SYSCORP_SEQUENCE.NEXTVAL,'XXX公安局','0','0','1',',1,');
 commit;
 
 insert into sys_login(LOGIN_ID,LOGIN_NAME,LOGIN_PWD,USER_NAME,USER_TYPE,CORP_ID,SYSTEM_ID,
 		USER_CODE,STATUS)
-values( '1' ,'admin','96e79218965eb72c92a549dd5a330112','超级管理员','0','1','1','000000','1');
+values( SYSLOGIN_SEQUENCE.NEXTVAL ,'admin','96e79218965eb72c92a549dd5a330112','超级管理员','0','1','1','000000','1');
 commit;
 
 insert into SYS_PERMISSION(PERMISSION_ID,PERMISSION_NAME,PERMISSION_TYPE,PERMISSION_URL,PERMISSION_SORT,PARENT_PERMISSION_ID,SYSTEM_ID,STATUS,TREE_CODE)
@@ -1116,8 +1188,32 @@ values( SYSPERMISSION_SEQUENCE.NEXTVAL ,'文件服务器管理','1','/ftpMgr','1
 commit;
 
 insert into FILE_TYPE_INFO(TYPE_ID,TYPE_NAME,VALID_TIME)
-values( "1" ,'未分类','30');
+values( '0' ,'未分类','30');
 commit;
 
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+values('1','0','license','');
 
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+values('2','1','Product.name','');
+
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+values('3','1','Product.version','');
+
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+VALUES('4','1','License.type','');
+
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+VALUES('5','1','License.expiry','');
+
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+VALUES('6','1','License.ips','');
+
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+VALUES('7','1','Server.macaddress','');
+
+insert into SYS_CONFIG(ID,PARENT_ID,CODE,VAL)
+VALUES('8','1','signature','');
+
+commit;
 
